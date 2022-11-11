@@ -1,5 +1,7 @@
-const BINDING_ATTRIBUTE_NAME = "x-bind"
-const BINDING_ATTRIBUTE_SELECTOR = `[${BINDING_ATTRIBUTE_NAME}]`
+import {
+  BINDING_ATTRIBUTE_NAME,
+  BINDING_ATTRIBUTE_SELECTOR,
+} from "./constants.js"
 
 function cast(v) {
   if (!isNaN(v)) return +v

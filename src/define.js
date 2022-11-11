@@ -1,4 +1,6 @@
 import { deriveState } from "./deriveState.js"
+import { deriveEvents } from "./deriveEvents.js"
+import { bindEvents } from "./bindEvents.js"
 import { configure } from "./store.js"
 
 export const define = (name, factory) => {
@@ -16,9 +18,13 @@ export const define = (name, factory) => {
           },
         })
 
-        // @todo: bind events ... bindEvents(this, dispatch)
+        const events = deriveEvents(this)
 
-        // @todo: update the DOM onChange
+        bindEvents(events, dispatch)
+
+        onChange(() => {
+          // ...
+        })
       }
     }
   )
