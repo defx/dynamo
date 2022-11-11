@@ -38,7 +38,9 @@ export const define = (name, factory) => {
         const subscribers = deriveSubscribers(this, initialState)
 
         onChange(() => {
-          // ...
+          const state = getState()
+          subscribers.forEach((fn) => fn(state))
+          updated()
         })
       }
     }
