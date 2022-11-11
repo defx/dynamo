@@ -1,0 +1,17 @@
+{
+  "name": "@defx/enhance",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "A JavaScript library for Progressive Enhancement",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha-express --coverage",
+    "test:watch": "mocha-express --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha-express": "^0.1.2"
+  }
+}
