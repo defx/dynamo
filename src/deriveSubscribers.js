@@ -46,7 +46,7 @@ export function deriveSubscribers(rootNode, initialState) {
         const newValue = state[k]
 
         if (newValue !== oldValue) {
-          const delta = compareKeyedLists("data-id", oldValue, newValue)
+          const delta = compareKeyedLists("id", oldValue, newValue)
 
           if (delta) {
             // @todo: update the list...
