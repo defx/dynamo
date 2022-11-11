@@ -1,4 +1,4 @@
-import { isWhitespace, walk } from "./helpers.js"
+// import { isWhitespace, walk } from "./helpers.js"
 
 export function parseEach(node) {
   let each = node.getAttribute(":each")
@@ -69,6 +69,8 @@ export const getBlocks = (template) => {
   }
   return r
 }
+
+// why are these entries??
 
 export const compareKeyedLists = (key, a = [], b = []) => {
   let delta = b.map(([k, item]) =>

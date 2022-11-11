@@ -1,5 +1,6 @@
 import { deriveState } from "./deriveState.js"
 import { deriveEvents } from "./deriveEvents.js"
+import { deriveSubscribers } from "./deriveSubscribers.js"
 import { bindEvents } from "./bindEvents.js"
 import { configure } from "./store.js"
 

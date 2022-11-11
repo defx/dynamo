@@ -27,32 +27,35 @@ export function deriveSubscribers(rootNode, initialState) {
   for (const node of nodes) {
     const path = node.getAttribute(BINDING_ATTRIBUTE_NAME)
 
-    const { id } = node.dataset
-
-    if (!id) {
-      console.warn(
-        `list node with no data-id attribute. any changes to state will not be reflected in the DOM`,
-        node
-      )
-    }
-
     if (path.endsWith(".*")) {
+      const { id } = node.dataset
+
+      if (!id) {
+        console.warn(
+          `list node with no data-id attribute. any changes to state will not be reflected in the DOM`,
+          node
+        )
+        continue
+      }
+
       const k = path.slice(0, -2)
       if (byPath[k]) continue
 
-      let oldValue = initialState[k]
+      let oldValue = Object.entries(initialState[k] || [])
 
       byPath[k] = (state) => {
-        const newValue = state[k]
+        const newValue = Object.entries(state[k] || [])
+
+        console.log({ newValue, oldValue })
 
         if (newValue !== oldValue) {
           const delta = compareKeyedLists("id", oldValue, newValue)
 
           if (delta) {
-            // @todo: update the list...
+            // ...update the list
           }
 
-          oldValue = newValue
+          oldValue = newValue.slice(0)
         }
       }
     }

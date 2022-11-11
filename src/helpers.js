@@ -1,3 +1,5 @@
+export const last = (v = []) => v[v.length - 1]
+
 const transformBrackets = (str = "") => {
   let parts = str.split(/(\[[^\]]+\])/).filter((v) => v)
   return parts.reduce((a, part) => {
