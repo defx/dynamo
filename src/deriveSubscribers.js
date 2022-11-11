@@ -7,17 +7,25 @@ import { compareKeyedLists } from "./list.js"
 
 /*
 
-what if...there are two lists bound to the same path?
-
-perhaps you need to stick the x-bind on a container element?
-
-    - ideally, no - shouldn't need to restrict the html structure in that way
-
-    so then...you need to check siblings to determine whether nodes are part of the same collection
-
-    but if subscription is based on paths, then we would be putting that logic in the subscriber...at some point...later :)
+@todo: handle multiple lists bound to the same property
 
 */
+
+function updateList(nodes, delta) {
+  const sibling = nodes[0].previousElementSibling
+  const parent = nodes[0].parentNode
+
+  const xnodes = delta.map((i) => nodes[i])
+
+  sibling ? sibling.after(xnodes[0]) : parent.prepend(xnodes[0])
+
+  let t = xnodes[0]
+
+  delta.slice(1).forEach((i) => {
+    t.after(xnodes[i])
+    t = xnodes[i]
+  })
+}
 
 export function deriveSubscribers(rootNode, initialState) {
   const nodes = [...rootNode.querySelectorAll(BINDING_ATTRIBUTE_SELECTOR)]
@@ -50,9 +58,9 @@ export function deriveSubscribers(rootNode, initialState) {
 
         if (newValue !== oldValue) {
           const delta = compareKeyedLists("id", oldValue, newValue)
-
+          const nodes = [...rootNode.querySelectorAll(`[x-bind="${path}"]`)]
           if (delta) {
-            // ...update the list
+            updateList(nodes, oldValue, delta)
           }
 
           oldValue = newValue.slice(0)

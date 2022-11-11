@@ -18,8 +18,7 @@ describe("list mutations", () => {
             data-price="14.99"
             data-rating="4.2"
           >
-            <img src="https://sdf76sdfhsdfj.cloudfront.com/ert987wer87u8.jpg" />
-            <a href="//bbc.co.uk"></a>
+            <p>first</p>
           </li>
           <li
             x-bind="products.*"
@@ -27,8 +26,7 @@ describe("list mutations", () => {
             data-price="5"
             data-rating="4.7"
           >
-            <img src="https://sdf76sdfhsdfj.cloudfront.com/ert987wer87u8.jpg" />
-            <a href="//bbc.co.uk"></a>
+            <p>second</p>
           </li>
         </ul>
       </x-app>
