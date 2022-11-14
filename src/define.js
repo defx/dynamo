@@ -1,6 +1,8 @@
 import { deriveState } from "./deriveState.js"
 import { deriveSubscribers } from "./deriveSubscribers.js"
 import { bindInputs } from "./bindInputs.js"
+import { bindEvents } from "./bindEvents.js"
+import { bindClasses } from "./bindClasses.js"
 import { configure } from "./store.js"
 import { mergeList } from "./list.js"
 
@@ -12,7 +14,9 @@ export const define = (name, factory) => {
         let config = factory(this)
 
         const initialState = deriveState(this)
-        const subscribers = deriveSubscribers(this, initialState)
+        const subscribers = deriveSubscribers(this, initialState).concat(
+          bindClasses(this)
+        )
 
         const { dispatch, getState, refs } = configure({
           ...config,
@@ -38,6 +42,7 @@ export const define = (name, factory) => {
         const store = { dispatch, getState, mergeListItems }
 
         bindInputs(this, dispatch)
+        bindEvents(this, dispatch)
 
         config.connectedCallback?.(store)
       }
