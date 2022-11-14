@@ -34,6 +34,7 @@ describe("list mutations", () => {
 
     const sort = {
       priceLowToHigh: (a, b) => a.price - b.price,
+      priceHighToLow: (a, b) => b.price - a.price,
     }
 
     define("x-app", () => {
@@ -51,6 +52,25 @@ describe("list mutations", () => {
       })
     )
 
-    // await nextFrame()
+    function prices() {
+      return $$(`[data-price]`)
+        .map((el) => el.getAttribute("data-price"))
+        .map((v) => +v)
+    }
+
+    await nextFrame()
+
+    assert.deepEqual(prices(), [5, 14.99])
+
+    $(`[id="pet-select"]`).value = "priceHighToLow"
+    $(`[id="pet-select"]`).dispatchEvent(
+      new Event("input", {
+        bubbles: true,
+      })
+    )
+
+    await nextFrame()
+
+    assert.deepEqual(prices(), [14.99, 5])
   })
 })
