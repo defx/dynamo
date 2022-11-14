@@ -24,14 +24,14 @@ export function configure({
   middleware = [],
   state: initialState = {},
   getState: getStateWrapper = (v) => v,
+  onChangeCallback, // use this callback to update your UI whenever state changes
 }) {
   let subscribers = []
   let state
-  let onChangeCallback = () => {}
 
   function updateState(o) {
     state = getStateWrapper({ ...o })
-    onChangeCallback()
+    onChangeCallback(getState(), updated)
   }
 
   updateState(initialState)
@@ -49,10 +49,6 @@ export function configure({
   function updated() {
     subscribers.forEach((fn) => fn())
     subscribers = []
-  }
-
-  function onChange(fn) {
-    onChangeCallback = fn
   }
 
   function dispatch(action) {
@@ -87,8 +83,6 @@ export function configure({
   return {
     dispatch, // dispatch an action to the reducers
     getState, // optionally provide a wrapper function to derive additional properties in state
-    onChange, // use this callback to update your UI whenever state changes
-    updated, // call this once you've updated the UI so that all subscribers will be invoked and then removed
     refs, // an empty object that you can attach element refs to (supplied on object passed as the third argument to middleware functions)
   }
 }

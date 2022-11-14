@@ -64,4 +64,24 @@ describe("deriveState", () => {
       sortBy: "bestsellers",
     })
   })
+
+  it("derives state from a Select element with [selected]", () => {
+    mount(html`
+      <x-app>
+        <label for="pet-select">Sort by:</label>
+        <select name="pets" id="pet-select" x-bind="sortBy">
+          <option value="bestsellers">Bestsellers</option>
+          <option value="priceLowToHigh">Price (low - high)</option>
+          <option value="priceHighToLow" selected>Price (high - low)</option>
+          <option value="rating">Rating</option>
+        </select>
+      </x-app>
+    `)
+
+    const state = deriveState($("x-app"))
+
+    assert.deepEqual(state, {
+      sortBy: "priceHighToLow",
+    })
+  })
 })

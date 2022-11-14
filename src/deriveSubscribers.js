@@ -46,6 +46,8 @@ export function deriveSubscribers(rootNode, initialState) {
 
       let oldValue = Object.entries(initialState[k] || [])
 
+      console.log({ oldValue })
+
       byPath[k] = (state) => {
         const newValue = Object.entries(state[k] || [])
 

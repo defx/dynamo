@@ -23,26 +23,31 @@ export const define = (name, factory) => {
         let config = factory(this)
 
         const initialState = deriveState(this)
+        const subscribers = deriveSubscribers(this, initialState)
 
-        const { dispatch, getState, onChange, updated, refs } = configure({
+        const { dispatch, getState, refs } = configure({
           ...config,
           state: {
             ...(config.state || {}),
             ...initialState,
           },
+          onChangeCallback: (state, updated) => {
+            console.log("onChangeCallback::", state)
+            subscribers.forEach((fn) => fn(state))
+            updated()
+          },
         })
 
+        function merge(k, v) {
+          console.log("merge", k, v)
+        }
+
+        const store = { dispatch, getState, merge }
         const events = deriveEvents(this)
 
         bindEvents(events, dispatch)
 
-        const subscribers = deriveSubscribers(this, initialState)
-
-        onChange(() => {
-          const state = getState()
-          subscribers.forEach((fn) => fn(state))
-          updated()
-        })
+        config.connectedCallback?.(store)
       }
     }
   )
