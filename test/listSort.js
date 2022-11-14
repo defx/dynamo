@@ -51,6 +51,6 @@ describe("list mutations", () => {
       })
     )
 
-    await nextFrame()
+    // await nextFrame()
   })
 })

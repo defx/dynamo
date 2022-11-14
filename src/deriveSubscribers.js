@@ -5,12 +5,7 @@ import {
 
 import { compareKeyedLists } from "./list.js"
 
-/*
-
-@todo: handle multiple lists bound to the same property
-
-*/
-
+/* @todo: handle multiple lists bound to the same property */
 function updateList(nodes, delta) {
   const sibling = nodes[0].previousElementSibling
   const parent = nodes[0].parentNode
@@ -54,13 +49,11 @@ export function deriveSubscribers(rootNode, initialState) {
       byPath[k] = (state) => {
         const newValue = Object.entries(state[k] || [])
 
-        console.log({ newValue, oldValue })
-
         if (newValue !== oldValue) {
           const delta = compareKeyedLists("id", oldValue, newValue)
           const nodes = [...rootNode.querySelectorAll(`[x-bind="${path}"]`)]
           if (delta) {
-            updateList(nodes, oldValue, delta)
+            updateList(nodes, delta)
           }
 
           oldValue = newValue.slice(0)
