@@ -114,12 +114,9 @@ describe("list sorting", () => {
 
     define(name, () => {
       return {
-        getState: (state) => {
-          console.log("getState", state.sortBy)
-          return {
-            products: state.products.sort(sort[state.sortBy]),
-          }
-        },
+        getState: (state) => ({
+          products: state.products.sort(sort[state.sortBy]),
+        }),
       }
     })
 
