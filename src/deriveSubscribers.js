@@ -3,24 +3,7 @@ import {
   BINDING_ATTRIBUTE_SELECTOR,
 } from "./constants.js"
 
-import { compareKeyedLists } from "./list.js"
-
-/* @todo: handle multiple lists bound to the same property */
-function updateList(nodes, delta) {
-  const sibling = nodes[0].previousElementSibling
-  const parent = nodes[0].parentNode
-
-  const xnodes = delta.map((i) => nodes[i])
-
-  sibling ? sibling.after(xnodes[0]) : parent.prepend(xnodes[0])
-
-  let t = xnodes[0]
-
-  delta.slice(1).forEach((i) => {
-    t.after(xnodes[i])
-    t = xnodes[i]
-  })
-}
+import { listSync } from "./list.js"
 
 export function deriveSubscribers(rootNode, initialState) {
   const nodes = [...rootNode.querySelectorAll(BINDING_ATTRIBUTE_SELECTOR)]
@@ -44,22 +27,8 @@ export function deriveSubscribers(rootNode, initialState) {
       const k = path.slice(0, -2)
       if (byPath[k]) continue
 
-      let oldValue = Object.entries(initialState[k] || [])
-
-      console.log({ oldValue })
-
       byPath[k] = (state) => {
-        const newValue = Object.entries(state[k] || [])
-
-        if (newValue !== oldValue) {
-          const delta = compareKeyedLists("id", oldValue, newValue)
-          const nodes = [...rootNode.querySelectorAll(`[x-bind="${path}"]`)]
-          if (delta) {
-            updateList(nodes, delta)
-          }
-
-          oldValue = newValue.slice(0)
-        }
+        listSync(rootNode, path, state[k])
       }
     }
   }

@@ -1,75 +1,3 @@
-import { isWhitespace, walk } from "./helpers.js"
-
-export function parseEach(node) {
-  let each = node.getAttribute(":each")
-  let m = each?.match(/(.+)\s+in\s+(.+)/)
-  if (!m) {
-    if (!each) return m
-    return {
-      path: each.trim(),
-      key: node.getAttribute(":key"),
-    }
-  }
-  let [_, left, right] = m
-  let parts = left.match(/\(([^\)]+)\)/)
-  let [a, b] = (parts ? parts[1].split(",") : [left]).map((v) => v.trim())
-
-  return {
-    path: right.trim(),
-    identifier: b ? b : a,
-    index: b ? a : b,
-    key: node.getAttribute(":key"),
-  }
-}
-
-const getBlockSize = (template) => {
-  let i = 0
-  walk(template.content?.firstChild || template.firstChild, () => i++, false)
-  return i
-}
-
-const nextNonWhitespaceSibling = (node) => {
-  return isWhitespace(node.nextSibling)
-    ? nextNonWhitespaceSibling(node.nextSibling)
-    : node.nextSibling
-}
-
-const getBlockFragments = (template, numBlocks) => {
-  let blockSize = getBlockSize(template)
-
-  let r = []
-  if (numBlocks) {
-    while (numBlocks--) {
-      let f = document.createDocumentFragment()
-      let n = blockSize
-      while (n--) {
-        f.appendChild(nextNonWhitespaceSibling(template))
-      }
-      r.push(f)
-    }
-  }
-  return r
-}
-
-export const getBlocks = (template) => {
-  let numBlocks = +(template.dataset.length || 0)
-  let blockSize = getBlockSize(template)
-  let r = []
-  let node = template
-  if (numBlocks) {
-    while (numBlocks--) {
-      let f = []
-      let n = blockSize
-      while (n--) {
-        node = nextNonWhitespaceSibling(node)
-        f.push(node)
-      }
-      r.push(f)
-    }
-  }
-  return r
-}
-
 export const compareKeyedLists = (key, a = [], b = []) => {
   let delta = b.map(([k, item]) =>
     !key ? (k in a ? k : -1) : a.findIndex(([_, v]) => v[key] === item[key])
@@ -77,29 +5,44 @@ export const compareKeyedLists = (key, a = [], b = []) => {
   if (a.length !== b.length || !delta.every((a, b) => a === b)) return delta
 }
 
-function lastChild(v) {
-  return (v.nodeType === v.DOCUMENT_FRAGMENT_NODE && v.lastChild) || v
+function last(v) {
+  return v[v.length - 1]
 }
 
-export const updateList = (template, delta, entries, createListItem) => {
-  let n = +(template.dataset.length || 0)
+export function mergeList(rootNode, key, html) {
+  const nodes = [...rootNode.querySelectorAll(`[x-bind="${key}"]`)]
+  const lastNode = last(nodes)
+  const tpl = document.createElement("template")
+  tpl.innerHTML = html.trim()
+  lastNode.after(tpl.content)
+}
 
-  const unchanged = delta.length === n && delta.every((a, b) => a == b)
+/* @todo: handle multiple lists bound to the same property */
+/* is .after a no-op if the element is already the nextSibling? */
+export function listSync(rootNode, path, arr) {
+  const nodes = [...rootNode.querySelectorAll(`[x-bind="${path}"]`)]
 
-  if (unchanged) return
+  // check if anything has changed
+  const nodeIds = nodes.map(({ dataset: { id } }) => id)
+  const dataIds = arr.map(({ id }) => id)
 
-  let blocks = getBlockFragments(template, n)
-  let t = template
+  if (nodeIds.toString() === dataIds.toString()) return
 
-  delta.forEach((i, newIndex) => {
-    let frag =
-      i === -1
-        ? createListItem(entries[newIndex][1], entries[newIndex][0])
-        : blocks[i]
-    let x = lastChild(frag)
-    t.after(frag)
-    t = x
+  const removals = nodes.filter((node) => {
+    const id = node.dataset.id
+    return arr.find((datum) => datum.id === id) === false
   })
+  removals.forEach((node) => node.remove())
 
-  template.dataset.length = delta.length
+  const [first, ...rest] = arr
+
+  let t = nodes.find((node) => node.dataset.id === first.id)
+
+  rest.forEach((datum) => {
+    let node = nodes.find((node) => node.dataset.id === datum.id)
+    if (node) {
+      t.after(node)
+      t = node
+    }
+  })
 }

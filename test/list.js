@@ -132,3 +132,88 @@ describe("list sorting", () => {
     assert.deepEqual(prices(), [5, 14.99])
   })
 })
+
+describe("list merge", () => {
+  it("merges items into the list at the correct position", async () => {
+    const tagName = createName()
+
+    mount(html`
+      <${tagName}>
+        <label for="pet-select">Sort by:</label>
+        <select name="pets" id="pet-select" x-bind="sortBy">
+          <option value="bestsellers">Bestsellers</option>
+          <option value="priceLowToHigh" selected>Price (low - high)</option>
+          <option value="priceHighToLow">Price (high - low)</option>
+          <option value="rating">Rating</option>
+        </select>
+        <ul>
+          <li
+            x-bind="products.*"
+            data-id="afd56erg"
+            data-price="14.99"
+            data-rating="4.2"
+          >
+            <p>14.99</p>
+          </li>
+          <li
+            x-bind="products.*"
+            data-id="f8g7r6d"
+            data-price="5"
+            data-rating="4.7"
+          >
+            <p>5</p>
+          </li>
+        </ul>
+      </${tagName}>
+    `)
+
+    const sort = {
+      priceLowToHigh: (a, b) => a.price - b.price,
+      priceHighToLow: (a, b) => b.price - a.price,
+      rating: (a, b) => b.rating - a.rating,
+    }
+
+    define(tagName, () => {
+      return {
+        getState: (state) => ({
+          products: state.products.sort(sort[state.sortBy]),
+        }),
+        connectedCallback({ mergeListItems }) {
+          requestAnimationFrame(() => {
+            mergeListItems(
+              "products.*",
+              html`
+                <li
+                  x-bind="products.*"
+                  data-id="f7g649f9"
+                  data-price="19.99"
+                  data-rating="4.2"
+                >
+                  <p>19.99</p>
+                </li>
+                <li
+                  x-bind="products.*"
+                  data-id="k7s95jg7"
+                  data-price="3.99"
+                  data-rating="4.7"
+                >
+                  <p>3.99</p>
+                </li>
+              `
+            )
+          })
+        },
+      }
+    })
+
+    function prices() {
+      return $$(`[data-price]`)
+        .map((el) => el.getAttribute("data-price"))
+        .map((v) => +v)
+    }
+
+    await nextFrame()
+
+    assert.deepEqual(prices(), [3.99, 5, 14.99, 19.99])
+  })
+})

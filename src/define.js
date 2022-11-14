@@ -3,6 +3,7 @@ import { deriveEvents } from "./deriveEvents.js"
 import { deriveSubscribers } from "./deriveSubscribers.js"
 import { bindEvents } from "./bindEvents.js"
 import { configure } from "./store.js"
+import { mergeList } from "./list.js"
 
 /*
 
@@ -32,17 +33,21 @@ export const define = (name, factory) => {
             ...initialState,
           },
           onChangeCallback: (state, updated) => {
-            console.log("onChangeCallback::", state)
             subscribers.forEach((fn) => fn(state))
             updated()
           },
         })
 
-        function merge(k, v) {
-          console.log("merge", k, v)
+        const mergeListItems = (k, v) => {
+          mergeList(this, k, v)
+          const nextState = deriveState(this)
+          dispatch({
+            type: "MERGE",
+            payload: nextState,
+          })
         }
 
-        const store = { dispatch, getState, merge }
+        const store = { dispatch, getState, mergeListItems }
         const events = deriveEvents(this)
 
         bindEvents(events, dispatch)
