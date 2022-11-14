@@ -8,8 +8,6 @@ export function bindInputs(node, dispatch) {
     (node) => ["SELECT"].includes(node.nodeName)
   )
 
-  const events = {}
-
   for (const node of nodes) {
     const path = node.getAttribute(BINDING_ATTRIBUTE_NAME)
 
@@ -28,6 +26,4 @@ export function bindInputs(node, dispatch) {
       })
     })
   }
-
-  return events
 }
