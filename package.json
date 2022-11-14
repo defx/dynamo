@@ -6,12 +6,24 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha-express --coverage",
-    "test:watch": "mocha-express --watch"
+    "test:watch": "mocha-express --watch",
+    "size": "gzip -c9 ./dist/enhance.min.js | wc -c",
+    "build": "rm -rf dist && rollup -c && npm run size"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "files": [
+    "src",
+    "dist",
+    "cjs"
+  ],
+  "directories": {
+    "test": "test"
+  },
   "devDependencies": {
-    "mocha-express": "^0.1.2"
+    "mocha-express": "^0.1.2",
+    "rollup": "^2.79.1",
+    "rollup-plugin-terser": "^7.0.2"
   }
 }
