@@ -9,7 +9,7 @@ describe("navigation menu enhancement", () => {
 
         .hamburger {
             transform: translate(-100%, 0);
-            transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+            transition: transform 0.5s ease-in-out;
         }
 
         .hamburger.open {
@@ -43,16 +43,13 @@ describe("navigation menu enhancement", () => {
             }
           },
         },
-        getState(state) {
-          const navClasses = {
+        getState: (state) => ({
+          ...state,
+          navClasses: {
             hamburger: true,
             open: state.menuIsOpen,
-          }
-          return {
-            ...state,
-            navClasses,
-          }
-        },
+          },
+        }),
       }
     })
 
