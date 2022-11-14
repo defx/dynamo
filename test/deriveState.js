@@ -2,8 +2,10 @@ import { deriveState } from "../src/deriveState.js"
 
 describe("deriveState", () => {
   it("derives state from a list of elements", () => {
+    const tagName = createName()
+
     mount(html`
-      <x-app>
+      <${tagName}>
         <ul>
           <li
             x-bind="products.*"
@@ -24,10 +26,10 @@ describe("deriveState", () => {
             <a href="//bbc.co.uk"></a>
           </li>
         </ul>
-      </x-app>
+      </${tagName}>
     `)
 
-    const state = deriveState($("x-app"))
+    const state = deriveState($(tagName))
 
     assert.deepEqual(state, {
       products: [
@@ -46,8 +48,9 @@ describe("deriveState", () => {
   })
 
   it("derives state from a Select element", () => {
+    const tagName = createName()
     mount(html`
-      <x-app>
+      <${tagName}>
         <label for="pet-select">Sort by:</label>
         <select name="pets" id="pet-select" x-bind="sortBy">
           <option value="bestsellers">Bestsellers</option>
@@ -55,10 +58,10 @@ describe("deriveState", () => {
           <option value="priceHighToLow">Price (high - low)</option>
           <option value="rating">Rating</option>
         </select>
-      </x-app>
+      </${tagName}>
     `)
 
-    const state = deriveState($("x-app"))
+    const state = deriveState($(tagName))
 
     assert.deepEqual(state, {
       sortBy: "bestsellers",
@@ -66,8 +69,9 @@ describe("deriveState", () => {
   })
 
   it("derives state from a Select element with [selected]", () => {
+    const tagName = createName()
     mount(html`
-      <x-app>
+      <${tagName}>
         <label for="pet-select">Sort by:</label>
         <select name="pets" id="pet-select" x-bind="sortBy">
           <option value="bestsellers">Bestsellers</option>
@@ -75,10 +79,10 @@ describe("deriveState", () => {
           <option value="priceHighToLow" selected>Price (high - low)</option>
           <option value="rating">Rating</option>
         </select>
-      </x-app>
+      </${tagName}>
     `)
 
-    const state = deriveState($("x-app"))
+    const state = deriveState($(tagName))
 
     assert.deepEqual(state, {
       sortBy: "priceHighToLow",
