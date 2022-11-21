@@ -1,15 +1,15 @@
-import {
-  BINDING_ATTRIBUTE_NAME,
-  BINDING_ATTRIBUTE_SELECTOR,
-} from "./constants.js"
-
 export function bindInputs(node, dispatch) {
-  const nodes = [...node.querySelectorAll(BINDING_ATTRIBUTE_SELECTOR)].filter(
-    (node) => ["SELECT"].includes(node.nodeName)
+  const nodes = [...node.querySelectorAll(`[x-input]`)].filter((node) =>
+    ["SELECT"].includes(node.nodeName)
   )
 
   for (const node of nodes) {
-    const path = node.getAttribute(BINDING_ATTRIBUTE_NAME)
+    const name = node.getAttribute(`name`)
+
+    if (!name) {
+      console.warn(`Missing name attribute on x-input`, node)
+      continue
+    }
 
     node.addEventListener("input", () => {
       let value =
@@ -20,7 +20,7 @@ export function bindInputs(node, dispatch) {
       dispatch({
         type: "SET",
         payload: {
-          name: path,
+          name,
           value,
         },
       })

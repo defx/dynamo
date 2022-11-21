@@ -25,10 +25,11 @@ function xList(node, state = {}) {
   return state
 }
 
-function xBind(node, state = {}) {
-  const elements = [...node.querySelectorAll(`[x-bind]`)]
+function xInput(node, state = {}) {
+  const elements = [...node.querySelectorAll(`[x-input]`)]
   for (const element of elements) {
-    let k = element.getAttribute(`x-bind`)
+    let k = element.getAttribute("name")
+    if (!k) continue
     let v = cast(element.value)
     state[k] = v
   }
@@ -37,5 +38,5 @@ function xBind(node, state = {}) {
 }
 
 export function deriveState(node) {
-  return xList(node, xBind(node))
+  return xList(node, xInput(node))
 }

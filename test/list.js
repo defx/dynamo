@@ -4,8 +4,8 @@ describe("list sorting", () => {
   it("sorts the list", async () => {
     mount(html`
       <x-app>
-        <label for="pet-select">Sort by:</label>
-        <select name="pets" id="pet-select" x-bind="sortBy">
+        <label for="sort">Sort by:</label>
+        <select id="sort" name="sortBy" x-input>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
@@ -45,8 +45,8 @@ describe("list sorting", () => {
       }
     })
 
-    $(`[id="pet-select"]`).value = "priceLowToHigh"
-    $(`[id="pet-select"]`).dispatchEvent(
+    $(`[id="sort"]`).value = "priceLowToHigh"
+    $(`[id="sort"]`).dispatchEvent(
       new Event("input", {
         bubbles: true,
       })
@@ -62,8 +62,8 @@ describe("list sorting", () => {
 
     assert.deepEqual(prices(), [5, 14.99])
 
-    $(`[id="pet-select"]`).value = "priceHighToLow"
-    $(`[id="pet-select"]`).dispatchEvent(
+    $(`[id="sort"]`).value = "priceHighToLow"
+    $(`[id="sort"]`).dispatchEvent(
       new Event("input", {
         bubbles: true,
       })
@@ -79,8 +79,8 @@ describe("list sorting", () => {
 
     mount(html`
       <${name}>
-        <label for="pet-select">Sort by:</label>
-        <select name="pets" id="pet-select" x-bind="sortBy">
+        <label for="sort">Sort by:</label>
+        <select name="sortBy" id="sort" x-input>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh" selected>Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
@@ -137,7 +137,7 @@ describe("list merge", () => {
     mount(html`
       <${tagName}>
         <label for="pet-select">Sort by:</label>
-        <select name="pets" id="pet-select" x-bind="sortBy">
+        <select name="sortBy" x-input>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh" selected>Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>

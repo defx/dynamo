@@ -20,6 +20,10 @@ By including some [special attributes]() in you HTML you will be able to harness
 
 Used to bind an event listener to an element, accepts the name of an action handler which will be invoked if and when the event fires on that element.
 
+```html
+<button x-on="click:toggleMenu">[=]</button>
+```
+
 ### x-list
 
 Used to declare an element as a list node.
@@ -34,9 +38,20 @@ The data for each list item is derived from each elements dataset, so be sure to
 
 > The only hard requirement for list items is that you _must_ include a `[data-id]` attribute so that Enhance can safely re-order the list in response to any changes.
 
-### x-bind
+### x-input
 
-Used to bind a user input element (e.g., `<input>, <select>, <textarea>`) to a property in state. Any changes to the element will be reflected in the state object
+Used to bind any user input element (e.g., `<input>, <select>, <textarea>`) to a property in state. The x-input attribute is a boolean attribute that doesn't accept any value, the name of the property reflected in state will be inferred from the elements [name] attribute.
+
+> Applying the [name] + [x-input] pattern encourages parity between form data and request data for the purpose of progressive enhancement.
+
+```html
+<select name="sortBy" x-input>
+  <option value="bestsellers">Bestsellers</option>
+  <option value="priceLowToHigh">Price (low - high)</option>
+  <option value="priceHighToLow">Price (high - low)</option>
+  <option value="rating">Rating</option>
+</select>
+```
 
 ### x-class
 
