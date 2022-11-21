@@ -1,36 +1,18 @@
-import {
-  BINDING_ATTRIBUTE_NAME,
-  BINDING_ATTRIBUTE_SELECTOR,
-} from "./constants.js"
-
 function cast(v) {
   if (!isNaN(v)) return +v
   return v
 }
 
-function getValue(key, node) {
-  if (key.endsWith(".*")) {
-    return Object.entries(node.dataset).reduce((o, [k, v]) => {
+function xList(node, state = {}) {
+  const elements = [...node.querySelectorAll(`[x-list]`)]
+  for (const element of elements) {
+    let k = element.getAttribute(`x-list`)
+    let v = Object.entries(element.dataset).reduce((o, [k, v]) => {
       o[k] = cast(v)
       return o
     }, {})
-  }
-  if (node.nodeName === "SELECT") {
-    return cast(node.value)
-  }
-}
-
-export function deriveState(node) {
-  const elements = [...node.querySelectorAll(BINDING_ATTRIBUTE_SELECTOR)]
-
-  const state = {}
-
-  for (const element of elements) {
-    let k = element.getAttribute(BINDING_ATTRIBUTE_NAME)
-    let v = getValue(k, element)
 
     if (!k.endsWith(".*")) {
-      state[k] = v
       continue
     }
 
@@ -41,4 +23,19 @@ export function deriveState(node) {
   }
 
   return state
+}
+
+function xBind(node, state = {}) {
+  const elements = [...node.querySelectorAll(`[x-bind]`)]
+  for (const element of elements) {
+    let k = element.getAttribute(`x-bind`)
+    let v = cast(element.value)
+    state[k] = v
+  }
+
+  return state
+}
+
+export function deriveState(node) {
+  return xList(node, xBind(node))
 }

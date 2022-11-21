@@ -13,7 +13,7 @@ describe("list sorting", () => {
         </select>
         <ul>
           <li
-            x-bind="products.*"
+            x-list="products.*"
             data-id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
@@ -21,7 +21,7 @@ describe("list sorting", () => {
             <p>first</p>
           </li>
           <li
-            x-bind="products.*"
+            x-list="products.*"
             data-id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
@@ -88,7 +88,7 @@ describe("list sorting", () => {
         </select>
         <ul>
           <li
-            x-bind="products.*"
+            x-list="products.*"
             data-id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
@@ -96,7 +96,7 @@ describe("list sorting", () => {
             <p>first</p>
           </li>
           <li
-            x-bind="products.*"
+            x-list="products.*"
             data-id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
@@ -145,7 +145,7 @@ describe("list merge", () => {
         </select>
         <ul>
           <li
-            x-bind="products.*"
+            x-list="products.*"
             data-id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
@@ -153,7 +153,7 @@ describe("list merge", () => {
             <p>14.99</p>
           </li>
           <li
-            x-bind="products.*"
+            x-list="products.*"
             data-id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
@@ -181,7 +181,7 @@ describe("list merge", () => {
               "products.*",
               html`
                 <li
-                  x-bind="products.*"
+                  x-list="products.*"
                   data-id="f7g649f9"
                   data-price="19.99"
                   data-rating="4.2"
@@ -189,7 +189,7 @@ describe("list merge", () => {
                   <p>19.99</p>
                 </li>
                 <li
-                  x-bind="products.*"
+                  x-list="products.*"
                   data-id="k7s95jg7"
                   data-price="3.99"
                   data-rating="4.7"

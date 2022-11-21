@@ -8,7 +8,7 @@ describe("deriveState", () => {
       <${tagName}>
         <ul>
           <li
-            x-bind="products.*"
+            x-list="products.*"
             data-id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
@@ -17,7 +17,7 @@ describe("deriveState", () => {
             <a href="//bbc.co.uk"></a>
           </li>
           <li
-            x-bind="products.*"
+            x-list="products.*"
             data-id="f8g7r6d"
             data-price="5"
             data-rating="4.7"

@@ -10,7 +10,7 @@ function last(v) {
 }
 
 export function mergeList(rootNode, key, html) {
-  const nodes = [...rootNode.querySelectorAll(`[x-bind="${key}"]`)]
+  const nodes = [...rootNode.querySelectorAll(`[x-list="${key}"]`)]
   const lastNode = last(nodes)
   const tpl = document.createElement("template")
   tpl.innerHTML = html.trim()
@@ -20,7 +20,7 @@ export function mergeList(rootNode, key, html) {
 /* @todo: handle multiple lists bound to the same property */
 /* is .after a no-op if the element is already the nextSibling? */
 export function listSync(rootNode, path, arr) {
-  const nodes = [...rootNode.querySelectorAll(`[x-bind="${path}"]`)]
+  const nodes = [...rootNode.querySelectorAll(`[x-list="${path}"]`)]
 
   // check if anything has changed
   const nodeIds = nodes.map(({ dataset: { id } }) => id)

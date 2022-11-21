@@ -1,11 +1,23 @@
 # Enhance
 
-A JavaScript library for progressively enhancing static HTML.
+A lightweight JavaScript library for progressively enhancing static HTML with functional state management and reactive updates.
 
-## Rationale
+## Install
 
-hydration requires that both data and templates are serialised in order for a library to understand how to resume state and functionality in the browser. this has a significant impact on the size of the initial payload sent to the user, as well as the amount of javascript processing that needs to happen after the initial render and before the page becomes interactive.
+```sh
+> npm i @defx/enhance
+```
 
-progressive enhancement is a technique that has been with us for much longer than hydration, however it is one that hasn't gained widespread usage beyond smaller websites, in part due to the difficulty of applying its principals when there is a requirement for things such as list re-renders (think sort / filter / pagination for a list of products). to do such a thing requires an understanding of the current and next state of the list, and then the means to reconcile those two states. this is a non trivial problem to solve when your primary requirement is to build a website, and a problem that hasn't been solved by library authors.
+## Use
 
-Enhance.js tackles this problem by providing a simple pattern for taking control of statically rendered html by deriving partial data structures from data attributes which may then be manipulated using a functional state management workflow.
+Use any language you like to generate that initial HTML for your pages. The purpose of enhance.js is exactly that: to _enhance_ pre-rendered HTML with asynchronous functionality. This allows you to apply adcanced techniques such as Progressive Enhancement to ensure that your websites and applications are lightweight and resilient.
+
+By including some [special attributes]() in you HTML you will be able to harness the power of the Enhance API to reactively update the page in the browser.
+
+## Attributes
+
+### x-on
+
+### x-class
+
+### x-bind

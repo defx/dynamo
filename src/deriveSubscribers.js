@@ -6,12 +6,12 @@ import {
 import { listSync } from "./list.js"
 
 export function deriveSubscribers(rootNode, initialState) {
-  const nodes = [...rootNode.querySelectorAll(BINDING_ATTRIBUTE_SELECTOR)]
+  const nodes = [...rootNode.querySelectorAll(`[x-list]`)]
 
   const byPath = {}
 
   for (const node of nodes) {
-    const path = node.getAttribute(BINDING_ATTRIBUTE_NAME)
+    const path = node.getAttribute(`x-list`)
 
     if (path.endsWith(".*")) {
       const { id } = node.dataset
