@@ -10,15 +10,15 @@ A lightweight JavaScript library for progressively enhancing static HTML with fu
 
 ## Use
 
-Use any language you like to generate that initial HTML for your pages. The purpose of enhance.js is exactly that: to _enhance_ pre-rendered HTML with asynchronous functionality.
+Use any language you like to generate the initial HTML for your pages. The purpose of enhance.js is exactly that: to _enhance_ pre-rendered HTML with asynchronous functionality.
 
-By including some [special attributes]() in you HTML you will be able to harness the power of the Enhance API to reactively update the page in the browser.
+By including a few additional [attributes]() in you HTML you will be able to harness the power of the Enhance API to reactively update the page in the browser.
 
 ## Attributes
 
 ### x-on
 
-Used to bind an event listener to an element, accepts the name of an action handler which will be invoked if and when the event fires on that element.
+Used to bind an event listener to an element, accepts two arguments separated by a colon `x-on="eventType:methodName"` where `eventType` is the type of even you want to listen for (e.g., "click", "mouseover", etc) and `methodName` is the name of the update method you wish to invoke;
 
 ```html
 <button x-on="click:toggleMenu">[=]</button>
@@ -28,7 +28,7 @@ Used to bind an event listener to an element, accepts the name of an action hand
 
 Used to declare an element as a list node.
 
-The data for each list item is derived from each elements dataset, so be sure to declare any values you need as data attributes so that you have them to work with. For example, if you want to allow a user to sort your list, make sure that you declare any values you wish to sort on in each elements dataset:
+The state for each list item in the collection is derived from each elements dataset, so be sure to declare any values you need to work with as data attributes. For example, if you want to allow a user to sort your list, make sure that you declare any values you wish to sort on in each elements dataset:
 
 ```html
 <li x-list="products.*" data-id="f7g649f9" data-price="19.99" data-rating="4.2">
