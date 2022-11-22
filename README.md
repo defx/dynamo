@@ -120,7 +120,7 @@ define("my-app", () => {
 })
 ```
 
-In the example above, we're telling the browser about a new element called "my-app", and we're providing a factory function that will be called for every new instance of that element on the page. The `state` object is, for the most part, something that is initially derived by Tandem from your HTML attributes. The `update` object is somewhere that you can add event handlers which you will be able to use to update state in response to user interactions. The `getState` function can be provided when you want to _derive_ properties in state. (_If you're familiar with Vue JS or similar libraries then these are often referred to as "computed properties"._)
+In the example above, we're telling the browser about a new element called "my-app", and we're providing a factory function that will be called for every new instance of that element on the page. The `state` object is, for the most part, something that is initially derived by Tandem from your HTML attributes. The `update` object is somewhere that you can add event handlers which you will be able to use to update state in response to user interactions. The `getState` function can be provided when you want to _derive_ properties in state. (If you're familiar with Vue JS or similar libraries then these are often referred to as "computed properties".)
 The `getState` function will be called automatically whenever state changes.
 
 Looking back at our Product List example, we want any changes to the `<Select>` option to update the sort order of our products. Using `getState` is a great way to do this...
