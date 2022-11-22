@@ -105,25 +105,22 @@ import { define } from "@defx/tandem"
 define("product-list", () => {
   return {
     state: {
-      // ...
+      /* Tandem derives the initial state of your element from your HTML attributes */
     },
     update: {
-      //...
+      /* Somewhere to put functions that you need to update state */
     },
     getState: (state) => {
-      return {
-        /* you can derive some new properties here */
-        ...state,
-      }
+      /* called once whenever state changes, provide this function if you want to derive any additional properties */
+      return state
     },
   }
 })
 ```
 
-In the example above, we're telling the browser about a new element called "product-list", and we're providing a factory function that will be called for every new instance of that element on the page. The `state` object is, for the most part, something that is initially derived by Tandem from your HTML attributes. The `update` object is somewhere that you can add event handlers which you will be able to use to update state in response to user interactions. The `getState` function can be provided when you want to _derive_ properties in state. (If you're familiar with Vue JS or similar libraries then these are often referred to as "computed properties".)
-The `getState` function will be called automatically whenever state changes.
+In the example above, we're telling the browser about a new element called "product-list", and we're providing a factory function that will be called for every new instance of that element on the page.
 
-Looking back at our Product List example, we want any changes to the `<Select>` option to update the sort order of our products. Using `getState` is a great way to do this...
+Looking back at our Product List example, we want any changes to the `<Select>` option to update the sort order of our products, and `getState` gives us a nice and simple way to do this...
 
 ```js
 const sort = {
