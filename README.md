@@ -10,7 +10,7 @@ A lightweight JavaScript library for progressively enhancing static HTML with fu
 
 ## Quick Start
 
-The first thing to understand is that, unlike most UI libraries, Tandem is not concerned with how or where you generate your HTML. You can use whatever language or library you like to generate you initial HTML, Tandem's responsibility is to bind to you existing HTML and provide asynchronous functionality in the browser.
+The first thing to understand is that Tandem is not concerned with how or where you generate your HTML. You can use whatever language or library you like to generate you initial HTML, Tandem's responsibility is to bind to your existing HTML and enable asynchronous updates in the browser.
 
 Follow these 3 steps to get started:
 
