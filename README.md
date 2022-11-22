@@ -150,7 +150,7 @@ Now, what if we want to add more items into the list? A common use case would be
 
 ### x-on
 
-Used to bind an event listener to an element, accepts two arguments separated by a colon `x-on="eventType:methodName"` where `eventType` is the type of even you want to listen for (e.g., "click", "mouseover", etc) and `methodName` is the name of the update method you wish to invoke;
+Used to bind an event listener to an element, accepts two arguments separated by a colon `x-on="eventType:methodName"` where `eventType` is the type of even you want to listen for and `methodName` is the name of the update method you wish to invoke;
 
 ```html
 <button x-on="click:toggleMenu">[=]</button>
