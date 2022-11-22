@@ -5,18 +5,6 @@ export const compareKeyedLists = (key, a = [], b = []) => {
   if (a.length !== b.length || !delta.every((a, b) => a === b)) return delta
 }
 
-function last(v) {
-  return v[v.length - 1]
-}
-
-export function mergeList(rootNode, key, html) {
-  const nodes = [...rootNode.querySelectorAll(`[x-list="${key}"]`)]
-  const lastNode = last(nodes)
-  const tpl = document.createElement("template")
-  tpl.innerHTML = html.trim()
-  lastNode.after(tpl.content)
-}
-
 /* @todo: handle multiple lists bound to the same property */
 /* is .after a no-op if the element is already the nextSibling? */
 export function listSync(rootNode, path, arr) {

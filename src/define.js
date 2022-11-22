@@ -4,7 +4,18 @@ import { bindInputs } from "./bindInputs.js"
 import { bindEvents } from "./bindEvents.js"
 import { bindClasses } from "./bindClasses.js"
 import { configure } from "./store.js"
-import { mergeList } from "./list.js"
+
+function last(v) {
+  return v[v.length - 1]
+}
+
+function mergeHTML(rootNode, selector, html) {
+  const nodes = [...rootNode.querySelectorAll(selector)]
+  const lastNode = last(nodes)
+  const tpl = document.createElement("template")
+  tpl.innerHTML = html.trim()
+  lastNode.after(tpl.content)
+}
 
 export const define = (name, factory) => {
   customElements.define(
@@ -18,7 +29,7 @@ export const define = (name, factory) => {
           bindClasses(this)
         )
 
-        const { dispatch, getState, refs } = configure({
+        const { dispatch, getState } = configure({
           ...config,
           state: {
             ...(config.state || {}),
@@ -30,16 +41,18 @@ export const define = (name, factory) => {
           },
         })
 
-        const mergeListItems = (k, v) => {
-          mergeList(this, k, v)
-          const nextState = deriveState(this)
-          dispatch({
-            type: "MERGE",
-            payload: nextState,
-          })
+        const store = {
+          dispatch,
+          getState,
+          mergeHTML: (k, v) => {
+            mergeHTML(this, k, v)
+            const nextState = deriveState(this)
+            dispatch({
+              type: "MERGE",
+              payload: nextState,
+            })
+          },
         }
-
-        const store = { dispatch, getState, mergeListItems }
 
         bindInputs(this, dispatch)
         bindEvents(this, dispatch)
