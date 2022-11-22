@@ -25,9 +25,9 @@ Let's take a look at each of those steps in a little more detail:
 The Custom Element spec is a web standard that allows us to extend HTML with our own custom elements. Once defined, we can use those elements just like any other HTML element. You can call your Custom Element anything you like, as long as you include a hyphen in the name (e.g., `main-nav`) - this is simply to differentiate custom elements from built-in elements. So, wrapping the HTML you want to control in a custom element would look like something like this:
 
 ```html
-<my-app>
+<product-list>
   <!-- your HTML here -->
-</my-app>
+</product-list>
 ```
 
 ## \[x-\*\] attributes
@@ -37,7 +37,7 @@ Tandem will look for a set of "special" attributes prefixed with an "x-" that yo
 Here's our basic HTML...
 
 ```html
-<my-app>
+<product-list>
   <label for="sortInput">Sort by:</label>
   <select id="sortInput" name="sortBy" x-input>
     <option value="priceLowToHigh">Price (low - high)</option>
@@ -62,10 +62,10 @@ Here's our basic HTML...
       <p>£5.99</p>
     </li>
   </ul>
-</my-app>
+</product-list>
 ```
 
-The first thing to note is that each list item includes an `x-list` attribute. This tells Tandem that those elements are part of a collection, and Tandem will derive an array value in state to represent the collection, including values for any `data-*` attributes on each element. For the above HTML, you can expect the initial state of your `my-app` element to include a key named `products` like this...
+The first thing to note is that each list item includes an `x-list` attribute. This tells Tandem that those elements are part of a collection, and Tandem will derive an array value in state to represent the collection, including values for any `data-*` attributes on each element. For the above HTML, you can expect the initial state of your `product-list` element to include a key named `products` like this...
 
 ```js
 {
@@ -84,7 +84,7 @@ The first thing to note is that each list item includes an `x-list` attribute. T
 }
 ```
 
-The second thing to note is that our `<Select>` element has the `x-input` attribute. This tells Tandem to create another key in state using the `name` attribute of the user input element, and keep the two in sync. If your user changes the value of the `<Select>` then this will be reflected automatically in state. As "Price (high - low)" is the default option, we can expect the initial state of our `my-app` to reflect that...
+The second thing to note is that our `<Select>` element has the `x-input` attribute. This tells Tandem to create another key in state using the `name` attribute of the user input element, and keep the two in sync. If your user changes the value of the `<Select>` then this will be reflected automatically in state. As "Price (high - low)" is the default option, we can expect the initial state of our `product-list` to reflect that...
 
 ```js
 {
@@ -102,7 +102,7 @@ Tandem exports the `define` function which is used to define a new custom elemen
 ```js
 import { define } from "@defx/tandem"
 
-define("my-app", () => {
+define("product-list", () => {
   return {
     state: {
       // ...
@@ -120,7 +120,7 @@ define("my-app", () => {
 })
 ```
 
-In the example above, we're telling the browser about a new element called "my-app", and we're providing a factory function that will be called for every new instance of that element on the page. The `state` object is, for the most part, something that is initially derived by Tandem from your HTML attributes. The `update` object is somewhere that you can add event handlers which you will be able to use to update state in response to user interactions. The `getState` function can be provided when you want to _derive_ properties in state. (If you're familiar with Vue JS or similar libraries then these are often referred to as "computed properties".)
+In the example above, we're telling the browser about a new element called "product-list", and we're providing a factory function that will be called for every new instance of that element on the page. The `state` object is, for the most part, something that is initially derived by Tandem from your HTML attributes. The `update` object is somewhere that you can add event handlers which you will be able to use to update state in response to user interactions. The `getState` function can be provided when you want to _derive_ properties in state. (If you're familiar with Vue JS or similar libraries then these are often referred to as "computed properties".)
 The `getState` function will be called automatically whenever state changes.
 
 Looking back at our Product List example, we want any changes to the `<Select>` option to update the sort order of our products. Using `getState` is a great way to do this...
@@ -132,7 +132,7 @@ const sort = {
   rating: (a, b) => b.rating - a.rating,
 }
 
-define("my-app", () => {
+define("product-list", () => {
   return {
     getState: (state) => ({
       products: state.products.sort(sort[state.sortBy]),
