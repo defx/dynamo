@@ -135,6 +135,7 @@ const sort = {
 define("product-list", () => {
   return {
     getState: (state) => ({
+      ...state,
       products: state.products.sort(sort[state.sortBy]),
     }),
   }
