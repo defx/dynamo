@@ -53,7 +53,12 @@ Here's our basic HTML...
     >
       <p>£14.99</p>
     </li>
-    <li x-list="products" data-id="f8g7r6d" data-price="5.99" data-rating="4.7">
+    <li
+      x-list="products"
+      data-id="f8g7r6d2"
+      data-price="5.99"
+      data-rating="4.7"
+    >
       <p>£5.99</p>
     </li>
   </ul>
