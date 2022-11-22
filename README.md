@@ -84,7 +84,7 @@ The first thing to note is that each list item includes an `x-list` attribute. T
 }
 ```
 
-The second thing to note is that our `<Select>` element has the `x-input` attribute. This tells Tandem to create another key in state using the `name` attribute of the user input element, and keep the two in sync. If the value of the `<Select>` changes then this will be reflected automatically in state. As "Price (high - low)" is the default option, we can expect the initial state of our `product-list` to reflect that...
+The second thing to note is that our `<Select>` element has the `x-input` attribute. This instructs Tandem to create another value in state and keep the two in sync. If the value of the `<Select>` changes then this will be reflected automatically in state, and vice versa. As "Price (high - low)" is the default option, we can expect the initial state of our `product-list` to reflect that...
 
 ```js
 {
