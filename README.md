@@ -132,7 +132,7 @@ const sort = {
   rating: (a, b) => b.rating - a.rating,
 }
 
-define(name, () => {
+define("my-app", () => {
   return {
     getState: (state) => ({
       products: state.products.sort(sort[state.sortBy]),
