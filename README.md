@@ -76,7 +76,7 @@ The first thing to note is that each list item includes an `x-list` attribute. T
       rating: 4.2,
     },
     {
-      id: "f8g7r6d",
+      id: "f8g7r6d2",
       price: 5.99,
       rating: 4.7,
     },
