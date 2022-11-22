@@ -61,7 +61,7 @@ Here's our basic HTML...
   </select>
   <ul>
     <li
-      x-list="products.*"
+      x-list="products"
       data-id="afd56erg"
       data-price="14.99"
       data-rating="4.2"
@@ -69,7 +69,7 @@ Here's our basic HTML...
       <p>£14.99</p>
     </li>
     <li
-      x-list="products.*"
+      x-list="products"
       data-id="f8g7r6d"
       data-price="5.99"
       data-rating="4.7"
@@ -187,7 +187,7 @@ The state for each list item in the collection is derived from each elements dat
 
 ```html
 <li
-  x-list="products.*"
+  x-list="products"
   data-id="f7g649f9"
   data-price="19.99"
   data-rating="4.2"

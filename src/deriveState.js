@@ -4,19 +4,20 @@ function cast(v) {
 }
 
 function xList(node, state = {}) {
-  const elements = [...node.querySelectorAll(`[x-list]`)]
+  const elements = [
+    ...node.querySelectorAll(
+      `[x-list]`
+    ),
+  ]
   for (const element of elements) {
-    let k = element.getAttribute(`x-list`)
-    let v = Object.entries(element.dataset).reduce((o, [k, v]) => {
+    let k =
+      element.getAttribute(`x-list`)
+    let v = Object.entries(
+      element.dataset
+    ).reduce((o, [k, v]) => {
       o[k] = cast(v)
       return o
     }, {})
-
-    if (!k.endsWith(".*")) {
-      continue
-    }
-
-    k = k.slice(0, -2)
 
     state[k] = state[k] || []
     state[k].push(v)
@@ -26,7 +27,11 @@ function xList(node, state = {}) {
 }
 
 function xInput(node, state = {}) {
-  const elements = [...node.querySelectorAll(`[x-input]`)]
+  const elements = [
+    ...node.querySelectorAll(
+      `[x-input]`
+    ),
+  ]
   for (const element of elements) {
     let k = element.getAttribute("name")
     if (!k) continue

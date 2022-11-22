@@ -5,31 +5,33 @@ import {
 
 import { listSync } from "./list.js"
 
-export function deriveSubscribers(rootNode, initialState) {
-  const nodes = [...rootNode.querySelectorAll(`[x-list]`)]
+export function deriveSubscribers(
+  rootNode
+) {
+  const nodes = [
+    ...rootNode.querySelectorAll(
+      `[x-list]`
+    ),
+  ]
 
   const byPath = {}
 
   for (const node of nodes) {
-    const path = node.getAttribute(`x-list`)
+    const k =
+      node.getAttribute(`x-list`)
 
-    if (path.endsWith(".*")) {
-      const { id } = node.dataset
+    const { id } = node.dataset
 
-      if (!id) {
-        console.warn(
-          `list node with no data-id attribute. any changes to state will not be reflected in the DOM`,
-          node
-        )
-        continue
-      }
+    if (!id) {
+      console.warn(
+        `list node with no data-id attribute. any changes to state will not be reflected in the DOM`,
+        node
+      )
+      continue
+    }
 
-      const k = path.slice(0, -2)
-      if (byPath[k]) continue
-
-      byPath[k] = (state) => {
-        listSync(rootNode, path, state[k])
-      }
+    byPath[k] = (state) => {
+      listSync(rootNode, k, state[k])
     }
   }
 
