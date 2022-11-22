@@ -51,8 +51,9 @@ describe("deriveState", () => {
     const tagName = createName()
     mount(html`
       <${tagName}>
-        <label for="pet-select">Sort by:</label>
-        <select name="sortBy" x-input>
+        <label>Sort by:
+          <select name="sortBy" x-input>
+        </label>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
@@ -72,8 +73,9 @@ describe("deriveState", () => {
     const tagName = createName()
     mount(html`
       <${tagName}>
-        <label for="pet-select">Sort by:</label>
-        <select name="sortBy" x-input>
+        <label>Sort by:
+          <select name="sortBy" x-input>
+        </label>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>
           <option value="priceHighToLow" selected>Price (high - low)</option>
