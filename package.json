@@ -1,8 +1,8 @@
 {
-  "name": "@defx/enhance",
+  "name": "@defx/tandem",
   "type": "module",
   "version": "0.1.0",
-  "description": "A JavaScript library for Progressive Enhancement",
+  "description": "A lightweight JavaScript library for Progressive Enhancement",
   "main": "index.js",
   "scripts": {
     "test": "mocha-express --coverage",

@@ -1,11 +1,11 @@
-# Enhance
+# @defx/tandem
 
 A lightweight JavaScript library for progressively enhancing static HTML with functional state management and reactive updates.
 
 ## Install
 
 ```sh
-> npm i @defx/enhance
+> npm i @defx/tandem
 ```
 
 ## Quick Start
@@ -165,7 +165,7 @@ The state for each list item in the collection is derived from each elements dat
 </li>
 ```
 
-> The only hard requirement for list items is that you _must_ include a `[data-id]` attribute so that Enhance can safely re-order the list in response to any changes.
+> The only hard requirement for list items is that you _must_ include a `[data-id]` attribute so that Tandem can safely re-order the list in response to any changes.
 
 ### x-input
 
