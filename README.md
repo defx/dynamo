@@ -38,26 +38,11 @@ Here's our basic HTML...
 
 ```html
 <product-list>
-  <label for="sortInput"
-    >Sort by:</label
-  >
-  <select
-    id="sortInput"
-    name="sortBy"
-    x-input
-  >
-    <option value="priceLowToHigh">
-      Price (low - high)
-    </option>
-    <option
-      value="priceHighToLow"
-      selected
-    >
-      Price (high - low)
-    </option>
-    <option value="rating">
-      Rating
-    </option>
+  <label for="sortInput">Sort by:</label>
+  <select id="sortInput" name="sortBy" x-input>
+    <option value="priceLowToHigh">Price (low - high)</option>
+    <option value="priceHighToLow" selected>Price (high - low)</option>
+    <option value="rating">Rating</option>
   </select>
   <ul>
     <li
@@ -68,19 +53,14 @@ Here's our basic HTML...
     >
       <p>£14.99</p>
     </li>
-    <li
-      x-list="products"
-      data-id="f8g7r6d"
-      data-price="5.99"
-      data-rating="4.7"
-    >
+    <li x-list="products" data-id="f8g7r6d" data-price="5.99" data-rating="4.7">
       <p>£5.99</p>
     </li>
   </ul>
 </product-list>
 ```
 
-The first thing to note is that each list item includes an `x-list` attribute. This tells Tandem that those elements are part of a collection, and Tandem will derive an array value in state to represent the collection, including values for any `data-*` attributes on each element. For the above HTML, you can expect the initial state of your `product-list` element to include a key named `products` like this...
+The first thing to note is that each list item includes an `x-list` attribute. This tells Tandem that those elements are part of a collection, and Tandem will derive a state value to represent the collection, incorporating values from each elements `data-*` attributes. For the above HTML, you can expect the initial state of your `product-list` element to include a key named `products` like this...
 
 ```js
 {
@@ -147,19 +127,15 @@ Looking back at our Product List example, we want any changes to the `<Select>` 
 
 ```js
 const sort = {
-  priceLowToHigh: (a, b) =>
-    a.price - b.price,
-  priceHighToLow: (a, b) =>
-    b.price - a.price,
+  priceLowToHigh: (a, b) => a.price - b.price,
+  priceHighToLow: (a, b) => b.price - a.price,
   rating: (a, b) => b.rating - a.rating,
 }
 
 define("product-list", () => {
   return {
     getState: (state) => ({
-      products: state.products.sort(
-        sort[state.sortBy]
-      ),
+      products: state.products.sort(sort[state.sortBy]),
     }),
   }
 })
@@ -178,9 +154,7 @@ The Tandem approach would simply be to request more HTML from your API and then 
 Used to bind an event listener to an element, accepts two arguments separated by a colon `x-on="eventType:methodName"` where `eventType` is the type of even you want to listen for (e.g., "click", "mouseover", etc) and `methodName` is the name of the update method you wish to invoke;
 
 ```html
-<button x-on="click:toggleMenu">
-  [=]
-</button>
+<button x-on="click:toggleMenu">[=]</button>
 ```
 
 ### x-list
@@ -190,12 +164,7 @@ Used to declare an element as a list node.
 The state for each list item in the collection is derived from each elements dataset, so be sure to declare any values you need to work with as data attributes. For example, if you want to allow a user to sort your list, make sure that you declare any values you wish to sort on in each elements dataset:
 
 ```html
-<li
-  x-list="products"
-  data-id="f7g649f9"
-  data-price="19.99"
-  data-rating="4.2"
->
+<li x-list="products" data-id="f7g649f9" data-price="19.99" data-rating="4.2">
   <p>19.99</p>
 </li>
 ```
@@ -210,15 +179,9 @@ Used to bind any user input element (e.g., `<input>, <select>, <textarea>`) to a
 
 ```html
 <select name="sortBy" x-input>
-  <option value="bestsellers">
-    Bestsellers
-  </option>
-  <option value="priceLowToHigh">
-    Price (low - high)
-  </option>
-  <option value="priceHighToLow">
-    Price (high - low)
-  </option>
+  <option value="bestsellers">Bestsellers</option>
+  <option value="priceLowToHigh">Price (low - high)</option>
+  <option value="priceHighToLow">Price (high - low)</option>
   <option value="rating">Rating</option>
 </select>
 ```
