@@ -243,6 +243,7 @@ describe("list merge", () => {
           >
             <p>5</p>
           </li>
+          <button x-on="click:loadMore">load more</button>
         </ul>
       </${tagName}>
     `)
@@ -291,6 +292,8 @@ describe("list merge", () => {
         .map((el) => el.getAttribute("data-price"))
         .map((v) => +v)
     }
+
+    $(`[x-on="click:loadMore"]`).click()
 
     await nextFrame()
 

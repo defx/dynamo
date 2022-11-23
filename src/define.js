@@ -22,6 +22,12 @@ export const define = (name, factory) => {
     name,
     class extends HTMLElement {
       connectedCallback() {
+        let mergeHTMLWrapper
+
+        const api = {
+          mergeHTML: (k, v) => mergeHTMLWrapper?.(k, v),
+        }
+
         let config = factory(this)
 
         const initialState = deriveState(this)
@@ -35,23 +41,26 @@ export const define = (name, factory) => {
             ...(config.state || {}),
             ...initialState,
           },
+          api,
           onChangeCallback: (state, updated) => {
             subscribers.forEach((fn) => fn(state))
             updated()
           },
         })
 
+        mergeHTMLWrapper = (k, v) => {
+          mergeHTML(this, k, v)
+          const nextState = deriveState(this)
+          dispatch({
+            type: "MERGE",
+            payload: nextState,
+          })
+        }
+
         const store = {
           dispatch,
           getState,
-          mergeHTML: (k, v) => {
-            mergeHTML(this, k, v)
-            const nextState = deriveState(this)
-            dispatch({
-              type: "MERGE",
-              payload: nextState,
-            })
-          },
+          ...api,
         }
 
         bindInputs(this, dispatch)

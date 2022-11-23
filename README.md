@@ -151,6 +151,43 @@ In the example above, we're using `getState` to re-define the value of `products
 
 Now, what if we want to add more items into the list? A common use case would be to load more products into your list as the user scrolls down the page. You might be tempted to imagine updating `products` in state to add more items to the array but don't forget that tupelo isn't concerned with rendering your HTML, only binding onto the HTML that you provide it with. Adding items into the list is no different, and tupelo provides the `mergeHTML` function that allows you to do just that. Once invoked, tupelo will ensure that DOM and state are synchronised accordingly.
 
+```js
+define(tagName, () => {
+  return {
+    getState: (state) => ({
+      products: state.products.sort(sort[state.sortBy]),
+    }),
+    middleware: {
+      loadMore: (action, next, { mergeHTML }) => {
+        mergeHTML(
+          `[x-list="products"]`,
+          html`
+            <li
+              x-list="products"
+              data-id="f7g649f9"
+              data-price="19.99"
+              data-rating="4.2"
+            >
+              <p>19.99</p>
+            </li>
+            <li
+              x-list="products"
+              data-id="k7s95jg7"
+              data-price="3.99"
+              data-rating="4.7"
+            >
+              <p>3.99</p>
+            </li>
+          `
+        )
+      },
+    },
+  }
+})
+```
+
+In the example above we're using a middleware function to merge some hard-coded HTML into the list but a more realistic scenario would involve first fetching the HTML from your server. Middleware is the perfect place to do such a thing because a) the initial server fetch is asynchronous, and b) updating the DOM is a _side effect_.
+
 ## Attributes
 
 ### x-on

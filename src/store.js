@@ -25,6 +25,7 @@ export function configure({
   state: initialState = {},
   getState: getStateWrapper = (v) => v,
   onChangeCallback, // use this callback to update your UI whenever state changes
+  api = {},
 }) {
   let subscribers = []
   let state
@@ -76,6 +77,7 @@ export function configure({
         getState,
         dispatch,
         refs,
+        ...api,
       }) || done(action)
     }
   }
