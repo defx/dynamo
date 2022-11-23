@@ -1,6 +1,6 @@
 # @defx/tupelo
 
-A lightweight JavaScript library for progressively enhancing static HTML with functional state management and reactive updates.
+A lightweight JavaScript library for progressively enhancing static HTML.
 
 ## Install
 
