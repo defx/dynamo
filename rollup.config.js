@@ -4,7 +4,7 @@ export default [
   {
     input: "src/index.js",
     output: {
-      file: "dist/enhance.js",
+      file: "dist/tupelo.js",
       format: "es",
     },
   },
@@ -12,7 +12,7 @@ export default [
     input: "src/index.js",
     plugins: [terser()],
     output: {
-      file: "dist/enhance.min.js",
+      file: "dist/tupelo.min.js",
       format: "es",
     },
   },

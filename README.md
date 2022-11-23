@@ -1,21 +1,21 @@
-# @defx/tandem
+# @defx/tupelo
 
 A lightweight JavaScript library for progressively enhancing static HTML with functional state management and reactive updates.
 
 ## Install
 
 ```sh
-> npm i @defx/tandem
+> npm i @defx/tupelo
 ```
 
 ## Quick Start
 
-The first thing to understand is that Tandem is not concerned with how or where you generate your HTML. You can use whatever language or library you like to generate you initial HTML, Tandem's responsibility is to bind to your existing HTML and enable asynchronous updates in the browser.
+The first thing to understand is that tupelo is not concerned with how or where you generate your HTML. You can use whatever language or library you like to generate you initial HTML, tupelo's responsibility is to bind to your existing HTML and enable asynchronous updates in the browser.
 
 Follow these 3 steps to get started:
 
 - [Custom Element tag](#custom-element-tag) : Wrap the chunk of HTML that you wish to control in a custom tag
-- [[x-\*] attributes](#x--attributes) : Add some HTML attributes that Tandem can use to _progressively enhance_ your HTML
+- [[x-\*] attributes](#x--attributes) : Add some HTML attributes that tupelo can use to _progressively enhance_ your HTML
 - [Define](#define) : Include a script that configures your Custom Element with the data and functions required to handle events and update your HTML
 
 Let's take a look at each of those steps in a little more detail:
@@ -32,7 +32,7 @@ The Custom Element spec is a web standard that allows us to extend HTML with our
 
 ## \[x-\*\] attributes
 
-Tandem will look for a set of "special" attributes prefixed with an "x-" that you can use to tell it how to update your HTML. For example, lets say that your HTML includes a list of products that you would like your users to be able to sort in the browser.
+tupelo will look for a set of "special" attributes prefixed with an "x-" that you can use to tell it how to update your HTML. For example, lets say that your HTML includes a list of products that you would like your users to be able to sort in the browser.
 
 Here's our basic HTML...
 
@@ -65,7 +65,7 @@ Here's our basic HTML...
 </product-list>
 ```
 
-The first thing to note is that each list item includes an `x-list` attribute. This tells Tandem that those elements are part of a collection, and Tandem will derive a state value to represent the collection, incorporating values from each elements `data-*` attributes. For the above HTML, you can expect the initial state of your `product-list` element to include a key named `products` like this...
+The first thing to note is that each list item includes an `x-list` attribute. This tells tupelo that those elements are part of a collection, and tupelo will derive a state value to represent the collection, incorporating values from each elements `data-*` attributes. For the above HTML, you can expect the initial state of your `product-list` element to include a key named `products` like this...
 
 ```js
 {
@@ -84,7 +84,7 @@ The first thing to note is that each list item includes an `x-list` attribute. T
 }
 ```
 
-The second thing to note is that our `<Select>` element has the `x-input` attribute. This instructs Tandem to create another value in state and keep the two in sync. If the value of the `<Select>` changes then this will be reflected automatically in state, and vice versa. As "Price (high - low)" is the default option, we can expect the initial state of our `product-list` to reflect that...
+The second thing to note is that our `<Select>` element has the `x-input` attribute. This instructs tupelo to create another value in state and keep the two in sync. If the value of the `<Select>` changes then this will be reflected automatically in state, and vice versa. As "Price (high - low)" is the default option, we can expect the initial state of our `product-list` to reflect that...
 
 ```js
 {
@@ -97,16 +97,16 @@ The second thing to note is that our `<Select>` element has the `x-input` attrib
 
 Now lets take a look at how our Custom Element is defined, where state lives, and how we can update it.
 
-Tandem exports the `define` function which is used to define a new custom element.
+tupelo exports the `define` function which is used to define a new custom element.
 
 ```js
-import { define } from "@defx/tandem"
+import { define } from "@defx/tupelo"
 
 define("product-list", () => {
   return {
     state: {
       /* 
-        Tandem derives the initial state of your element 
+        tupelo derives the initial state of your element 
         from your HTML attributes 
       */
     },
@@ -149,7 +149,7 @@ define("product-list", () => {
 
 In the example above, we're using `getState` to re-define the value of `products` by sorting its initial value using one of three custom sorting functions. We use the value of `sortBy` in state to select the correct sorting function. Because `getState` is called automatically whenever state changes, this is literally all that we need to ensure that our list of products on the page reflects the selected sort option!
 
-Now, what if we want to add more items into the list? A common use case would be to load more products into your list as the user scrolls down the page. You might be tempted to imagine updating `products` in state to add more items to the array but don't forget that Tandem isn't concerned with rendering your HTML, only binding onto the HTML that you provide it with. Adding items into the list is no different, and Tandem provides the `mergeHTML` function that allows you to do just that. Once invoked, Tandem will ensure that DOM and state are synchronised accordingly.
+Now, what if we want to add more items into the list? A common use case would be to load more products into your list as the user scrolls down the page. You might be tempted to imagine updating `products` in state to add more items to the array but don't forget that tupelo isn't concerned with rendering your HTML, only binding onto the HTML that you provide it with. Adding items into the list is no different, and tupelo provides the `mergeHTML` function that allows you to do just that. Once invoked, tupelo will ensure that DOM and state are synchronised accordingly.
 
 ## Attributes
 
@@ -173,7 +173,7 @@ The state for each list item in the collection is derived from each elements dat
 </li>
 ```
 
-> The only hard requirement for list items is that you _must_ include a `[data-id]` attribute so that Tandem can safely re-order the list in response to any changes.
+> The only hard requirement for list items is that you _must_ include a `[data-id]` attribute so that tupelo can safely re-order the list in response to any changes.
 
 ### x-input
 
