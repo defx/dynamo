@@ -175,9 +175,9 @@ describe("list merge", () => {
         getState: (state) => ({
           products: state.products.sort(sort[state.sortBy]),
         }),
-        connectedCallback({ mergeHTML }) {
+        connectedCallback({ appendHTML }) {
           requestAnimationFrame(() => {
-            mergeHTML(
+            appendHTML(
               `[x-list="products"]`,
               html`
                 <li
@@ -260,8 +260,8 @@ describe("list merge", () => {
           products: state.products.sort(sort[state.sortBy]),
         }),
         middleware: {
-          loadMore: (action, next, { mergeHTML }) => {
-            mergeHTML(
+          loadMore: (action, next, { appendHTML }) => {
+            appendHTML(
               `[x-list="products"]`,
               html`
                 <li

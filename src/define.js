@@ -25,7 +25,7 @@ export const define = (name, factory) => {
         let mergeHTMLWrapper
 
         const api = {
-          mergeHTML: (k, v) => mergeHTMLWrapper?.(k, v),
+          appendHTML: (k, v) => mergeHTMLWrapper?.(k, v),
         }
 
         let config = factory(this)

@@ -149,7 +149,7 @@ define("product-list", () => {
 
 In the example above, we're using `getState` to re-define the value of `products` by sorting its initial value using one of three custom sorting functions. We use the value of `sortBy` in state to select the correct sorting function. Because `getState` is called automatically whenever state changes, this is literally all that we need to ensure that our list of products on the page reflects the selected sort option!
 
-Now, what if we want to add more items into the list? A common use case would be to load more products into your list as the user scrolls down the page. You might be tempted to imagine updating `products` in state to add more items to the array but don't forget that tupelo isn't concerned with rendering your HTML, only binding onto the HTML that you provide it with. Adding items into the list is no different, and tupelo provides the `mergeHTML` function that allows you to do just that. Once invoked, tupelo will ensure that DOM and state are synchronised accordingly.
+Now, what if we want to add more items into the list? A common use case would be to load more products into your list as the user scrolls down the page. You might be tempted to imagine updating `products` in state to add more items to the array but don't forget that tupelo isn't concerned with rendering your HTML, only binding onto the HTML that you provide it with. Adding items into the list is no different, and tupelo provides the `appendHTML` function that allows you to do just that. Once invoked, tupelo will ensure that DOM and state are synchronised accordingly.
 
 ```js
 define(tagName, () => {
@@ -158,8 +158,8 @@ define(tagName, () => {
       products: state.products.sort(sort[state.sortBy]),
     }),
     middleware: {
-      loadMore: (action, next, { mergeHTML }) => {
-        mergeHTML(
+      loadMore: (action, next, { appendHTML }) => {
+        appendHTML(
           `[x-list="products"]`,
           html`
             <li
