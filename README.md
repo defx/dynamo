@@ -269,7 +269,7 @@ Our hamburger button will simply be initialised with a fragment link so that cli
 </style>
 <a href="#mainNavigation" x-on="click:toggleMenu">[=]</a>
 <main>
-  <!-- your main page content here -->
+  <!-- main page content here -->
 </main>
 <nav x-class="navClasses">
   <ul id="mainNavigation">
