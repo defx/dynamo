@@ -134,29 +134,6 @@ In the example above, we're using `getState` to re-define the value of `products
 
 ## Attributes
 
-### x-on
-
-Used to bind an event listener to an element, accepts two arguments separated by a colon `x-on="eventType:methodName"` where `eventType` is the type of even you want to listen for and `methodName` is the name of the update method you wish to invoke;
-
-```html
-<button x-on="click:toggleMenu">[=]</button>
-```
-
-```js
-define("some-element", () => {
-  return {
-    update: {
-      toggleMenu: (state) => {
-        return {
-          ...state,
-          menuOpen: !state.menuOpen,
-        }
-      },
-    },
-  }
-})
-```
-
 ### x-list
 
 Used to declare an element as a list node.
@@ -186,20 +163,36 @@ Used to bind any user input element (e.g., `<input>, <select>, <textarea>`) to a
 </select>
 ```
 
+### x-on
+
+Used to bind an event listener to an element, accepts two arguments separated by a colon `x-on="eventType:methodName"` where `eventType` is the type of even you want to listen for and `methodName` is the name of the update method you wish to invoke;
+
+Let's say, for example, we want to add a "load more" button to our product list...
+
+```html
+<button x-on="click:loadMore">[=]</button>
+```
+
+```js
+define("some-element", () => {
+  return {
+    middleware: {
+      loadMore: (state) => {
+        /* fetch more products from the server... */
+      },
+    },
+  }
+})
+```
+
 ### x-ref
 
 Used to create a reference to a particular DOM element which will be available on the `refs` object provided as the third argument to a `middleware` callback function (see [Middleware]() for more details) and also as part of the first argument provided to `connectedCallback` (see [Lifecycle Events]()).
 
-Each ref also includes a special `append` method that can be used to append additional HTML to the element which will then trigger an update cycle to ensure state and DOM are synchronised. For example, let's say that we wanted to extend our `product-list` example so that we could load more items into the list when the user taps a button...
+Each ref also includes a special `append` method that can be used to append additional HTML to the element which will then trigger an update cycle to ensure state and DOM are synchronised.
 
 ```html
-<label for="sortInput">Sort by:</label>
-<select name="sortBy" id="sortInput" x-input>
-  <option value="bestsellers">Bestsellers</option>
-  <option value="priceLowToHigh" selected>Price (low - high)</option>
-  <option value="priceHighToLow">Price (high - low)</option>
-  <option value="rating">Rating</option>
-</select>
+<!-- .... -->
 <ul x-ref="productList">
   <li x-list="products" data-id="afd56erg" data-price="14.99" data-rating="4.2">
     <p>14.99</p>
@@ -211,9 +204,11 @@ Each ref also includes a special `append` method that can be used to append addi
 </ul>
 ```
 
-In the example above, we've added the `x-ref` to the list parent and also included a "load more" button with an `x-on` binding which will invoke an update method with the name `loadMore` in the event of a click.
+In the example above, we've added the `x-ref` to the list parent so that we have a reference to the element that we want to append more list items to.
 
-Our custom element definition looks like this:
+We've also included a "load more" button with an `x-on` binding which will invoke our `loadMore` function in the event of a click.
+
+The `loadMore` function in our `product-list` definition might look something like this:
 
 ```js
 define("product-list", () => {
@@ -247,10 +242,69 @@ define("product-list", () => {
 })
 ```
 
-We've configured `middleware` to define our `loadMore` function as we're handling a side effect rather than simply updating state (see (Middleware)[] for full details). In the example above we simply append some hard-coded html to the product list, however a more likely scenario would be to fetch the HTML from your server. Once the `append` function is invoked, the `product-list` DOM will be synchronised with state and your list will now include the additional items with the correct sorting applied.
+We've configured `middleware` to define our `loadMore` function as we're handling a side effect rather than simply updating state (see (Middleware)[] for full details). In the example above we simply append some hard-coded html to the product list, however a more realistic scenario would include fetching the HTML from your server. Once the `append` function is invoked, the `product-list` DOM will be synchronised with state and your list will now include the additional items with the correct sorting applied.
 
 ### x-class
 
-Use to bind an object in state to one or more classes on the element. Object keys declare a class name, and will be applied to the element dependent on whether the corresponding value is truthy or falsy.
+Use to bind an object in state to one or more classes on the element. Object keys declare a class name, and will be applied to the element dependent on whether the corresponding value is truthy or falsy. Let's say that we want to include a sliding navigation menu on our website, we could initially render the menu at the foot of the page so that it is...
+
+1. part of the initial HTMl payload
+2. accessible without JavaScript
+3. out of the way of the main content
+
+Our hamburger button will simply be initialised with a fragment link so that clicking it will simply scroll the page down the where the menu starts.
+
+```html
+<style>
+  .hamburger {
+    transform: translate(-100%, 0);
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .hamburger.open {
+    transform: translate(0, 0);
+  }
+</style>
+<a href="#mainNavigation" x-on="click:toggleMenu">[=]</a>
+<main>
+  <!-- your main page content here -->
+</main>
+<nav x-class="navClasses">
+  <ul id="mainNavigation">
+    <li>New In</li>
+    <li>Bestsellers</li>
+    <li>Skincare</li>
+    <li>Makeup</li>
+  </ul>
+</nav>
+```
+
+Now in our element defintion we can define the desired behaviour:
+
+```js
+define("page-container", () => {
+  return {
+    state: {
+      navClasses: {
+        hamburger: true,
+        open: false,
+      },
+    },
+    update: {
+      toggleMenu: (state) => {
+        return {
+          ...state,
+          navClasses: {
+            hamburger: true,
+            open: !state.navClasses.open,
+          },
+        }
+      },
+    },
+  }
+})
+```
+
+In the example above, we define some initial state for our `navClasses` causing the menu to be hidden offscreen, as well as our `toggleMenu` update function to toggle the `open` class in response to the click event.
 
 ## Define

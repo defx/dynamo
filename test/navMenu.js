@@ -33,23 +33,22 @@ describe("navigation menu enhancement", () => {
     define(tagName, () => {
       return {
         state: {
-          menuIsOpen: false,
+          navClasses: {
+            hamburger: true,
+            open: false,
+          },
         },
         update: {
           toggleMenu: (state) => {
             return {
               ...state,
-              menuIsOpen: !state.menuIsOpen,
+              navClasses: {
+                hamburger: true,
+                open: !state.navClasses.open,
+              },
             }
           },
         },
-        getState: (state) => ({
-          ...state,
-          navClasses: {
-            hamburger: true,
-            open: state.menuIsOpen,
-          },
-        }),
       }
     })
 

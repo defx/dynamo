@@ -218,8 +218,8 @@ describe("list merge", () => {
 
     mount(html`
       <${tagName}>
-        <label for="pet-select">Sort by:</label>
-        <select name="sortBy" x-input>
+        <label for="sortInput">Sort by:</label>
+        <select name="sortBy" id="sortInput" x-input>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh" selected>Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
