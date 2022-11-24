@@ -1,5 +1,7 @@
+import { $$ } from "./helpers.js"
+
 export function bindInputs(node, dispatch) {
-  const nodes = [...node.querySelectorAll(`[x-input]`)].filter((node) =>
+  const nodes = $$(node, `[x-input]`).filter((node) =>
     ["SELECT"].includes(node.nodeName)
   )
 

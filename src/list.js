@@ -1,3 +1,5 @@
+import { $$ } from "./helpers.js"
+
 export const compareKeyedLists = (key, a = [], b = []) => {
   let delta = b.map(([k, item]) =>
     !key ? (k in a ? k : -1) : a.findIndex(([_, v]) => v[key] === item[key])
@@ -8,7 +10,7 @@ export const compareKeyedLists = (key, a = [], b = []) => {
 /* @todo: handle multiple lists bound to the same property */
 /* is .after a no-op if the element is already the nextSibling? */
 export function listSync(rootNode, path, arr) {
-  const nodes = [...rootNode.querySelectorAll(`[x-list="${path}"]`)]
+  const nodes = $$(rootNode, `[x-list="${path}"]`)
 
   // check if anything has changed
   const nodeIds = nodes.map(({ dataset: { id } }) => id)

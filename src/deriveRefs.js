@@ -1,3 +1,5 @@
+import { $$ } from "./helpers.js"
+
 function wrap(node, append) {
   return new Proxy(node, {
     get(_, prop) {
@@ -10,7 +12,7 @@ function wrap(node, append) {
 }
 
 export function deriveRefs(rootNode, append) {
-  return [...rootNode.querySelectorAll(`[x-ref]`)].reduce((o, el) => {
+  return $$(rootNode, `[x-ref]`).reduce((o, el) => {
     o[el.getAttribute("x-ref")] = wrap(el, append)
     return o
   }, {})

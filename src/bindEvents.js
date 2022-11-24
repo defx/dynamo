@@ -1,5 +1,7 @@
+import { $$ } from "./helpers.js"
+
 export function bindEvents(node, dispatch) {
-  const nodes = [...node.querySelectorAll(`[x-on]`)]
+  const nodes = $$(node, `[x-on]`)
 
   for (const node of nodes) {
     const [eventType, actionName] = node

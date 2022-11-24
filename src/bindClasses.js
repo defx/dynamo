@@ -1,4 +1,4 @@
-/* this can just return a subscriber */
+import { $$ } from "./helpers.js"
 
 function applyClasses(o, node) {
   if (!o) return
@@ -13,7 +13,8 @@ function applyClasses(o, node) {
 
 export function bindClasses(rootNode) {
   return (state) => {
-    const nodes = [...rootNode.querySelectorAll(`[x-class]`)]
+    const nodes = $$(rootNode, `[x-class]`)
+
     if (!nodes.length) return
 
     for (const node of nodes) {

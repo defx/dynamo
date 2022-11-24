@@ -1,7 +1,8 @@
+import { $$ } from "./helpers.js"
 import { listSync } from "./list.js"
 
 export function deriveSubscribers(rootNode) {
-  const nodes = [...rootNode.querySelectorAll(`[x-list]`)]
+  const nodes = $$(rootNode, `[x-list]`)
 
   const byPath = {}
 

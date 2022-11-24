@@ -1,2 +1,0 @@
-export const BINDING_ATTRIBUTE_NAME = "x-bind"
-export const BINDING_ATTRIBUTE_SELECTOR = `[${BINDING_ATTRIBUTE_NAME}]`
