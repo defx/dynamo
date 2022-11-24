@@ -142,6 +142,21 @@ Used to bind an event listener to an element, accepts two arguments separated by
 <button x-on="click:toggleMenu">[=]</button>
 ```
 
+```js
+define("some-element", () => {
+  return {
+    update: {
+      toggleMenu: (state) => {
+        return {
+          ...state,
+          menuOpen: !state.menuOpen,
+        }
+      },
+    },
+  }
+})
+```
+
 ### x-list
 
 Used to declare an element as a list node.
