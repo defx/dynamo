@@ -22,7 +22,7 @@ Let's take a look at each of those steps in a little more detail:
 
 ## Custom Element tag
 
-The Custom Element spec is a web standard that allows us to extend HTML with our own custom elements. Once defined, we can use those elements just like any other HTML element. You can call your Custom Element anything you like, as long as you include a hyphen in the name (e.g., `main-nav`) - this is simply to differentiate custom elements from built-in elements. So, wrapping the HTML you want to control in a custom element would look like something like this:
+The Custom Element spec is a web standard that allows us to extend HTML with our own custom elements. Once defined, we can use those elements just like any other HTML element. You can call your Custom Element anything you like, as long as you include a hyphen in the name (e.g., `main-nav`) - this is simply to differentiate custom elements from native built-in elements.
 
 ```html
 <product-list>
