@@ -97,7 +97,7 @@ The second thing to note is that our `<Select>` element has the `x-input` attrib
 
 Now lets take a look at how our Custom Element is defined, where state lives, and how we can update it.
 
-tupelo exports the `define` function which is used to define a new custom element.
+tupelo exports the `define` function which is used to configure a new custom element.
 
 ```js
 import { define } from "@defx/tupelo"
