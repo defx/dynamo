@@ -10,7 +10,7 @@ A lightweight JavaScript library for progressively enhancing static HTML.
 
 ## Quick Start
 
-The first thing to understand is that tupelo is not concerned with how or where you generate your HTML. You can use whatever language or library you like to generate you initial HTML, tupelo's responsibility is to bind to your existing HTML and enable asynchronous updates in the browser.
+The first thing to understand is that tupelo is not concerned with how or where you generate your HTML. You can use whatever language or library you like to generate your initial HTML, tupelo's responsibility is to bind to your existing HTML and enable asynchronous updates in the browser.
 
 Follow these 3 steps to get started:
 
