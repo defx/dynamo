@@ -65,7 +65,7 @@ Here's our basic HTML...
 </product-list>
 ```
 
-The first thing to note is that each list item includes an `x-list` attribute. This tells tupelo that those elements are part of a collection named "products", and tupelo will derive a state value to represent the collection, incorporating values from each elements `data-*` attributes. For the above HTML, you can expect your initial state to look like this...
+The first thing to note is that each list item includes an `x-list` attribute. This tells tupelo that those elements are part of a collection named "products", and tupelo will derive a state value to represent the collection, incorporating values from each elements `data-*` attributes. For the above HTML, you can expect the initial state of `<product-list>` to look like this...
 
 ```js
 {
@@ -84,7 +84,7 @@ The first thing to note is that each list item includes an `x-list` attribute. T
 }
 ```
 
-The second thing to note is that our `<Select>` element has the `x-input` attribute. This instructs tupelo to create another value in state and keep the two in sync. If the value of the `<Select>` changes then this will be reflected automatically in state, and vice versa. As "Price (high - low)" is the default option, we can expect the initial state of our `product-list` to reflect that...
+The second thing to note is that our `<Select>` element has the `x-input` attribute. This instructs tupelo to create another value in state and keep the two in sync. If the value of the `<Select>` changes then this will be reflected automatically in state, and vice versa. As "Price (high - low)" is the default option, we can expect the initial state of `<product-list>` to reflect that...
 
 ```js
 {
