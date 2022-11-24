@@ -93,7 +93,7 @@ The second thing to note is that our `<Select>` element has the `x-input` attrib
 }
 ```
 
-## Define
+## Configure
 
 Now lets take a look at how our Custom Element is defined, where state lives, and how we can update it.
 
@@ -104,31 +104,14 @@ import { define } from "@defx/tupelo"
 
 define("product-list", () => {
   return {
-    state: {
-      /* 
-        tupelo derives the initial state of your element 
-        from your HTML attributes 
-      */
-    },
-    update: {
-      /* 
-        Somewhere to put functions that you need to update state 
-      */
-    },
-    getState: (state) => {
-      /* 
-        Called once whenever state changes, provide this function 
-        if you want to derive any additional properties
-      */
-      return state
-    },
+    /* some configuration here */
   }
 })
 ```
 
-In the example above, we're telling the browser about a new element called "product-list", and we're providing a factory function that will be called for every new instance of that element on the page.
+In the example above, we're telling the browser about a new element called "product-list", and we're providing a factory function that will be called for every new instance of that element on the page. The object returned from this factory function is used to configuration our custom element (see [Define](#define) for all the options)
 
-Looking back at our Product List example, we want any changes to the `<Select>` option to update the sort order of our products, and `getState` gives us a nice and simple way to do this...
+Looking back at our Product List example, we want any changes to the `<Select>` option to update the sort order of our products, and the `getState` configuration parameter gives us a nice, simple way to do this...
 
 ```js
 const sort = {
@@ -227,3 +210,5 @@ Used to bind any user input element (e.g., `<input>, <select>, <textarea>`) to a
 ### x-class
 
 Use to bind an object in state to one or more classes on the element. Object keys declare a class name, and will be applied to the element dependent on whether the corresponding value is truthy or falsy.
+
+## Define
