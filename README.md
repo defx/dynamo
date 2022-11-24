@@ -246,11 +246,13 @@ We've configured `middleware` to define our `loadMore` function as we're handlin
 
 ### x-class
 
-Use to bind an object in state to one or more classes on the element. Object keys declare a class name, and will be applied to the element dependent on whether the corresponding value is truthy or falsy. Let's say that we want to include a sliding navigation menu on our website, we could initially render the menu at the foot of the page so that it is...
+Use to bind an object in state to one or more classes on the element.
 
-1. part of the initial HTMl payload
-2. accessible without JavaScript
-3. out of the way of the main content
+Let's say that we want to include a sliding navigation menu on our website, we could initially render the menu at the foot of the page so that it is...
+
+- part of the initial HTMl payload
+- accessible without JavaScript
+- out of the way of the main content
 
 Our hamburger button will simply be initialised with a fragment link so that clicking it will simply scroll the page down the where the menu starts.
 
