@@ -1,24 +1,12 @@
-import {
-  BINDING_ATTRIBUTE_NAME,
-  BINDING_ATTRIBUTE_SELECTOR,
-} from "./constants.js"
-
 import { listSync } from "./list.js"
 
-export function deriveSubscribers(
-  rootNode
-) {
-  const nodes = [
-    ...rootNode.querySelectorAll(
-      `[x-list]`
-    ),
-  ]
+export function deriveSubscribers(rootNode) {
+  const nodes = [...rootNode.querySelectorAll(`[x-list]`)]
 
   const byPath = {}
 
   for (const node of nodes) {
-    const k =
-      node.getAttribute(`x-list`)
+    const k = node.getAttribute(`x-list`)
 
     const { id } = node.dataset
 

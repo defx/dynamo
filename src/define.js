@@ -1,5 +1,6 @@
 import { deriveState } from "./deriveState.js"
 import { deriveSubscribers } from "./deriveSubscribers.js"
+import { deriveRefs } from "./deriveRefs.js"
 import { bindInputs } from "./bindInputs.js"
 import { bindEvents } from "./bindEvents.js"
 import { bindClasses } from "./bindClasses.js"
@@ -9,12 +10,10 @@ function last(v) {
   return v[v.length - 1]
 }
 
-function mergeHTML(rootNode, selector, html) {
-  const nodes = [...rootNode.querySelectorAll(selector)]
-  const lastNode = last(nodes)
+function mergeHTML(parentNode, html) {
   const tpl = document.createElement("template")
   tpl.innerHTML = html.trim()
-  lastNode.after(tpl.content)
+  parentNode.appendChild(tpl.content)
 }
 
 export const define = (name, factory) => {
@@ -22,10 +21,8 @@ export const define = (name, factory) => {
     name,
     class extends HTMLElement {
       connectedCallback() {
-        let mergeHTMLWrapper
-
         const api = {
-          appendHTML: (k, v) => mergeHTMLWrapper?.(k, v),
+          refs: {},
         }
 
         let config = factory(this)
@@ -48,14 +45,14 @@ export const define = (name, factory) => {
           },
         })
 
-        mergeHTMLWrapper = (k, v) => {
-          mergeHTML(this, k, v)
+        api.refs = deriveRefs(this, (parentNode) => (html) => {
+          mergeHTML(parentNode, html)
           const nextState = deriveState(this)
           dispatch({
             type: "MERGE",
             payload: nextState,
           })
-        }
+        })
 
         const store = {
           dispatch,

@@ -37,8 +37,6 @@ export function configure({
 
   updateState(initialState)
 
-  const refs = {}
-
   function getState() {
     return { ...state }
   }
@@ -76,7 +74,6 @@ export function configure({
       middleware[action.type]?.(action, done, {
         getState,
         dispatch,
-        refs,
         ...api,
       }) || done(action)
     }
@@ -85,6 +82,5 @@ export function configure({
   return {
     dispatch, // dispatch an action to the reducers
     getState, // optionally provide a wrapper function to derive additional properties in state
-    refs, // an empty object that you can attach element refs to (supplied on object passed as the third argument to middleware functions)
   }
 }

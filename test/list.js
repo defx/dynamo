@@ -143,7 +143,7 @@ describe("list merge", () => {
           <option value="priceHighToLow">Price (high - low)</option>
           <option value="rating">Rating</option>
         </select>
-        <ul>
+        <ul x-ref="productList">
           <li
             x-list="products"
             data-id="afd56erg"
@@ -175,10 +175,9 @@ describe("list merge", () => {
         getState: (state) => ({
           products: state.products.sort(sort[state.sortBy]),
         }),
-        connectedCallback({ appendHTML }) {
+        connectedCallback({ refs: { productList } }) {
           requestAnimationFrame(() => {
-            appendHTML(
-              `[x-list="products"]`,
+            productList.append(
               html`
                 <li
                   x-list="products"
@@ -226,7 +225,7 @@ describe("list merge", () => {
           <option value="priceHighToLow">Price (high - low)</option>
           <option value="rating">Rating</option>
         </select>
-        <ul>
+        <ul x-ref="productList">
           <li
             x-list="products"
             data-id="afd56erg"
@@ -260,9 +259,8 @@ describe("list merge", () => {
           products: state.products.sort(sort[state.sortBy]),
         }),
         middleware: {
-          loadMore: (action, next, { appendHTML }) => {
-            appendHTML(
-              `[x-list="products"]`,
+          loadMore: (action, next, { refs: { productList } }) => {
+            productList.append(
               html`
                 <li
                   x-list="products"
