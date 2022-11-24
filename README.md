@@ -16,7 +16,7 @@ Follow these 3 steps to get started:
 
 - [Custom Element tag](#custom-element-tag) : Wrap the chunk of HTML that you wish to control in a custom tag
 - [[x-\*] attributes](#x--attributes) : Add some HTML attributes that tupelo can use to _progressively enhance_ your HTML
-- [Define](#define) : Include a script that configures your Custom Element with the data and functions required to handle events and update your HTML
+- [Configure](#define) : Include a script that configures your Custom Element using tupelos `define` function
 
 Let's take a look at each of those steps in a little more detail:
 
