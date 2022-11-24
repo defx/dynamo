@@ -186,6 +186,69 @@ Used to bind any user input element (e.g., `<input>, <select>, <textarea>`) to a
 </select>
 ```
 
+### x-ref
+
+Used to create a reference to a particular DOM element which will be available on the `refs` object provided as the third argument to a `middleware` callback function (see [Middleware]() for more details) and also as part of the first argument provided to `connectedCallback` (see [Lifecycle Events]()).
+
+Each ref also includes a special `append` method that can be used to append additional HTML to the element which will then trigger an update cycle to ensure state and DOM are synchronised. For example, let's say that we wanted to extend our `product-list` example so that we could load more items into the list when the user taps a button...
+
+```html
+<label for="sortInput">Sort by:</label>
+<select name="sortBy" id="sortInput" x-input>
+  <option value="bestsellers">Bestsellers</option>
+  <option value="priceLowToHigh" selected>Price (low - high)</option>
+  <option value="priceHighToLow">Price (high - low)</option>
+  <option value="rating">Rating</option>
+</select>
+<ul x-ref="productList">
+  <li x-list="products" data-id="afd56erg" data-price="14.99" data-rating="4.2">
+    <p>14.99</p>
+  </li>
+  <li x-list="products" data-id="f8g7r6d" data-price="5" data-rating="4.7">
+    <p>5</p>
+  </li>
+  <button x-on="click:loadMore">load more</button>
+</ul>
+```
+
+In the example above, we've added the `x-ref` to the list parent and also included a "load more" button with an `x-on` binding which will invoke an update method with the name `loadMore` in the event of a click.
+
+Our custom element definition looks like this:
+
+```js
+define("product-list", () => {
+  return {
+    /* ... */
+    middleware: {
+      loadMore: (action, next, { refs: { productList } }) => {
+        productList.append(
+          html`
+            <li
+              x-list="products"
+              data-id="f7g649f9"
+              data-price="19.99"
+              data-rating="4.2"
+            >
+              <p>19.99</p>
+            </li>
+            <li
+              x-list="products"
+              data-id="k7s95jg7"
+              data-price="3.99"
+              data-rating="4.7"
+            >
+              <p>3.99</p>
+            </li>
+          `
+        )
+      },
+    },
+  }
+})
+```
+
+We've used `middleware` to define our `loadMore` function as we're handling a side effect rather than simply updating state. In the example above we simply append some hard-coded html to the product list, however a more likely scenario would be to fetch the HTML from your server. Once the `append` function is invoked, the `product-list` DOM will be synchronised with state and your list will now include the additional items with the correct sorting applied.
+
 ### x-class
 
 Use to bind an object in state to one or more classes on the element. Object keys declare a class name, and will be applied to the element dependent on whether the corresponding value is truthy or falsy.
