@@ -254,7 +254,7 @@ Let's say that we want to include a sliding navigation menu on our website, we c
 - accessible without JavaScript
 - out of the way of the main content
 
-Our hamburger button will simply be initialised with a fragment link so that clicking it will simply scroll the page down the where the menu starts.
+Our hamburger button will be initialised with a fragment link so that clicking it will simply scroll the page down the where the menu starts.
 
 ```html
 <style>
