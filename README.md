@@ -242,7 +242,7 @@ define("product-list", () => {
 })
 ```
 
-We've configured `middleware` to define our `loadMore` function as we're handling a side effect rather than simply updating state (see (Middleware)[] for full details). In the example above we simply append some hard-coded html to the product list, however a more realistic scenario would include fetching the HTML from your server. Once the `append` function is invoked, the `product-list` DOM will be synchronised with state and your list will now include the additional items with the correct sorting applied.
+We've configured `middleware` to define our `loadMore` function as we're handling a side effect rather than simply updating state (see [Middleware]() for full details). In the example above we simply append some hard-coded html to the product list, however a more realistic scenario would include fetching the HTML from your server. Once the `append` function is invoked, the `product-list` DOM will be synchronised with state and your list will now include the additional items with the correct sorting applied.
 
 ### x-class
 
