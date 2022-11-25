@@ -2,6 +2,8 @@
 
 A lightweight JavaScript library for progressively enhancing static HTML.
 
+Over-dependence on JavaScript hinders the performance and resilience of many of todays websites. Progressive Enhancement has been around for many years and provides a clear strategy for building resilient and performant websites from first principles, however many of the most popular JavaScript libraries today aren't well suited to this approach. Tupelo has been designed for the purpose of providing the best features a developer needs for web development (component worflow, functional state management, and reactive updates) that can be applied together with a strategy of Progressive Enhancement.
+
 ## Install
 
 ```sh
