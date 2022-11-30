@@ -258,7 +258,7 @@ Use to bind an object in state to one or more classes on the element.
 
 Let's say that we want to include a sliding navigation menu on our website, we could initially render the menu at the foot of the page so that it is...
 
-- part of the initial HTMl payload
+- part of the initial HTML payload
 - accessible without JavaScript
 - out of the way of the main content
 
