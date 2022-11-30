@@ -117,7 +117,7 @@ define("product-list", () => {
 })
 ```
 
-In the example above, we're telling the browser about a new element called "product-list", and we're providing a factory function that will be called for every new instance of that element on the page. The object returned from this factory function is used to configuration our custom element (see [Define](#define) for all the options)
+In the example above, we're telling the browser about a new element called "product-list", and we're providing a factory function that will be called for every new instance of that element on the page. The object returned from this factory function is used to configure our custom element (see [Define](#define) for all the options)
 
 Looking back at our Product List example, we want any changes to the `<Select>` option to update the sort order of our products, and the `getState` configuration parameter gives us a nice, simple way to do this...
 
