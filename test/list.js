@@ -259,7 +259,7 @@ describe("list merge", () => {
           products: state.products.sort(sort[state.sortBy]),
         }),
         middleware: {
-          loadMore: (action, next, { refs: { productList } }) => {
+          loadMore: (_, { refs: { productList } }) => {
             productList.append(
               html`
                 <li

@@ -6,10 +6,6 @@ import { bindEvents } from "./bindEvents.js"
 import { bindClasses } from "./bindClasses.js"
 import { configure } from "./store.js"
 
-function last(v) {
-  return v[v.length - 1]
-}
-
 function mergeHTML(parentNode, html) {
   const tpl = document.createElement("template")
   tpl.innerHTML = html.trim()
@@ -21,8 +17,11 @@ export const define = (name, factory) => {
     name,
     class extends HTMLElement {
       connectedCallback() {
+        let nextTickSubscribers = []
+
         const api = {
           refs: {},
+          nextTick: (fn) => nextTickSubscribers.push(fn),
         }
 
         let config = factory(this)
@@ -39,9 +38,10 @@ export const define = (name, factory) => {
             ...initialState,
           },
           api,
-          onChangeCallback: (state, updated) => {
+          onChangeCallback: (state) => {
             subscribers.forEach((fn) => fn(state))
-            updated()
+            nextTickSubscribers.forEach((fn) => fn(state))
+            nextTickSubscribers = []
           },
         })
 

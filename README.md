@@ -317,4 +317,82 @@ define("page-container", () => {
 
 In the example above, we define some initial state for our `navClasses` causing the menu to be hidden offscreen, as well as our `toggleMenu` update function to toggle the `open` class in response to the click event.
 
-## Define
+## Configure
+
+## update
+
+the `update` config parameter can be used to supply a dictionary of named functions that will update state when invoked. these functions can be invoked as error handlers declared with `x-on` attributes, and also dispatched from middleware functions that we will discuss next.
+
+the most important thing to understand about update functions is:
+
+1. they must be synchronous
+2. they accept the current state as their first argument
+3. they return the next state
+
+For example...
+
+```js
+define("page-container", () => {
+  return {
+    state: {
+      menuIsOpen: false,
+    },
+    update: {
+      toggleMenu: (state) => {
+        return {
+          ...state,
+          menuIsOpen: !state.menuIsOpen,
+        }
+      },
+    },
+  }
+})
+```
+
+## middleware
+
+the `middleware` config parameter is similar to `update` in the sense that it expects a dictionary of named functions, however the functions provided here should be used whenever you need to do some asynchronous work or work with side-effects.
+
+the middleware function accepts the native event object as its first argument, and a special "middleware api" object as its second argument.
+
+### Middleware API
+
+```typescript
+
+type State = {
+    [key: string]: any
+  }
+
+type ActionInput = {
+  type: string
+  payload: {
+    [key: string]: any
+  }
+}
+
+interface Element extends HTMLElement {
+  /* appends the provided html to the element and then triggers an update cycle to ensure state and UI are synchronised */
+  appendHTML(html: String):void
+}
+
+type MiddlewareAPI {
+  /**
+   * Returns the current state at the time of invocation
+   */
+  getState():State
+  /*
+  * Dispatch an update to any update function with name matching action.type
+  */
+  dispatch(action: ActionInput):void
+  /*
+  * A dictionary of any HTML elements declared with the x-ref attribute
+  */
+  refs: {
+    [key: string]:Element
+  }
+  /*
+  * Register a callback to be invoked once after the next UI update
+  */
+ nextTick(callback: Function):void
+}
+```

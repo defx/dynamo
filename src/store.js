@@ -24,63 +24,61 @@ export function configure({
   middleware = [],
   state: initialState = {},
   getState: getStateWrapper = (v) => v,
-  onChangeCallback, // use this callback to update your UI whenever state changes
+  onChangeCallback,
   api = {},
 }) {
-  let subscribers = []
   let state
 
-  function updateState(o) {
+  function transition(o) {
     state = getStateWrapper({ ...o })
-    onChangeCallback(getState(), updated)
+    onChangeCallback(getState())
   }
 
-  updateState(initialState)
+  transition(initialState)
 
   function getState() {
     return { ...state }
-  }
-
-  function subscribe(fn) {
-    subscribers.push(fn)
-  }
-
-  function updated() {
-    subscribers.forEach((fn) => fn())
-    subscribers = []
   }
 
   function dispatch(action) {
     const { type } = action
 
     if (type === "SET" || type === "MERGE") {
-      updateState(systemReducer(getState(), action))
-    } else {
-      const done = (action) => {
-        if (action.type in update) {
-          updateState(update[action.type](getState(), action))
-        }
-        return {
-          then: (fn) =>
-            new Promise((resolve) => {
-              subscribe(() => {
-                fn()
-                resolve()
-              })
-            }),
-        }
-      }
+      transition(systemReducer(getState(), action))
+      return
+    }
 
-      middleware[action.type]?.(action, done, {
+    if (action.type in middleware) {
+      middleware[action.type]?.(action, {
         getState,
         dispatch,
         ...api,
-      }) || done(action)
+      })
+      return
+    }
+
+    if (action.type in update) {
+      transition(update[action.type](getState(), action))
     }
   }
 
   return {
     dispatch, // dispatch an action to the reducers
     getState, // optionally provide a wrapper function to derive additional properties in state
+    ...api,
   }
 }
+
+/*
+
+      return {
+        then: (fn) =>
+          new Promise((resolve) => {
+            subscribe(() => {
+              fn()
+              resolve()
+            })
+          }),
+      }
+
+*/
