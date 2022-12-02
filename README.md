@@ -358,6 +358,8 @@ Both `update` and `middleware` functions can be invoked via [`x-on`](#x-on) even
 
 ## update
 
+Update functions receive the current state as their first argument and return the _next_ state.
+
 The most important thing to understand about update functions is that;
 
 1. They must be synchronous
@@ -405,26 +407,15 @@ An action object provides some context to the `update` and `middleware` function
 
 ## middleware
 
-The middleware function accepts an `Action` as its first argument, and a special [middleware api](#middleware-api) object as its second argument.
-
-### Middleware API
+Middleware functions receieve an `Action` as their first argument, and a special [middleware api](#middleware-api) object as their second argument. Middleware functions are intended to do async work and handle side effects, so the Middleware API object provided as the second argument here provides the functions necessary to achieve that.
 
 ```typescript
-
-type State = {
-    [key: string]: any
-  }
 
 type ActionInput = {
   type: string
   payload: {
     [key: string]: any
   }
-}
-
-interface Element extends HTMLElement {
-  /* appends the provided html to the element and then triggers an update cycle to ensure state and UI are synchronised */
-  appendHTML(html: String):void
 }
 
 type MiddlewareAPI {
@@ -440,7 +431,7 @@ type MiddlewareAPI {
   * A dictionary of any HTML elements declared with the x-ref attribute
   */
   refs: {
-    [key: string]:Element
+    [key: string]: HTMLElement
   }
   /*
   * Register a callback to be invoked once after the next UI update
