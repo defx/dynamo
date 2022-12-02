@@ -321,7 +321,7 @@ In the example above, we define some initial state for our `navClasses` causing 
 
 ## update
 
-the `update` config parameter can be used to supply a dictionary of named functions that will update state when invoked. these functions can be invoked as error handlers declared with `x-on` attributes, and also dispatched from (Middleware)[#middleware] functions (we will discuss these next).
+the `update` config parameter can be used to supply a dictionary of named functions that will update state when invoked. these functions can be invoked as error handlers declared with `x-on` attributes, and also dispatched from [Middleware](#middleware) functions (we will discuss these next).
 
 The most important thing to understand about update functions is:
 
