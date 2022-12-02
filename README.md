@@ -393,17 +393,17 @@ The second argument passed to an update function is an `Action` object.
 An action object provides some context to the `update` and `middleware` functions. Depending on how it was generated, the action will contain two of three possible parameters:
 
 ```typescript
-{
+type Action = {
   /* Refers to the name of the target function */
-  type: String;
+  type: string
   /* The native event object. Supplied when triggered via an event with x-on attribute */
-  event?: Event;
+  event?: Event
   /* A custom object provided by the developer when calling the Middleware API's dispatch method */
-  payload?: Object;
+  payload?: { [key: string]: any }
 }
 ```
 
-> the value of payload _must_ be serializable, and Tupelo makes sure of that by serialising and then deserialising whatever you provide here before passing it to the target function.
+> The value of payload _must_ be serializable, and Tupelo makes sure of that by serialising and then deserialising whatever you provide here before passing it to the target function, so while you can theoretically pass any values through, what actually gets through is subject to the rules of [JSON serialization](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description).
 
 ## middleware
 
@@ -422,11 +422,11 @@ type MiddlewareAPI {
   /**
    * Returns the current state at the time of invocation
    */
-  getState():State
+  getState(): State
   /*
-  * Dispatch an update to any update function with name matching action.type
+  * Dispatch an update to any update or middleware function with name matching action.type
   */
-  dispatch(action: ActionInput):void
+  dispatch(action: ActionInput): void
   /*
   * A dictionary of any HTML elements declared with the x-ref attribute
   */
@@ -436,6 +436,6 @@ type MiddlewareAPI {
   /*
   * Register a callback to be invoked once after the next UI update
   */
- nextTick(callback: Function):void
+  nextTick(callback: Function): void
 }
 ```
