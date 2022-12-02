@@ -79,3 +79,5 @@ export const $$ = (e, q) => {
   })
   return matches
 }
+
+export const serializable = (o) => JSON.parse(JSON.stringify(o))

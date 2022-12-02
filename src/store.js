@@ -1,4 +1,4 @@
-import { setValueAtPath } from "./helpers.js"
+import { setValueAtPath, serializable } from "./helpers.js"
 
 function systemReducer(state, action) {
   switch (action.type) {
@@ -40,8 +40,9 @@ export function configure({
     return { ...state }
   }
 
-  function dispatch(action) {
-    const { type, payload, event } = action
+  function dispatch(_action) {
+    const { type, payload, event } = _action
+    const action = { type, payload: serializable(payload), event }
 
     if (type === "SET" || type === "MERGE") {
       transition(systemReducer(getState(), action))
@@ -49,19 +50,16 @@ export function configure({
     }
 
     if (action.type in middleware) {
-      middleware[action.type]?.(
-        { type, payload, event },
-        {
-          getState,
-          dispatch,
-          ...api,
-        }
-      )
+      middleware[action.type]?.(action, {
+        getState,
+        dispatch,
+        ...api,
+      })
       return
     }
 
     if (action.type in update) {
-      transition(update[action.type](getState(), { type, payload, event }))
+      transition(update[action.type](getState(), action))
     }
   }
 
