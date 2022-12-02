@@ -354,7 +354,7 @@ define(tagName, () => {
 })
 ```
 
-Both `update` and `middleware` functions can be invoked from `x-on` events, whereas `update` functions can also be dispatched directly from `middleware` functions.
+Both `update` and `middleware` functions can be invoked via [`x-on`](#x-on) events, whereas `update` functions can also be dispatched directly from `middleware` functions.
 
 ## update
 
