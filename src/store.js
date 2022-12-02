@@ -41,7 +41,7 @@ export function configure({
   }
 
   function dispatch(action) {
-    const { type } = action
+    const { type, payload, event } = action
 
     if (type === "SET" || type === "MERGE") {
       transition(systemReducer(getState(), action))
@@ -49,16 +49,19 @@ export function configure({
     }
 
     if (action.type in middleware) {
-      middleware[action.type]?.(action, {
-        getState,
-        dispatch,
-        ...api,
-      })
+      middleware[action.type]?.(
+        { type, payload, event },
+        {
+          getState,
+          dispatch,
+          ...api,
+        }
+      )
       return
     }
 
     if (action.type in update) {
-      transition(update[action.type](getState(), action))
+      transition(update[action.type](getState(), { type, payload, event }))
     }
   }
 

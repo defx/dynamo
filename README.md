@@ -358,9 +358,7 @@ Both `update` and `middleware` functions can be invoked via [`x-on`](#x-on) even
 
 ## update
 
-the `update` config parameter can be used to supply a dictionary of named functions that will update state when invoked. these functions can be invoked as error handlers declared with `x-on` attributes, and also dispatched programatically from [Middleware](#middleware) functions (we will discuss these next).
-
-The most important thing to understand about update functions is:
+The most important thing to understand about update functions is that;
 
 1. They must be synchronous
 2. They accept the current state as their first argument
@@ -386,11 +384,26 @@ define("page-container", () => {
 })
 ```
 
+The second argument passed to an update function is an `Action` object.
+
+## Actions
+
+An action object provides some context to the `update` and `middleware` functions. Depending on how it was generated, the action will contain two of three possible parameters:
+
+```typescript
+{
+  /* Simply refers to the name of the target function */
+  type: String,
+  /* The native event object, supplied if triggered via an event */
+  event?: Event
+  /* The payload is a custom object provided by the developer when calling dispatch */
+  payload?: Object
+}
+```
+
 ## middleware
 
-Like `update`, the `middleware` config parameter is a dictionary of named functions, however the functions provided here should be used whenever you need to do asynchronous work or to work with side-effects.
-
-The middleware function accepts the native event object as its first argument, and a special [middleware api](#middleware-api) object as its second argument.
+The middleware function accepts an `Action` as its first argument, and a special [middleware api](#middleware-api) object as its second argument.
 
 ### Middleware API
 
