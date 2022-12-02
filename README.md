@@ -317,11 +317,48 @@ define("page-container", () => {
 
 In the example above, we define some initial state for our `navClasses` causing the menu to be hidden offscreen, as well as our `toggleMenu` update function to toggle the `open` class in response to the click event.
 
-## Configure
+## define
+
+The define function is used to configure a new Custom Element.
+
+### syntax
+
+```js
+define(tagName, factory)
+```
+
+### Parameters
+
+- `tagName` (required) [string] - Name for the new Custom Element. As per the Custom Element
+  spec, an elements name must include a hyphen to differentiate from standard built-in elements.
+
+- `factory` (required) [function] - A factory function that will be called whenever a new instance of your Custom Element is created. It will be provided with one argument which is the Custom Element node itself. The factory function returns a [Model]() or a Promise that resolves to a Model.
+
+### Model
+
+The Model returned from your custom elements factory function accepts various parameters which are detailed in full in the API Reference section. Three of the most commonly used parameters are `state`,`update`, and `middleware`.
+
+```js
+define(tagName, () => {
+  return {
+    state: {
+      /* the initial state */
+    },
+    update: {
+      /* a dictionary of synchronous functions that update state */
+    },
+    middleware: {
+      /* a dictionary of functions that handle async work or side effects */
+    },
+  }
+})
+```
+
+Both `update` and `middleware` functions can be invoked from `x-on` events, whereas `update` functions can also be dispatched directly from `middleware` functions.
 
 ## update
 
-the `update` config parameter can be used to supply a dictionary of named functions that will update state when invoked. these functions can be invoked as error handlers declared with `x-on` attributes, and also dispatched from [Middleware](#middleware) functions (we will discuss these next).
+the `update` config parameter can be used to supply a dictionary of named functions that will update state when invoked. these functions can be invoked as error handlers declared with `x-on` attributes, and also dispatched programatically from [Middleware](#middleware) functions (we will discuss these next).
 
 The most important thing to understand about update functions is:
 
