@@ -401,6 +401,8 @@ An action object provides some context to the `update` and `middleware` function
 }
 ```
 
+> the value of payload _must_ be serializable, and tupelo makes sure of that by serialising and then deserialising whatever you provide here before passing it to the target function.
+
 ## middleware
 
 The middleware function accepts an `Action` as its first argument, and a special [middleware api](#middleware-api) object as its second argument.
