@@ -351,9 +351,9 @@ define("page-container", () => {
 
 ## middleware
 
-the `middleware` config parameter is similar to `update` in the sense that it expects a dictionary of named functions, however the functions provided here should be used whenever you need to do some asynchronous work or work with side-effects.
+Like `update`, the `middleware` config parameter is a dictionary of named functions, however the functions provided here should be used whenever you need to do asynchronous work or to work with side-effects.
 
-the middleware function accepts the native event object as its first argument, and a special "middleware api" object as its second argument.
+The middleware function accepts the native event object as its first argument, and a special [middleware api](#middleware-api) object as its second argument.
 
 ### Middleware API
 
