@@ -392,16 +392,16 @@ An action object provides some context to the `update` and `middleware` function
 
 ```typescript
 {
-  /* Simply refers to the name of the target function */
-  type: String,
-  /* The native event object, supplied if triggered via an event */
-  event?: Event
-  /* The payload is a custom object provided by the developer when calling dispatch */
-  payload?: Object
+  /* Refers to the name of the target function */
+  type: String;
+  /* The native event object. Supplied when triggered via an event with x-on attribute */
+  event?: Event;
+  /* A custom object provided by the developer when calling the Middleware API's dispatch method */
+  payload?: Object;
 }
 ```
 
-> the value of payload _must_ be serializable, and tupelo makes sure of that by serialising and then deserialising whatever you provide here before passing it to the target function.
+> the value of payload _must_ be serializable, and Tupelo makes sure of that by serialising and then deserialising whatever you provide here before passing it to the target function.
 
 ## middleware
 
