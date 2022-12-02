@@ -321,13 +321,13 @@ In the example above, we define some initial state for our `navClasses` causing 
 
 ## update
 
-the `update` config parameter can be used to supply a dictionary of named functions that will update state when invoked. these functions can be invoked as error handlers declared with `x-on` attributes, and also dispatched from middleware functions that we will discuss next.
+the `update` config parameter can be used to supply a dictionary of named functions that will update state when invoked. these functions can be invoked as error handlers declared with `x-on` attributes, and also dispatched from (Middleware)[#middleware] functions (we will discuss these next).
 
-the most important thing to understand about update functions is:
+The most important thing to understand about update functions is:
 
-1. they must be synchronous
-2. they accept the current state as their first argument
-3. they return the next state
+1. They must be synchronous
+2. They accept the current state as their first argument
+3. They return the next state
 
 For example...
 
