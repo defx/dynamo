@@ -403,7 +403,7 @@ type Action = {
 }
 ```
 
-> The value of payload _must_ be serializable, and Tupelo makes sure of that by serialising and then deserialising whatever you provide here before passing it to the target function, so while you can theoretically pass any values through, what actually gets through is subject to the rules of [JSON serialization](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify#description).
+> The value of payload _must_ be serializable, which means no functions or classes, for example, just simple objects with primitive values. Tupelo makes sure of that by serialising (`JSON.stringify`) and then deserialising (`JSON.parse`) whatever you provide here before passing it to the target function.
 
 ## middleware
 
