@@ -1,5 +1,5 @@
 {
-  "name": "@defx/tupelo",
+  "name": "@defx/dynamo",
   "type": "module",
   "version": "0.1.0",
   "description": "A lightweight JavaScript library for Progressive Enhancement",
@@ -7,7 +7,7 @@
   "scripts": {
     "test": "mocha-express --coverage",
     "test:watch": "mocha-express --watch",
-    "size": "gzip -c9 ./dist/tupelo.min.js | wc -c",
+    "size": "gzip -c9 ./dist/dynamo.min.js | wc -c",
     "build": "rm -rf dist && rollup -c && npm run size"
   },
   "keywords": [],

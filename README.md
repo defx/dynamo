@@ -1,8 +1,8 @@
-# @defx/tupelo
+# @defx/enhance
 
 A lightweight JavaScript library for progressively enhancing static HTML.
 
-Over-dependence on JavaScript hinders the performance and resilience of many of todays websites. Progressive Enhancement has been around for many years and provides a clear strategy for building resilient and performant websites from first principles, however many of the most popular JavaScript libraries today aren't well suited to this approach. Tupelo has been designed to provide the key features required to enhance web sites and applications with asynchronous functionality through progressive enhancement.
+Over-dependence on JavaScript hinders the performance and resilience of many of todays websites. Progressive Enhancement has been around for many years and provides a clear strategy for building resilient and performant websites from first principles, however many of the most popular JavaScript libraries today aren't well suited to this approach. The Enhance has been designed to provide the key features required to enhance web sites and applications with asynchronous functionality through progressive enhancement.
 
 ## Features
 
@@ -13,18 +13,18 @@ Over-dependence on JavaScript hinders the performance and resilience of many of 
 ## Install
 
 ```sh
-> npm i @defx/tupelo
+> npm i @defx/enhance
 ```
 
 ## Quick Start
 
-The first thing to understand is that tupelo is not concerned with how or where you generate your HTML. You can use whatever language or library you like to generate your initial HTML, tupelo's responsibility is to bind to your existing HTML and enable asynchronous updates in the browser.
+The first thing to understand is that Enhance is not concerned with how or where you generate your HTML, it binds to your _existing_ HTML to enable asynchronous updates in the browser.
 
 Follow these 3 steps to get started:
 
 - [Custom Element tag](#custom-element-tag) : Wrap the chunk of HTML that you wish to control in a custom tag
-- [[x-\*] attributes](#x--attributes) : Add some HTML attributes that tupelo can use to _progressively enhance_ your HTML
-- [Configure](#configure) : Include a script that configures your Custom Element using tupelos `define` function
+- [[x-\*] attributes](#x--attributes) : Used to declare the dynamic parts of your HTML
+- [Configure](#configure) : Include a script that configures your Custom Element using the `define` function
 
 Let's take a look at each of those steps in a little more detail:
 
@@ -40,7 +40,7 @@ The Custom Element spec is a web standard that allows us to extend HTML with our
 
 ## \[x-\*\] attributes
 
-tupelo will look for a set of "special" attributes prefixed with an "x-" that you can use to tell it how to update your HTML. For example, lets say that your HTML includes a list of products that you would like your users to be able to sort in the browser.
+Attributes prefixed with an "x-" declare the dynamic parts of your HTML. For example, lets say that your HTML includes a list of products that you would like your users to be able to sort in the browser.
 
 Here's our basic HTML...
 
@@ -73,7 +73,7 @@ Here's our basic HTML...
 </product-list>
 ```
 
-The first thing to note is that each list item includes an `x-list` attribute. This tells tupelo that those elements are part of a collection named "products", and tupelo will derive a state value to represent the collection, incorporating values from each elements `data-*` attributes. For the above HTML, you can expect the initial state of `<product-list>` to look like this...
+The first thing to note is that each list item includes an `x-list` attribute. This declares that those elements are part of a collection named "products" that will be reflected in state, incorporating values from each elements `data-*` attributes. For the above HTML, you can expect the initial state of `<product-list>` to look like this...
 
 ```js
 {
@@ -92,7 +92,7 @@ The first thing to note is that each list item includes an `x-list` attribute. T
 }
 ```
 
-The second thing to note is that our `<Select>` element has the `x-input` attribute. This instructs tupelo to create another value in state and keep the two in sync. If the value of the `<Select>` changes then this will be reflected automatically in state, and vice versa. As "Price (high - low)" is the default option, we can expect the initial state of `<product-list>` to reflect that...
+The second thing to note is that our `<Select>` element has the `x-input` attribute - a two-way binding that can be applied to any user input element. As "Price (high - low)" is the default option, we can expect the initial state of `<product-list>` to reflect that...
 
 ```js
 {
@@ -105,10 +105,10 @@ The second thing to note is that our `<Select>` element has the `x-input` attrib
 
 Now lets take a look at how our Custom Element is defined, where state lives, and how we can update it.
 
-tupelo exports the `define` function which is used to define a new custom element.
+The `define` function can be imported and used to define a new custom element.
 
 ```js
-import { define } from "@defx/tupelo"
+import { define } from "@defx/enhance"
 
 define("product-list", () => {
   return {
@@ -154,7 +154,7 @@ The state for each list item in the collection is derived from each elements dat
 </li>
 ```
 
-> The only hard requirement for list items is that you _must_ include a `[data-id]` attribute so that tupelo can safely re-order the list in response to any changes.
+> The only hard requirement for list items is that you _must_ include a `[data-id]` attribute so that the list can be reliably re-ordered.
 
 ### x-input
 
@@ -403,7 +403,7 @@ type Action = {
 }
 ```
 
-> The value of payload _must_ be serializable, which means no functions or classes, for example, just simple objects with primitive values. Tupelo makes sure of that by serialising (`JSON.stringify`) and then deserialising (`JSON.parse`) whatever you provide here before passing it to the target function.
+> The value of payload _must_ be serializable, which means no functions or classes, just simple objects and primitive values.
 
 ## middleware
 

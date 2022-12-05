@@ -4,7 +4,7 @@ export default [
   {
     input: "src/index.js",
     output: {
-      file: "dist/tupelo.js",
+      file: "dist/dynamo.js",
       format: "es",
     },
   },
@@ -12,7 +12,7 @@ export default [
     input: "src/index.js",
     plugins: [terser()],
     output: {
-      file: "dist/tupelo.min.js",
+      file: "dist/dynamo.min.js",
       format: "es",
     },
   },
