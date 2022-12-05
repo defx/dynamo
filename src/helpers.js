@@ -55,23 +55,10 @@ export const setValueAtPath = (path, value, target) => {
   return (a[b] = value)
 }
 
-export const $ = (e, q) => {
-  let match
-  walk(e.firstChild, (node) => {
-    if (node.nodeName.includes("-"))
-      return node.nextSibling || node.parentNode.nextSibling
-    if (node.matches(q)) {
-      match = node
-      return false
-    }
-  })
-  return match
-}
-
 export const $$ = (e, q) => {
   let matches = []
-  walk(e.firstChild, (node) => {
-    if (node.nodeName.includes("-"))
+  walk(e, (node) => {
+    if (node.isSameNode(e) === false && node.nodeName.includes("-"))
       return node.nextSibling || node.parentNode.nextSibling
     if (node.matches?.(q)) {
       matches.push(node)
