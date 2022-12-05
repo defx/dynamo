@@ -1,8 +1,8 @@
-# @defx/enhance
+# @defx/dynamo
 
 A lightweight JavaScript library for progressively enhancing static HTML.
 
-Over-dependence on JavaScript hinders the performance and resilience of many of todays websites. Progressive Enhancement has been around for many years and provides a clear strategy for building resilient and performant websites from first principles, however many of the most popular JavaScript libraries today aren't well suited to this approach. The Enhance has been designed to provide the key features required to enhance web sites and applications with asynchronous functionality through progressive enhancement.
+Over-dependence on JavaScript hinders the performance and resilience of many of todays websites. Progressive Enhancement has been around for many years and provides a clear strategy for building resilient and performant websites from first principles, however many of the most popular JavaScript libraries today aren't well suited to this approach. Dynamo has been designed to provide the key features required to enhance web sites and applications with asynchronous functionality through progressive enhancement.
 
 ## Features
 
@@ -13,12 +13,12 @@ Over-dependence on JavaScript hinders the performance and resilience of many of 
 ## Install
 
 ```sh
-> npm i @defx/enhance
+> npm i @defx/dynamo
 ```
 
 ## Quick Start
 
-The first thing to understand is that Enhance is not concerned with how or where you generate your HTML, it binds to your _existing_ HTML to enable asynchronous updates in the browser.
+The first thing to understand is that, from a Dynamo point of view, it doesn't matter how or where you generate your HTML. Dyanmo binds to your _existing_ HTML to enable asynchronous updates in the browser.
 
 Follow these 3 steps to get started:
 
@@ -108,7 +108,7 @@ Now lets take a look at how our Custom Element is defined, where state lives, an
 The `define` function can be imported and used to define a new custom element.
 
 ```js
-import { define } from "@defx/enhance"
+import { define } from "@defx/dynamo"
 
 define("product-list", () => {
   return {
