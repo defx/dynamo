@@ -12,6 +12,14 @@ The small yet powerful JavaScript library for the progressive enhancement of HTM
 
 ## Install
 
+### cdn
+
+```js
+import { define } from "https://unpkg.com/@defx/dynamo"
+```
+
+### npm
+
 ```sh
 > npm i @defx/dynamo
 ```
