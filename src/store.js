@@ -41,7 +41,7 @@ export function configure({
   }
 
   function dispatch(_action) {
-    const { type, payload, event } = _action
+    const { type, payload = {}, event } = _action
     const action = { type, payload: serializable(payload), event }
 
     if (type === "SET" || type === "MERGE") {
