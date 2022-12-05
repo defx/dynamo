@@ -45,14 +45,16 @@ export const define = (name, factory) => {
           },
         })
 
-        api.refs = deriveRefs(this, (parentNode) => (html) => {
-          mergeHTML(parentNode, html)
+        api.append = (html, targetNode) => {
+          mergeHTML(targetNode, html)
           const nextState = deriveState(this)
           dispatch({
             type: "MERGE",
             payload: nextState,
           })
-        })
+        }
+
+        api.refs = deriveRefs(this)
 
         const store = {
           dispatch,

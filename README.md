@@ -205,8 +205,6 @@ define("some-element", () => {
 
 Used to create a reference to a particular DOM element which will be available on the `refs` object provided as the third argument to a `middleware` callback function (see [Middleware]() for more details) and also as part of the first argument provided to `connectedCallback` (see [Lifecycle Events]()).
 
-Each ref also includes a special `append` method that can be used to append additional HTML to the element which will then trigger an update cycle to ensure state and DOM are synchronised.
-
 ```html
 <!-- .... -->
 <ul x-ref="productList">
@@ -231,8 +229,8 @@ define("product-list", () => {
   return {
     /* ... */
     middleware: {
-      loadMore: (action, next, { refs: { productList } }) => {
-        productList.append(
+      loadMore: (action, next, { refs: { productList }, append }) => {
+        append(
           html`
             <li
               x-list="products"
@@ -250,7 +248,8 @@ define("product-list", () => {
             >
               <p>3.99</p>
             </li>
-          `
+          `,
+          productList
         )
       },
     },

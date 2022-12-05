@@ -175,9 +175,9 @@ describe("list merge", () => {
         getState: (state) => ({
           products: state.products.sort(sort[state.sortBy]),
         }),
-        connectedCallback({ refs: { productList } }) {
+        connectedCallback({ refs: { productList }, append }) {
           requestAnimationFrame(() => {
-            productList.append(
+            append(
               html`
                 <li
                   x-list="products"
@@ -195,7 +195,8 @@ describe("list merge", () => {
                 >
                   <p>3.99</p>
                 </li>
-              `
+              `,
+              productList
             )
           })
         },
@@ -259,8 +260,8 @@ describe("list merge", () => {
           products: state.products.sort(sort[state.sortBy]),
         }),
         middleware: {
-          loadMore: (_, { refs: { productList } }) => {
-            productList.append(
+          loadMore: (_, { refs: { productList }, append }) => {
+            append(
               html`
                 <li
                   x-list="products"
@@ -278,7 +279,8 @@ describe("list merge", () => {
                 >
                   <p>3.99</p>
                 </li>
-              `
+              `,
+              productList
             )
           },
         },
