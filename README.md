@@ -1,8 +1,6 @@
 # @defx/dynamo
 
-A lightweight JavaScript library for progressively enhancing HTML.
-
-Over-dependence on JavaScript hinders the performance and resilience of many of todays websites. Progressive Enhancement has been around for many years and provides a clear strategy for building resilient and performant websites from first principles, however many of the most popular JavaScript libraries today aren't well suited to this approach. Dynamo has been designed to provide the key features required to enhance web sites and applications with asynchronous functionality through progressive enhancement.
+The small yet powerful JavaScript library for the progressive enhancement of HTML.
 
 ## Features
 
