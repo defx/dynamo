@@ -12,9 +12,7 @@ export function bindEvents(node, dispatch) {
     node.addEventListener(eventType, (event) => {
       dispatch({
         type: actionName,
-        payload: {
-          event,
-        },
+        event,
       })
     })
   }
