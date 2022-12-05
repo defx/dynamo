@@ -11,6 +11,7 @@ export function bindEvents(node, dispatch) {
 
     node.addEventListener(eventType, (event) => {
       event.preventDefault()
+      event.stopPropagation()
       dispatch({
         type: actionName,
         payload: {
