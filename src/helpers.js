@@ -58,7 +58,7 @@ export const setValueAtPath = (path, value, target) => {
 export const $$ = (e, q) => {
   let matches = []
   walk(e, (node) => {
-    if (node.isSameNode(e) === false && node.nodeName.includes("-"))
+    if (node !== e && node.nodeName.includes("-"))
       return node.nextSibling || node.parentNode.nextSibling
     if (node.matches?.(q)) {
       matches.push(node)
