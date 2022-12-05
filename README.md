@@ -18,7 +18,7 @@ Over-dependence on JavaScript hinders the performance and resilience of many of 
 
 ## Quick Start
 
-The first thing to understand is that, from a Dynamo point of view, it doesn't matter how or where you generate your HTML. Dyanmo binds to your _existing_ HTML to enable asynchronous updates in the browser.
+The first thing to understand is that, from a Dynamo point of view, it doesn't matter how or where you generate your HTML. Dynamo binds to your _existing_ HTML to enable asynchronous updates in the browser.
 
 Follow these 3 steps to get started:
 
