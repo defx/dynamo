@@ -10,8 +10,6 @@ export function bindEvents(node, dispatch) {
       .map((v) => v.trim())
 
     node.addEventListener(eventType, (event) => {
-      event.preventDefault()
-      event.stopPropagation()
       dispatch({
         type: actionName,
         payload: {
