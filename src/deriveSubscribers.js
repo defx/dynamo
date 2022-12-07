@@ -37,9 +37,7 @@ function xToggle(rootNode) {
     if (!target) return
     subscriptions.push((state) => {
       const expanded = state.__xToggles__?.[id] || false
-
       node.setAttribute("aria-expanded", expanded)
-      target.hidden = !expanded
     })
   })
   return subscriptions
