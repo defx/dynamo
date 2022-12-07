@@ -10,6 +10,7 @@ export function bindEvents(node, dispatch) {
       .map((v) => v.trim())
 
     node.addEventListener(eventType, (event) => {
+      event.stopPropagation()
       dispatch({
         type: actionName,
         event,
