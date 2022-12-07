@@ -1,9 +1,4 @@
-import { $$ } from "./helpers.js"
-
-function cast(v) {
-  if (!isNaN(v)) return +v
-  return v
-}
+import { $$, cast } from "./helpers.js"
 
 function xList(node, state = {}) {
   const elements = $$(node, `[x-list]`)

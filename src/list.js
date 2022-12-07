@@ -1,4 +1,4 @@
-import { $$ } from "./helpers.js"
+import { $$, cast } from "./helpers.js"
 
 export const compareKeyedLists = (key, a = [], b = []) => {
   let delta = b.map(([k, item]) =>
@@ -19,14 +19,14 @@ export function listSync(rootNode, path, arr) {
   if (nodeIds.toString() === dataIds.toString()) return
 
   const removals = nodes.filter((node) => {
-    const id = node.dataset.id
+    const id = cast(node.dataset.id)
     return arr.find((datum) => datum.id === id) === false
   })
   removals.forEach((node) => node.remove())
 
   const [first, ...rest] = arr
 
-  let t = nodes.find((node) => node.dataset.id === first.id)
+  let t = nodes.find((node) => cast(node.dataset.id) === first.id)
 
   rest.forEach((datum) => {
     let node = nodes.find((node) => node.dataset.id === datum.id)

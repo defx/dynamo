@@ -6,7 +6,6 @@ import { bindEvents } from "./bindEvents.js"
 import { bindClasses } from "./bindClasses.js"
 import { bindToggles } from "./bindToggles.js"
 import { configure } from "./store.js"
-import { uncloak } from "./cloak.js"
 
 function mergeHTML(parentNode, html) {
   const tpl = document.createElement("template")
@@ -69,7 +68,6 @@ export const define = (name, factory) => {
         bindInputs(this, dispatch)
         bindEvents(this, dispatch)
         bindToggles(this, dispatch)
-        uncloak(this)
 
         onChangeCallback(getState())
 

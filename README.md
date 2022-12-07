@@ -324,6 +324,43 @@ define("page-container", () => {
 
 In the example above, we define some initial state for our `navClasses` causing the menu to be hidden offscreen, as well as our `toggleMenu` update function to toggle the `open` class in response to the click event.
 
+## x-toggle
+
+Hiding and showing parts of the UI to save space is one of the most common UI patterns of all. In accessibility terms this is referred to as the "Disclosure" pattern. Dynamo simplifies this common pattern to save you repeating yourself, and also to ensure that you implement this pattern in an accessible way.
+
+As an example, lets take a navigation menu with nested lists. When the menu is first opened by the user, we want it to only show the top-level items and then, for those items that have a nested section, we want to provide a button that can be used to toggle that section open and closed.
+
+```html
+<button x-toggle="foo">+</button>
+<ul id="foo">
+  Hello world 👋
+</ul>
+```
+
+In the example above, the `[x-toggle]` attribute indicates that the button is a toggle control, and that it toggles the element with an `id` of "foo".
+
+If you run this in the browser then you will see that Dynamo immediately updates these elements to:
+
+```html
+<button x-toggle="foo" aria-expanded="false">+</button>
+<ul id="foo" hidden>
+  Hello world 👋
+</ul>
+```
+
+So now the button indicates to the accessibility tree that its content is _not_ expanded, and it also hides the content using the `[hidden]` attribute.
+
+Now, given that our button isn't doing anything without javascript, we ought to hide it until Dynamo is running. Simply add the hidden attribute to any `[x-toggle]` and Dynamo will unhide it during initialisation.
+
+```html
+<button x-toggle="foo" hidden>+</button>
+<ul id="foo">
+  Hello world 👋
+</ul>
+```
+
+This is a great progressive enhancement because, without JS, all of the content is accessible and the redundant button is hidden from view and from the accessbility tree.
+
 ## define
 
 The define function is used to configure a new Custom Element.

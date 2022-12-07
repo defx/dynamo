@@ -68,3 +68,8 @@ export const $$ = (e, q) => {
 }
 
 export const serializable = (o) => JSON.parse(JSON.stringify(o))
+
+export function cast(v) {
+  if (!isNaN(v)) return +v
+  return v
+}
