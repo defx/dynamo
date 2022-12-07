@@ -1,7 +1,7 @@
 {
   "name": "@defx/dynamo",
   "type": "module",
-  "version": "0.1.11",
+  "version": "0.1.13",
   "description": "A lightweight JavaScript library for Progressive Enhancement",
   "main": "dist/dynamo.min.js",
   "browser": "dist/dynamo.min.js",
@@ -11,7 +11,8 @@
     "test": "mocha-express --coverage",
     "test:watch": "mocha-express --watch",
     "size": "gzip -c9 ./dist/dynamo.min.js | wc -c",
-    "build": "rm -rf dist && rollup -c && npm run size"
+    "build": "rm -rf dist && rollup -c && npm run size",
+    "prepublish": "npm run build"
   },
   "keywords": [],
   "author": "",

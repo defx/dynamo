@@ -29,7 +29,7 @@ export function listSync(rootNode, path, arr) {
   let t = nodes.find((node) => cast(node.dataset.id) === first.id)
 
   rest.forEach((datum) => {
-    let node = nodes.find((node) => node.dataset.id === datum.id)
+    let node = nodes.find((node) => cast(node.dataset.id) === datum.id)
     if (node) {
       t.after(node)
       t = node
