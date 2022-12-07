@@ -29,24 +29,20 @@ describe("deriveState", () => {
       </${tagName}>
     `)
 
-    const state = deriveState(
-      $(tagName)
-    )
+    const state = deriveState($(tagName))
 
-    assert.deepEqual(state, {
-      products: [
-        {
-          id: "afd56erg",
-          price: 14.99,
-          rating: 4.2,
-        },
-        {
-          id: "f8g7r6d",
-          price: 5,
-          rating: 4.7,
-        },
-      ],
-    })
+    assert.deepEqual(state.products, [
+      {
+        id: "afd56erg",
+        price: 14.99,
+        rating: 4.2,
+      },
+      {
+        id: "f8g7r6d",
+        price: 5,
+        rating: 4.7,
+      },
+    ])
   })
 
   it("derives state from a Select element", () => {
@@ -64,13 +60,9 @@ describe("deriveState", () => {
       </${tagName}>
     `)
 
-    const state = deriveState(
-      $(tagName)
-    )
+    const state = deriveState($(tagName))
 
-    assert.deepEqual(state, {
-      sortBy: "bestsellers",
-    })
+    assert.equal(state.sortBy, "bestsellers")
   })
 
   it("derives state from a Select element with [selected]", () => {
@@ -88,12 +80,8 @@ describe("deriveState", () => {
       </${tagName}>
     `)
 
-    const state = deriveState(
-      $(tagName)
-    )
+    const state = deriveState($(tagName))
 
-    assert.deepEqual(state, {
-      sortBy: "priceHighToLow",
-    })
+    assert.deepEqual(state.sortBy, "priceHighToLow")
   })
 })

@@ -4,6 +4,7 @@ import { deriveRefs } from "./deriveRefs.js"
 import { bindInputs } from "./bindInputs.js"
 import { bindEvents } from "./bindEvents.js"
 import { bindClasses } from "./bindClasses.js"
+import { bindToggles } from "./bindToggles.js"
 import { configure } from "./store.js"
 import { uncloak } from "./cloak.js"
 
@@ -32,6 +33,12 @@ export const define = (name, factory) => {
           bindClasses(this)
         )
 
+        const onChangeCallback = (state) => {
+          subscribers.forEach((fn) => fn(state))
+          nextTickSubscribers.forEach((fn) => fn(state))
+          nextTickSubscribers = []
+        }
+
         const { dispatch, getState } = configure({
           ...config,
           state: {
@@ -39,11 +46,7 @@ export const define = (name, factory) => {
             ...initialState,
           },
           api,
-          onChangeCallback: (state) => {
-            subscribers.forEach((fn) => fn(state))
-            nextTickSubscribers.forEach((fn) => fn(state))
-            nextTickSubscribers = []
-          },
+          onChangeCallback,
         })
 
         api.append = (html, targetNode) => {
@@ -65,7 +68,10 @@ export const define = (name, factory) => {
 
         bindInputs(this, dispatch)
         bindEvents(this, dispatch)
+        bindToggles(this, dispatch)
         uncloak(this)
+
+        onChangeCallback(getState())
 
         config.connectedCallback?.(store)
       }

@@ -1,7 +1,7 @@
 import { $$ } from "./helpers.js"
 import { listSync } from "./list.js"
 
-export function deriveSubscribers(rootNode) {
+function xList(rootNode) {
   const nodes = $$(rootNode, `[x-list]`)
 
   const byPath = {}
@@ -25,4 +25,26 @@ export function deriveSubscribers(rootNode) {
   }
 
   return Object.values(byPath)
+}
+
+function xToggle(rootNode) {
+  const subscriptions = []
+
+  $$(rootNode, `[x-toggle]`).forEach((node) => {
+    const id = node.getAttribute(`x-toggle`)
+    if (!id) return
+    const target = rootNode.querySelector(`#${id}`)
+    if (!target) return
+    subscriptions.push((state) => {
+      const expanded = state.__xToggles__?.[id] || false
+
+      node.setAttribute("aria-expanded", expanded)
+      target.hidden = !expanded
+    })
+  })
+  return subscriptions
+}
+
+export function deriveSubscribers(rootNode) {
+  return [xList(rootNode), xToggle(rootNode)].flat()
 }
