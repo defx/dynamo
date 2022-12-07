@@ -5,6 +5,7 @@ import { bindInputs } from "./bindInputs.js"
 import { bindEvents } from "./bindEvents.js"
 import { bindClasses } from "./bindClasses.js"
 import { configure } from "./store.js"
+import { uncloak } from "./cloak.js"
 
 function mergeHTML(parentNode, html) {
   const tpl = document.createElement("template")
@@ -64,6 +65,7 @@ export const define = (name, factory) => {
 
         bindInputs(this, dispatch)
         bindEvents(this, dispatch)
+        uncloak(this)
 
         config.connectedCallback?.(store)
       }
