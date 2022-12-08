@@ -1,6 +1,32 @@
 import { $$ } from "./helpers.js"
 import { listSync } from "./list.js"
 
+function applyClasses(o, node) {
+  if (!o) return
+  Object.keys(o).forEach((name) => {
+    if (o[name]) {
+      node.classList.add(name)
+    } else {
+      node.classList.remove(name)
+    }
+  })
+}
+
+function xClass(rootNode) {
+  return [
+    (state) => {
+      const nodes = $$(rootNode, `[x-class]`)
+
+      if (!nodes.length) return
+
+      for (const node of nodes) {
+        const k = node.getAttribute("x-class")
+        applyClasses(state[k], node)
+      }
+    },
+  ]
+}
+
 function xList(rootNode) {
   const nodes = $$(rootNode, `[x-list]`)
 
@@ -44,5 +70,5 @@ function xToggle(rootNode) {
 }
 
 export function deriveSubscribers(rootNode) {
-  return [xList(rootNode), xToggle(rootNode)].flat()
+  return [xList(rootNode), xToggle(rootNode), xClass(rootNode)].flat()
 }

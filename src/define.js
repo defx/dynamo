@@ -3,7 +3,6 @@ import { deriveSubscribers } from "./deriveSubscribers.js"
 import { deriveRefs } from "./deriveRefs.js"
 import { bindInputs } from "./bindInputs.js"
 import { bindEvents } from "./bindEvents.js"
-import { bindClasses } from "./bindClasses.js"
 import { bindToggles } from "./bindToggles.js"
 import { configure } from "./store.js"
 
@@ -28,9 +27,7 @@ export const define = (name, factory) => {
         let config = factory(this)
 
         const initialState = deriveState(this)
-        const subscribers = deriveSubscribers(this, initialState).concat(
-          bindClasses(this)
-        )
+        const subscribers = deriveSubscribers(this, initialState)
 
         const onChangeCallback = (state) => {
           subscribers.forEach((fn) => fn(state))
