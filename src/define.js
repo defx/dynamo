@@ -3,7 +3,6 @@ import { deriveSubscribers } from "./deriveSubscribers.js"
 import { deriveRefs } from "./deriveRefs.js"
 import { bindInputs } from "./bindInputs.js"
 import { bindEvents } from "./bindEvents.js"
-import { bindToggles } from "./bindToggles.js"
 import { configure } from "./store.js"
 
 function mergeHTML(parentNode, html) {
@@ -38,8 +37,8 @@ export const define = (name, factory) => {
         const { dispatch, getState } = configure({
           ...config,
           state: {
-            ...(config.state || {}),
             ...initialState,
+            ...(config.state || {}),
           },
           api,
           onChangeCallback,
@@ -64,7 +63,6 @@ export const define = (name, factory) => {
 
         bindInputs(this, dispatch)
         bindEvents(this, dispatch)
-        bindToggles(this, dispatch)
 
         onChangeCallback(getState())
 

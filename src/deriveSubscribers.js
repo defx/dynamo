@@ -1,5 +1,6 @@
-import { $$ } from "./helpers.js"
+import { $$, getValueAtPath, findIndex } from "./helpers.js"
 import { listSync } from "./list.js"
+import { applyAttribute } from "./attribute.js"
 
 function applyClasses(o, node) {
   if (!o) return
@@ -22,6 +23,33 @@ function xClass(rootNode) {
       for (const node of nodes) {
         const k = node.getAttribute("x-class")
         applyClasses(state[k], node)
+      }
+    },
+  ]
+}
+
+function applyAttributes(attrs, node) {
+  for (const [name, value] of Object.entries(attrs || {}))
+    applyAttribute(node, name, value)
+}
+
+function xAttr(rootNode) {
+  return [
+    (state) => {
+      const nodes = $$(rootNode, `[x-attr]`)
+
+      if (!nodes.length) return
+
+      for (const node of nodes) {
+        let k = node.getAttribute("x-attr")
+
+        if (k.endsWith(".*")) {
+          const collection = [...rootNode.querySelectorAll(`[x-attr="${k}"]`)]
+          const index = collection.findIndex((n) => n === node)
+          k = k.slice(0, -2) + `.${index}`
+        }
+
+        applyAttributes(getValueAtPath(k, state), node)
       }
     },
   ]
@@ -70,5 +98,10 @@ function xToggle(rootNode) {
 }
 
 export function deriveSubscribers(rootNode) {
-  return [xList(rootNode), xToggle(rootNode), xClass(rootNode)].flat()
+  return [
+    xList(rootNode),
+    xToggle(rootNode),
+    xClass(rootNode),
+    xAttr(rootNode),
+  ].flat()
 }

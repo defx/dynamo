@@ -28,13 +28,25 @@ function xInput(node, state = {}) {
   return state
 }
 
-function xToggle(node, state = {}) {
-  state.__xToggles__ = {}
-  const toggles = $$(node, `[x-toggle]`)
-  for (const toggle of toggles) {
-    const id = toggle.getAttribute("x-toggle")
-    const ariaExpanded = toggle.getAttribute("aria-expanded") === "true"
-    state.__xToggles__[id] = ariaExpanded
+function attributes(node) {
+  return node.getAttributeNames().reduce((o, k) => {
+    if (!k.startsWith("x-")) o[k] = node.getAttribute(k)
+    return o
+  }, {})
+}
+
+function xAttr(node, state = {}) {
+  const elements = $$(node, `[x-attr]`)
+  for (const element of elements) {
+    let k = element.getAttribute("x-attr")
+    const v = attributes(element)
+    if (k.endsWith(".*")) {
+      k = k.slice(0, -2)
+      state[k] = state[k] || []
+      state[k].push(v)
+    } else {
+      state[k] = v
+    }
   }
   return state
 }
@@ -43,6 +55,6 @@ export function deriveState(node) {
   return {
     ...xList(node),
     ...xInput(node),
-    ...xToggle(node),
+    ...xAttr(node),
   }
 }

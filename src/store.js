@@ -41,8 +41,8 @@ export function configure({
   }
 
   function dispatch(_action) {
-    const { type, payload = {}, event } = _action
-    const action = { type, payload: serializable(payload), event }
+    const { type, payload = {}, event, index } = _action
+    const action = { type, payload: serializable(payload), event, index }
 
     if (type === "SET" || type === "MERGE") {
       transition(systemReducer(getState(), action))

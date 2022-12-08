@@ -1,7 +1,12 @@
 import { $$ } from "./helpers.js"
 
-export function bindEvents(node, dispatch) {
-  const nodes = $$(node, `[x-on]`)
+function findIndex(rootNode, node, query) {
+  const collection = [...rootNode.querySelectorAll(query)]
+  return collection.findIndex((n) => n === node)
+}
+
+export function bindEvents(rootNode, dispatch) {
+  const nodes = $$(rootNode, `[x-on]`)
 
   for (const node of nodes) {
     const [eventType, actionName] = node
@@ -11,9 +16,17 @@ export function bindEvents(node, dispatch) {
 
     node.addEventListener(eventType, (event) => {
       event.stopPropagation()
+
+      const k = event.target.getAttribute("x-attr") || ""
+
+      const index = k.endsWith(".*")
+        ? findIndex(rootNode, event.target, `[x-attr="${k}"]`)
+        : null
+
       dispatch({
         type: actionName,
         event,
+        index,
       })
     })
   }
