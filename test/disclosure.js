@@ -21,7 +21,6 @@ describe("disclosure pattern", () => {
     define("x-toggle-test-2", () => ({}))
 
     assert.equal($(`[x-toggle]`).getAttribute("aria-expanded"), "false")
-    assert.equal($(`#foo`).hidden, true)
   })
 
   it("initialises the relevant attributes and props (shown)", () => {
@@ -34,6 +33,5 @@ describe("disclosure pattern", () => {
     `)
     define("x-toggle-test-3", () => ({}))
     assert.equal($(`[x-toggle]`).getAttribute("aria-expanded"), "true")
-    assert.equal($(`#foo`).hidden, false)
   })
 })
