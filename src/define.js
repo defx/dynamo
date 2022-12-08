@@ -38,7 +38,10 @@ export const define = (name, factory) => {
           ...config,
           state: {
             ...initialState,
-            ...(config.state || {}),
+            ...((state) =>
+              typeof state === "function" ? state(initialState) : state)(
+              config.state || {}
+            ),
           },
           api,
           onChangeCallback,
