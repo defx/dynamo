@@ -1,31 +1,34 @@
-import { $$, cast } from "./helpers.js"
+import { walk, cast, getValueAtPath } from "./helpers.js"
+import { listSync } from "./list.js"
+import { applyAttribute } from "./attribute.js"
+
+/* skip any custom elements  */
+const cwalk = (node, callback) => {
+  callback(node)
+  walk(node.firstChild, (node) => {
+    if (node.nodeName.includes("-")) {
+      return node.nextSibling || node.parentNode.nextSibling
+    }
+    callback(node)
+  })
+}
 
 function xList(node, state = {}) {
-  const elements = $$(node, `[x-list]`)
-  for (const element of elements) {
-    let k = element.getAttribute(`x-list`)
-    let v = Object.entries(element.dataset).reduce((o, [k, v]) => {
-      o[k] = cast(v)
-      return o
-    }, {})
+  let k = node.getAttribute(`x-list`)
+  let v = Object.entries(node.dataset).reduce((o, [k, v]) => {
+    o[k] = cast(v)
+    return o
+  }, {})
 
-    state[k] = state[k] || []
-    state[k].push(v)
-  }
-
-  return state
+  state[k] = state[k] || []
+  state[k].push(v)
 }
 
 function xInput(node, state = {}) {
-  const elements = $$(node, `[x-input]`)
-  for (const element of elements) {
-    let k = element.getAttribute("name")
-    if (!k) continue
-    let v = cast(element.value)
-    state[k] = v
-  }
-
-  return state
+  let k = node.getAttribute("name")
+  if (!k) return state
+  let v = cast(node.value)
+  state[k] = v
 }
 
 function attributes(node) {
@@ -36,25 +39,29 @@ function attributes(node) {
 }
 
 function xAttr(node, state = {}) {
-  const elements = $$(node, `[x-attr]`)
-  for (const element of elements) {
-    let k = element.getAttribute("x-attr")
-    const v = attributes(element)
-    if (k.endsWith(".*")) {
-      k = k.slice(0, -2)
-      state[k] = state[k] || []
-      state[k].push(v)
-    } else {
-      state[k] = v
-    }
+  let k = node.getAttribute("x-attr")
+  const v = attributes(node)
+  if (k.endsWith(".*")) {
+    k = k.slice(0, -2)
+    state[k] = state[k] || []
+    state[k].push(v)
+  } else {
+    state[k] = v
   }
-  return state
 }
 
-export function deriveState(node) {
-  return {
-    ...xList(node),
-    ...xInput(node),
-    ...xAttr(node),
-  }
+export function deriveState(rootNode, state = {}) {
+  cwalk(rootNode, (node) => {
+    if (node.hasAttribute?.("x-list")) {
+      xList(node, state)
+    }
+    if (node.hasAttribute?.("x-input")) {
+      xInput(node, state)
+    }
+    if (node.hasAttribute?.("x-attr")) {
+      xAttr(node, state)
+    }
+  })
+
+  return state
 }

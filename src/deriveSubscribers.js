@@ -1,4 +1,4 @@
-import { $$, getValueAtPath, findIndex } from "./helpers.js"
+import { $$, getValueAtPath } from "./helpers.js"
 import { listSync } from "./list.js"
 import { applyAttribute } from "./attribute.js"
 
@@ -81,27 +81,6 @@ function xList(rootNode) {
   return Object.values(byPath)
 }
 
-function xToggle(rootNode) {
-  const subscriptions = []
-
-  $$(rootNode, `[x-toggle]`).forEach((node) => {
-    const id = node.getAttribute(`x-toggle`)
-    if (!id) return
-    const target = rootNode.querySelector(`#${id}`)
-    if (!target) return
-    subscriptions.push((state) => {
-      const expanded = state.__xToggles__?.[id] || false
-      node.setAttribute("aria-expanded", expanded)
-    })
-  })
-  return subscriptions
-}
-
 export function deriveSubscribers(rootNode) {
-  return [
-    xList(rootNode),
-    xToggle(rootNode),
-    xClass(rootNode),
-    xAttr(rootNode),
-  ].flat()
+  return [xList(rootNode), xClass(rootNode), xAttr(rootNode)].flat()
 }

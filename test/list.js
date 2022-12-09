@@ -172,9 +172,12 @@ describe("list merge", () => {
 
     define(tagName, () => {
       return {
-        getState: (state) => ({
-          products: state.products.sort(sort[state.sortBy]),
-        }),
+        getState: (state) => {
+          return {
+            ...state,
+            products: state.products.sort(sort[state.sortBy]),
+          }
+        },
         connectedCallback({ refs: { productList }, append }) {
           requestAnimationFrame(() => {
             append(
@@ -257,6 +260,7 @@ describe("list merge", () => {
     define(tagName, () => {
       return {
         getState: (state) => ({
+          ...state,
           products: state.products.sort(sort[state.sortBy]),
         }),
         middleware: {

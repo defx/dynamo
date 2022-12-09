@@ -8,7 +8,9 @@ import { configure } from "./store.js"
 function mergeHTML(parentNode, html) {
   const tpl = document.createElement("template")
   tpl.innerHTML = html.trim()
+  const childNodes = [...tpl.content.childNodes]
   parentNode.appendChild(tpl.content)
+  return childNodes
 }
 
 export const define = (name, factory) => {
@@ -29,6 +31,7 @@ export const define = (name, factory) => {
         const subscribers = deriveSubscribers(this, initialState)
 
         const onChangeCallback = (state) => {
+          console.log("onChangeCallback!", state)
           subscribers.forEach((fn) => fn(state))
           nextTickSubscribers.forEach((fn) => fn(state))
           nextTickSubscribers = []
@@ -48,8 +51,12 @@ export const define = (name, factory) => {
         })
 
         api.append = (html, targetNode) => {
-          mergeHTML(targetNode, html)
-          const nextState = deriveState(this)
+          const childNodes = mergeHTML(targetNode, html)
+
+          const nextState = childNodes.reduce((state, node) => {
+            return deriveState(node, state)
+          }, getState())
+
           dispatch({
             type: "MERGE",
             payload: nextState,

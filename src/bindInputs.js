@@ -20,10 +20,9 @@ export function bindInputs(node, dispatch) {
       if (value.trim?.().length && !isNaN(value)) value = +value
 
       dispatch({
-        type: "SET",
+        type: "MERGE",
         payload: {
-          name,
-          value,
+          [name]: value,
         },
       })
     })
