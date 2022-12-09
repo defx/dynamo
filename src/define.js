@@ -1,5 +1,4 @@
-import { deriveState } from "./deriveState.js"
-import { deriveSubscribers } from "./deriveSubscribers.js"
+import { update } from "./update.js"
 import { deriveRefs } from "./deriveRefs.js"
 import { bindInputs } from "./bindInputs.js"
 import { bindEvents } from "./bindEvents.js"
@@ -27,12 +26,15 @@ export const define = (name, factory) => {
 
         let config = factory(this)
 
-        const initialState = deriveState(this)
-        const subscribers = deriveSubscribers(this, initialState)
+        const subscribers = []
+        const listSubscribers = {}
+        const initialState = update(this, {}, subscribers, listSubscribers)
 
         const onChangeCallback = (state) => {
           console.log("onChangeCallback!", state)
-          subscribers.forEach((fn) => fn(state))
+          subscribers
+            .concat(Object.values(listSubscribers))
+            .forEach((fn) => fn(state))
           nextTickSubscribers.forEach((fn) => fn(state))
           nextTickSubscribers = []
         }
@@ -54,7 +56,7 @@ export const define = (name, factory) => {
           const childNodes = mergeHTML(targetNode, html)
 
           const nextState = childNodes.reduce((state, node) => {
-            return deriveState(node, state)
+            return update(node, state, subscribers, listSubscribers)
           }, getState())
 
           dispatch({
@@ -73,7 +75,6 @@ export const define = (name, factory) => {
 
         bindInputs(this, dispatch)
         bindEvents(this, dispatch)
-
         onChangeCallback(getState())
 
         config.connectedCallback?.(store)

@@ -1,19 +1,6 @@
-import { walk, cast, getValueAtPath } from "./helpers.js"
-import { listSync } from "./list.js"
-import { applyAttribute } from "./attribute.js"
+import { cast } from "./helpers.js"
 
-/* skip any custom elements  */
-const cwalk = (node, callback) => {
-  callback(node)
-  walk(node.firstChild, (node) => {
-    if (node.nodeName.includes("-")) {
-      return node.nextSibling || node.parentNode.nextSibling
-    }
-    callback(node)
-  })
-}
-
-function xList(node, state = {}) {
+export function xList(node, state = {}) {
   let k = node.getAttribute(`x-list`)
   let v = Object.entries(node.dataset).reduce((o, [k, v]) => {
     o[k] = cast(v)
@@ -24,7 +11,7 @@ function xList(node, state = {}) {
   state[k].push(v)
 }
 
-function xInput(node, state = {}) {
+export function xInput(node, state = {}) {
   let k = node.getAttribute("name")
   if (!k) return state
   let v = cast(node.value)
@@ -38,7 +25,7 @@ function attributes(node) {
   }, {})
 }
 
-function xAttr(node, state = {}) {
+export function xAttr(node, state = {}) {
   let k = node.getAttribute("x-attr")
   const v = attributes(node)
   if (k.endsWith(".*")) {
@@ -48,20 +35,4 @@ function xAttr(node, state = {}) {
   } else {
     state[k] = v
   }
-}
-
-export function deriveState(rootNode, state = {}) {
-  cwalk(rootNode, (node) => {
-    if (node.hasAttribute?.("x-list")) {
-      xList(node, state)
-    }
-    if (node.hasAttribute?.("x-input")) {
-      xInput(node, state)
-    }
-    if (node.hasAttribute?.("x-attr")) {
-      xAttr(node, state)
-    }
-  })
-
-  return state
 }

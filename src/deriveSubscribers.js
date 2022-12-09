@@ -1,4 +1,4 @@
-import { $$, getValueAtPath } from "./helpers.js"
+import { getValueAtPath } from "./helpers.js"
 import { listSync } from "./list.js"
 import { applyAttribute } from "./attribute.js"
 
@@ -13,19 +13,11 @@ function applyClasses(o, node) {
   })
 }
 
-function xClass(rootNode) {
-  return [
-    (state) => {
-      const nodes = $$(rootNode, `[x-class]`)
-
-      if (!nodes.length) return
-
-      for (const node of nodes) {
-        const k = node.getAttribute("x-class")
-        applyClasses(state[k], node)
-      }
-    },
-  ]
+export function xClass(node, subscribers = []) {
+  subscribers.push((state) => {
+    const k = node.getAttribute("x-class")
+    applyClasses(state[k], node)
+  })
 }
 
 function applyAttributes(attrs, node) {
@@ -33,54 +25,36 @@ function applyAttributes(attrs, node) {
     applyAttribute(node, name, value)
 }
 
-function xAttr(rootNode) {
-  return [
-    (state) => {
-      const nodes = $$(rootNode, `[x-attr]`)
+export function xAttr(node, subscribers = []) {
+  subscribers.push((state) => {
+    let k = node.getAttribute("x-attr")
 
-      if (!nodes.length) return
+    if (k.endsWith(".*")) {
+      const collection = [
+        ...node.parentNode.querySelectorAll(`[x-attr="${k}"]`),
+      ]
+      const index = collection.findIndex((n) => n === node)
+      k = k.slice(0, -2) + `.${index}`
+    }
 
-      for (const node of nodes) {
-        let k = node.getAttribute("x-attr")
-
-        if (k.endsWith(".*")) {
-          const collection = [...rootNode.querySelectorAll(`[x-attr="${k}"]`)]
-          const index = collection.findIndex((n) => n === node)
-          k = k.slice(0, -2) + `.${index}`
-        }
-
-        applyAttributes(getValueAtPath(k, state), node)
-      }
-    },
-  ]
+    applyAttributes(getValueAtPath(k, state), node)
+  })
 }
 
-function xList(rootNode) {
-  const nodes = $$(rootNode, `[x-list]`)
+export function xList(node, listSubscribers = {}) {
+  const k = node.getAttribute(`x-list`)
 
-  const byPath = {}
+  const { id } = node.dataset
 
-  for (const node of nodes) {
-    const k = node.getAttribute(`x-list`)
-
-    const { id } = node.dataset
-
-    if (!id) {
-      console.warn(
-        `list node with no data-id attribute. any changes to state will not be reflected in the DOM`,
-        node
-      )
-      continue
-    }
-
-    byPath[k] = (state) => {
-      listSync(rootNode, k, state[k])
-    }
+  if (!id) {
+    console.warn(
+      `list node with no data-id attribute. any changes to state will not be reflected in the DOM`,
+      node
+    )
+    return
   }
 
-  return Object.values(byPath)
-}
-
-export function deriveSubscribers(rootNode) {
-  return [xList(rootNode), xClass(rootNode), xAttr(rootNode)].flat()
+  listSubscribers[k] = (state) => {
+    listSync(node.parentNode, k, state[k])
+  }
 }
