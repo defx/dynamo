@@ -1,4 +1,4 @@
-import { deriveState } from "../src/deriveState.js"
+import { update } from "../src/update.js"
 
 describe("deriveState", () => {
   it("derives state from a list of elements", () => {
@@ -29,7 +29,7 @@ describe("deriveState", () => {
       </${tagName}>
     `)
 
-    const state = deriveState($(tagName))
+    const state = update($(tagName))
 
     assert.deepEqual(state.products, [
       {
@@ -60,7 +60,7 @@ describe("deriveState", () => {
       </${tagName}>
     `)
 
-    const state = deriveState($(tagName))
+    const state = update($(tagName))
 
     assert.equal(state.sortBy, "bestsellers")
   })
@@ -80,7 +80,7 @@ describe("deriveState", () => {
       </${tagName}>
     `)
 
-    const state = deriveState($(tagName))
+    const state = update($(tagName))
 
     assert.deepEqual(state.sortBy, "priceHighToLow")
   })
