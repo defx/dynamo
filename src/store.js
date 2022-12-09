@@ -3,7 +3,6 @@ import { serializable } from "./helpers.js"
 export function configure({
   update = {},
   middleware = [],
-  state: initialState = {},
   getState: getStateWrapper = (v) => v,
   onChangeCallback,
   api = {},
@@ -15,8 +14,6 @@ export function configure({
 
     onChangeCallback(getState())
   }
-
-  transition(initialState)
 
   function getState() {
     return { ...state }

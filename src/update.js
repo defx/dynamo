@@ -1,6 +1,7 @@
 import { walk } from "./helpers.js"
 import * as deriveState from "./deriveState.js"
 import * as deriveSubscribers from "./deriveSubscribers.js"
+import * as bindEvents from "./bindEvents.js"
 
 /* skip any custom elements  */
 const cwalk = (node, callback) => {
@@ -17,7 +18,8 @@ export function update(
   rootNode,
   state = {},
   subscribers = [],
-  listSubscribers = {}
+  listSubscribers = {},
+  dispatch
 ) {
   cwalk(rootNode, (node) => {
     if (node.hasAttribute?.("x-list")) {
@@ -26,6 +28,7 @@ export function update(
     }
     if (node.hasAttribute?.("x-input")) {
       deriveState.xInput(node, state)
+      bindEvents.xInput(node, dispatch)
     }
     if (node.hasAttribute?.("x-attr")) {
       deriveState.xAttr(node, state)
@@ -33,6 +36,9 @@ export function update(
     }
     if (node.hasAttribute?.("x-class")) {
       deriveSubscribers.xClass(node, subscribers)
+    }
+    if (node.hasAttribute?.("x-on")) {
+      bindEvents.xOn(node, dispatch)
     }
   })
 

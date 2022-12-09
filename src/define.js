@@ -1,7 +1,5 @@
 import { update } from "./update.js"
 import { deriveRefs } from "./deriveRefs.js"
-import { bindInputs } from "./bindInputs.js"
-import { bindEvents } from "./bindEvents.js"
 import { configure } from "./store.js"
 
 function mergeHTML(parentNode, html) {
@@ -28,7 +26,6 @@ export const define = (name, factory) => {
 
         const subscribers = []
         const listSubscribers = {}
-        const initialState = update(this, {}, subscribers, listSubscribers)
 
         const onChangeCallback = (state) => {
           subscribers
@@ -40,22 +37,23 @@ export const define = (name, factory) => {
 
         const { dispatch, getState } = configure({
           ...config,
-          state: {
-            ...initialState,
-            ...((state) =>
-              typeof state === "function" ? state(initialState) : state)(
-              config.state || {}
-            ),
-          },
           api,
           onChangeCallback,
         })
+
+        const initialState = update(
+          this,
+          {},
+          subscribers,
+          listSubscribers,
+          dispatch
+        )
 
         api.append = (html, targetNode) => {
           const childNodes = mergeHTML(targetNode, html)
 
           const nextState = childNodes.reduce((state, node) => {
-            return update(node, state, subscribers, listSubscribers)
+            return update(node, state, subscribers, listSubscribers, dispatch)
           }, getState())
 
           dispatch({
@@ -72,9 +70,16 @@ export const define = (name, factory) => {
           ...api,
         }
 
-        bindInputs(this, dispatch)
-        bindEvents(this, dispatch)
-        onChangeCallback(getState())
+        dispatch({
+          type: "MERGE",
+          payload: {
+            ...initialState,
+            ...((state) =>
+              typeof state === "function" ? state(initialState) : state)(
+              config.state || {}
+            ),
+          },
+        })
 
         config.connectedCallback?.(store)
       }
