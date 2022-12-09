@@ -31,7 +31,6 @@ export const define = (name, factory) => {
         const initialState = update(this, {}, subscribers, listSubscribers)
 
         const onChangeCallback = (state) => {
-          console.log("onChangeCallback!", state)
           subscribers
             .concat(Object.values(listSubscribers))
             .forEach((fn) => fn(state))
