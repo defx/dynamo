@@ -15,7 +15,8 @@ export function xNode(node, subscribers = [], listSubscribers = {}, refs = {}) {
   if (!(_k in refs)) {
     Object.defineProperty(refs, _k, {
       get() {
-        return [...node.parentNode.querySelectorAll(`[x-node="${k}"]`)]
+        const x = [...node.parentNode.querySelectorAll(`[x-node="${k}"]`)]
+        return k === _k ? x[0] : x
       },
     })
   }
