@@ -150,18 +150,6 @@ In the example above, we're using `getState` to re-define the value of `products
 
 ## Attributes
 
-### x-list
-
-Used to declare an element as a list node.
-
-The state for each list item in the collection is derived from each elements dataset, so be sure to declare any values you need to work with as data attributes. For example, if you want to allow a user to sort your list, make sure that you declare any values you wish to sort on in each elements dataset:
-
-```html
-<li x-list="products" data-id="f7g649f9" data-price="19.99" data-rating="4.2">
-  <p>19.99</p>
-</li>
-```
-
 > The only hard requirement for list items is that you _must_ include a `[data-id]` attribute so that the list can be reliably re-ordered.
 
 ### x-input
