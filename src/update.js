@@ -18,7 +18,8 @@ export function update(
   state = {},
   subscribers = [],
   listSubscribers = {},
-  dispatch
+  dispatch,
+  refs = {}
 ) {
   cwalk(rootNode, (node) => {
     if (node.hasAttribute?.("x-input")) {
@@ -30,7 +31,7 @@ export function update(
     }
     if (node.hasAttribute?.("x-node")) {
       deriveState.xNode(node, state)
-      deriveSubscribers.xNode(node, subscribers, listSubscribers)
+      deriveSubscribers.xNode(node, subscribers, listSubscribers, refs)
     }
   })
 
