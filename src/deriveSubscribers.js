@@ -11,7 +11,7 @@ export function xNode(
   refs = {},
   dispatch
 ) {
-  const k = node.getAttribute(`x-node`)
+  const k = node.getAttribute(`x-o`)
   const _k = k.replace(/\.\*$/, "")
 
   if (k.endsWith(".*") && !(k in listSubscribers)) {
@@ -23,7 +23,7 @@ export function xNode(
   if (!(_k in refs)) {
     Object.defineProperty(refs, _k, {
       get() {
-        const x = [...node.parentNode.querySelectorAll(`[x-node="${k}"]`)]
+        const x = [...node.parentNode.querySelectorAll(`[x-o="${k}"]`)]
         return k === _k ? x[0] : x
       },
     })
@@ -33,9 +33,7 @@ export function xNode(
     let rk = k
 
     if (k.endsWith(".*")) {
-      const collection = [
-        ...node.parentNode.querySelectorAll(`[x-node="${k}"]`),
-      ]
+      const collection = [...node.parentNode.querySelectorAll(`[x-o="${k}"]`)]
       const index = collection.findIndex((n) => n === node)
       rk = _k + `.${index}`
     }
@@ -53,9 +51,7 @@ export function xNode(
       if (value.trim?.().length && !isNaN(value)) value = +value
 
       if (k.endsWith(".*")) {
-        const collection = [
-          ...node.parentNode.querySelectorAll(`[x-node="${k}"]`),
-        ]
+        const collection = [...node.parentNode.querySelectorAll(`[x-o="${k}"]`)]
         const index = collection.findIndex((n) => n === node)
         rk = _k + `.${index}`
       }

@@ -8,7 +8,7 @@ describe("deriveState", () => {
       <${tagName}>
         <ul>
           <li
-            x-node="products.*"
+            x-o="products.*"
             id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
@@ -17,7 +17,7 @@ describe("deriveState", () => {
             <a href="//bbc.co.uk"></a>
           </li>
           <li
-            x-node="products.*"
+            x-o="products.*"
             id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
@@ -54,7 +54,7 @@ describe("deriveState", () => {
     mount(html`
       <${tagName}>
         <label>Sort by:
-          <select name="sortBy" x-node="sortBy">
+          <select name="sortBy" x-o="sortBy">
         </label>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>
@@ -74,7 +74,7 @@ describe("deriveState", () => {
     mount(html`
       <${tagName}>
         <label>Sort by:
-          <select name="sortBy" x-node="sortBy">
+          <select name="sortBy" x-o="sortBy">
         </label>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>

@@ -12,10 +12,10 @@ export const xOn = (node, dispatch) => {
   node.addEventListener(eventType, (event) => {
     event.stopPropagation()
 
-    const k = event.target.getAttribute("x-node") || ""
+    const k = event.target.getAttribute("x-o") || ""
 
     const index = k.endsWith(".*")
-      ? findIndex(node.parentNode, event.target, `[x-node="${k}"]`)
+      ? findIndex(node.parentNode, event.target, `[x-o="${k}"]`)
       : null
 
     dispatch({

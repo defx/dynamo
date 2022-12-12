@@ -25,7 +25,7 @@ export function update(
     if (node.hasAttribute?.("x-e")) {
       bindEvents.xOn(node, dispatch)
     }
-    if (node.hasAttribute?.("x-node")) {
+    if (node.hasAttribute?.("x-o")) {
       deriveState.xNode(node, state)
       deriveSubscribers.xNode(
         node,

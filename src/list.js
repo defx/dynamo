@@ -8,7 +8,7 @@ export const compareKeyedLists = (key, a = [], b = []) => {
 }
 
 export function listSync(rootNode, path, arr) {
-  const nodes = $$(rootNode, `[x-node="${path}"]`)
+  const nodes = $$(rootNode, `[x-o="${path}"]`)
 
   // check if anything has changed
   const nodeIds = nodes.map(({ id }) => id)

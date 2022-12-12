@@ -5,7 +5,7 @@ describe("list sorting", () => {
     mount(html`
       <x-app>
         <label for="sort">Sort by:</label>
-        <select id="sort" name="sortBy" x-node="sortBy">
+        <select id="sort" name="sortBy" x-o="sortBy">
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
@@ -13,14 +13,14 @@ describe("list sorting", () => {
         </select>
         <ul>
           <li
-            x-node="products.*"
+            x-o="products.*"
             id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
             <p>14.99</p>
           </li>
-          <li x-node="products.*" id="f8g7r6d" data-price="5" data-rating="4.7">
+          <li x-o="products.*" id="f8g7r6d" data-price="5" data-rating="4.7">
             <p>5</p>
           </li>
         </ul>
@@ -75,7 +75,7 @@ describe("list sorting", () => {
     mount(html`
       <${name}>
         <label for="sort">Sort by:</label>
-        <select name="sortBy" id="sort" x-node="sortBy">
+        <select name="sortBy" id="sort" x-o="sortBy">
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh" selected>Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
@@ -83,7 +83,7 @@ describe("list sorting", () => {
         </select>
         <ul>
           <li
-            x-node="products.*"
+            x-o="products.*"
             data-id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
@@ -91,7 +91,7 @@ describe("list sorting", () => {
             <p>first</p>
           </li>
           <li
-            x-node="products.*"
+            x-o="products.*"
             data-id="f8g7r6d"
             data-price="5"
             data-rating="4.7"

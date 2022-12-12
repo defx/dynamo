@@ -19,7 +19,7 @@ describe("navigation menu enhancement", () => {
     </style>
       <${tagName}>
         <button x-e="click:toggleMenu">[=]</button>
-        <nav x-node="nav">
+        <nav x-o="nav">
             <ul>
                 <li>New In</li>
                 <li>Bestsellers</li>
