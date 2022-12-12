@@ -5,7 +5,7 @@ function findIndex(rootNode, node, query) {
 
 export const xOn = (node, dispatch) => {
   const [eventType, actionName] = node
-    .getAttribute("x-on")
+    .getAttribute("x-e")
     .split(":")
     .map((v) => v.trim())
 

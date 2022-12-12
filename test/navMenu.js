@@ -18,7 +18,7 @@ describe("navigation menu enhancement", () => {
 
     </style>
       <${tagName}>
-        <button x-on="click:toggleMenu">[=]</button>
+        <button x-e="click:toggleMenu">[=]</button>
         <nav x-node="nav">
             <ul>
                 <li>New In</li>
@@ -59,7 +59,7 @@ describe("navigation menu enhancement", () => {
     assert.ok($("nav").classList.contains("hamburger"))
     assert.notOk($("nav").classList.contains("open"))
 
-    $(`[x-on="click:toggleMenu"]`).click()
+    $(`[x-e="click:toggleMenu"]`).click()
 
     await nextFrame()
 

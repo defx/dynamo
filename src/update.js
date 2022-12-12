@@ -22,7 +22,7 @@ export function update(
   refs = {}
 ) {
   cwalk(rootNode, (node) => {
-    if (node.hasAttribute?.("x-on")) {
+    if (node.hasAttribute?.("x-e")) {
       bindEvents.xOn(node, dispatch)
     }
     if (node.hasAttribute?.("x-node")) {

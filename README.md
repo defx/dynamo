@@ -38,7 +38,9 @@ Let's take a look at each of those steps in a little more detail:
 
 ## Custom Element tag
 
-The Custom Element spec is a web standard that allows us to extend HTML with our own custom elements. Once defined, we can use those elements just like any other HTML element. You can call your Custom Element anything you like, as long as you include a hyphen in the name (e.g., `main-nav`) - this is simply to differentiate custom elements from native built-in elements.
+Include a custom element tag in your HTML to define a block of content that you wish to enhance with some behaviour.
+
+You can call your Custom Element anything you like, as long as you include a hyphen in the name (e.g., `main-nav`) - this is simply to differentiate custom elements from native built-in elements.
 
 ```html
 <product-list>
@@ -46,68 +48,7 @@ The Custom Element spec is a web standard that allows us to extend HTML with our
 </product-list>
 ```
 
-## \[x-\*\] attributes
-
-Attributes prefixed with an "x-" declare the dynamic parts of your HTML. For example, lets say that your HTML includes a list of products that you would like your users to be able to sort in the browser.
-
-Here's our basic HTML...
-
-```html
-<product-list>
-  <label for="sortInput">Sort by:</label>
-  <select id="sortInput" name="sortBy" x-input>
-    <option value="priceLowToHigh">Price (low - high)</option>
-    <option value="priceHighToLow" selected>Price (high - low)</option>
-    <option value="rating">Rating</option>
-  </select>
-  <ul>
-    <li
-      x-list="products"
-      data-id="afd56erg"
-      data-price="14.99"
-      data-rating="4.2"
-    >
-      <p>£14.99</p>
-    </li>
-    <li
-      x-list="products"
-      data-id="f8g7r6d2"
-      data-price="5.99"
-      data-rating="4.7"
-    >
-      <p>£5.99</p>
-    </li>
-  </ul>
-</product-list>
-```
-
-The first thing to note is that each list item includes an `x-list` attribute. This declares that those elements are part of a collection named "products" that will be reflected in state, incorporating values from each elements `data-*` attributes. For the above HTML, you can expect the initial state of `<product-list>` to look like this...
-
-```js
-{
-  products: [
-    {
-      id: "afd56erg",
-      price: 14.99,
-      rating: 4.2,
-    },
-    {
-      id: "f8g7r6d2",
-      price: 5.99,
-      rating: 4.7,
-    },
-  ],
-}
-```
-
-The second thing to note is that our `<Select>` element has the `x-input` attribute - a two-way binding that can be applied to any user input element. As "Price (high - low)" is the default option, we can expect the initial state of `<product-list>` to reflect that...
-
-```js
-{
-  sortBy: "priceHighToLow",
-  products: [/* ... */]
-}
-```
+You can have as many or as few custom elements as you like within your HTML and it's fine to nest multiple custom elements.
 
 ## Configure
 
@@ -125,77 +66,7 @@ define("product-list", () => {
 })
 ```
 
-In the example above, we're telling the browser about a new element called "product-list", and we're providing a factory function that will be called for every new instance of that element on the page. The object returned from this factory function is used to configure our custom element (see [Define](#define) for all the options)
-
-Looking back at our Product List example, we want any changes to the `<Select>` option to update the sort order of our products, and the `getState` configuration parameter gives us a nice, simple way to do this...
-
-```js
-const sort = {
-  priceLowToHigh: (a, b) => a.price - b.price,
-  priceHighToLow: (a, b) => b.price - a.price,
-  rating: (a, b) => b.rating - a.rating,
-}
-
-define("product-list", () => {
-  return {
-    getState: (state) => ({
-      ...state,
-      products: state.products.sort(sort[state.sortBy]),
-    }),
-  }
-})
-```
-
-In the example above, we're using `getState` to re-define the value of `products` by sorting its initial value using one of three custom sorting functions. We use the value of `sortBy` in state to select the correct sorting function. Because `getState` is called automatically whenever state changes, this is literally all that we need to ensure that our list of products on the page reflects the selected sort option!
-
-## Attributes
-
-> The only hard requirement for list items is that you _must_ include a `[data-id]` attribute so that the list can be reliably re-ordered.
-
-### x-input
-
-Used to bind any user input element (e.g., `<input>, <select>, <textarea>`) to a property in state. The x-input attribute is a boolean attribute that doesn't accept any value, the name of the property reflected in state will be inferred from the elements [name] attribute.
-
-> Applying the [name] + [x-input] pattern encourages parity between form data and request data for the purpose of progressive enhancement.
-
-```html
-<select name="sortBy" x-input>
-  <option value="bestsellers">Bestsellers</option>
-  <option value="priceLowToHigh">Price (low - high)</option>
-  <option value="priceHighToLow">Price (high - low)</option>
-  <option value="rating">Rating</option>
-</select>
-```
-
-### x-on
-
-Used to bind an event listener to an element, accepts two arguments separated by a colon `x-on="eventType:methodName"` where `eventType` is the type of even you want to listen for and `methodName` is the name of the update method you wish to invoke;
-
-Let's say, for example, we want to add a "load more" button to our product list...
-
-```html
-<button x-on="click:loadMore">[=]</button>
-```
-
-```js
-define("some-element", () => {
-  return {
-    middleware: {
-      loadMore: (state) => {
-        /* fetch more products from the server... */
-      },
-    },
-  }
-})
-```
-
-## x-node
-
-Used to bind one or more nodes to a property in state. The value for each node will be represented by a dictionary of attributes, where kebab-cased attribute names are converted to camel-cased property names. In keeping with regular HTML Element Nodes, data-\* attributes are reflected under the `dataset` property. Changes to the object in state will be reflected back on to the DOM Node.
-
-### Collections
-
-A set of adjacent siblings may be bound to an array in state using the `.*` "glob" postfix convention, making it possible to group items together, and also sort the items.
+In the example above, we're telling the browser about a new element called "product-list", and we're providing a factory function that will be called for every new instance of that element on the page. The object returned from this factory function is used to configure our custom elements behaviour (see [Define](#define) for all the options)
 
 ## define
 
@@ -212,7 +83,7 @@ define(tagName, factory)
 - `tagName` (required) [string] - Name for the new Custom Element. As per the Custom Element
   spec, an elements name must include a hyphen to differentiate from standard built-in elements.
 
-- `factory` (required) [function] - A factory function that will be called whenever a new instance of your Custom Element is created. It will be provided with one argument which is the Custom Element node itself. The factory function returns a [Model]() or a Promise that resolves to a Model.
+- `factory` (required) [function] - A factory function that will be called whenever a new instance of your Custom Element is created. It will be provided with one argument which is the Custom Element node itself. The factory function returns a [Model]().
 
 ### Model
 
@@ -234,7 +105,7 @@ define(tagName, () => {
 })
 ```
 
-Both `update` and `middleware` functions can be invoked via [`x-on`](#x-on) events, whereas `update` functions can also be dispatched directly from `middleware` functions.
+Both `update` and `middleware` functions can be invoked via [`x-e`](#x-e) events, whereas `update` functions can also be dispatched directly from `middleware` functions.
 
 ## update
 
@@ -276,10 +147,12 @@ An action object provides some context to the `update` and `middleware` function
 type Action = {
   /* Refers to the name of the target function */
   type: string
-  /* The native event object. Supplied when triggered via an event with x-on attribute */
+  /* The native event object. Supplied when triggered via an event with x-e attribute */
   event?: Event
   /* A custom object provided by the developer when calling the Middleware API's dispatch method */
   payload?: { [key: string]: any }
+  /* If the event was triggered by a node that is part of an x-o collection, this is the index of that node within the collection */
+  index? number
 }
 ```
 
@@ -308,10 +181,10 @@ type MiddlewareAPI {
   */
   dispatch(action: ActionInput): void
   /*
-  * A dictionary of any HTML elements declared with the x-ref attribute
+  * A dictionary of any HTML Elements with an x-o binding
   */
   refs: {
-    [key: string]: HTMLElement
+    [key: string]: HTMLElement | HTMLElement[]
   }
   /*
   * Register a callback to be invoked once after the next UI update
@@ -319,3 +192,37 @@ type MiddlewareAPI {
   nextTick(callback: Function): void
 }
 ```
+
+## [x-*] attributes
+
+There are only two special attributes used by dynamo to enhance your HTML, `x-o` and `x-e`.
+
+## x-e (Event binding)
+
+Used to bind an event listener to an element node, accepts two arguments separated by a colon `x-e="type:method"` where `type` is the type of even you want to listen for and `method` is the name of the update or middleware method that you wish to invoke;
+
+Let's say, for example, we want to add a "load more" button to our product list...
+
+```html
+<button x-e="click:loadMore">load more</button>
+```
+
+```js
+define("product-list", () => {
+  return {
+    middleware: {
+      loadMore: (state) => {
+        /* fetch more products from the server... */
+      },
+    },
+  }
+})
+```
+
+## x-o (Object binding)
+
+Used to bind an element node to an object in state. The object in state will be initialised from the elements attributes and dataset, and changes to the object will be reflected back on to the node whenever state changes.
+
+### Collections
+
+A set of adjacent siblings may be bound to an array in state using the `.*` "glob" postfix convention, making it possible to group items together, and also sort the items.

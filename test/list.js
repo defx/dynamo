@@ -241,7 +241,7 @@ describe("list merge", () => {
           >
             <p>5</p>
           </li>
-          <button x-on="click:loadMore">load more</button>
+          <button x-e="click:loadMore">load more</button>
         </ul>
       </${tagName}>
     `)
@@ -292,7 +292,7 @@ describe("list merge", () => {
         .map((v) => +v)
     }
 
-    $(`[x-on="click:loadMore"]`).click()
+    $(`[x-e="click:loadMore"]`).click()
 
     await nextFrame()
 

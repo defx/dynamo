@@ -4,7 +4,7 @@ describe("x-attr", () => {
   it("initialises the attributes", () => {
     mount(html`
       <x-attr-test>
-        <button x-on="click:toggle" x-node="toggleButton" hidden>[+]</button>
+        <button x-e="click:toggle" x-node="toggleButton" hidden>[+]</button>
       </x-attr-test>
     `)
     define("x-attr-test", () => ({
@@ -23,7 +23,7 @@ describe("x-attr", () => {
   it("updates the attributes", async () => {
     mount(html`
       <x-attr-test-2>
-        <button x-on="click:toggle" x-node="toggleButton" hidden>[+]</button>
+        <button x-e="click:toggle" x-node="toggleButton" hidden>[+]</button>
       </x-attr-test-2>
     `)
     define("x-attr-test-2", () => ({
@@ -71,7 +71,7 @@ describe("x-attr", () => {
   it("updates the attribute as part of a collection", async () => {
     mount(html`
       <x-attr-test-5>
-        <button x-on="click:toggle" x-node="toggleButtons.*">[+]</button>
+        <button x-e="click:toggle" x-node="toggleButtons.*">[+]</button>
       </x-attr-test-5>
     `)
     define("x-attr-test-5", () => ({
