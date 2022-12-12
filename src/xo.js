@@ -54,7 +54,7 @@ export const write = (node, attrs) => {
     if (k === "class") {
       v = Object.entries(v)
         .reduce((o, [k, v]) => {
-          if (v[k]) o.push(k)
+          if (v) o.push(k)
           return o
         }, [])
         .join(" ")

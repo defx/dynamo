@@ -2,24 +2,6 @@ import { getValueAtPath } from "./helpers.js"
 import { listSync } from "./list.js"
 import * as xo from "./xo.js"
 
-function applyClasses(o, node) {
-  if (!o) return
-  Object.keys(o).forEach((name) => {
-    if (o[name]) {
-      node.classList.add(name)
-    } else {
-      node.classList.remove(name)
-    }
-  })
-}
-
-export function xClass(node, subscribers = []) {
-  subscribers.push((state) => {
-    const k = node.getAttribute("x-class")
-    applyClasses(state[k], node)
-  })
-}
-
 export function xNode(node, subscribers = [], listSubscribers = {}) {
   const k = node.getAttribute(`x-node`)
 

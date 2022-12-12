@@ -25,9 +25,6 @@ export function update(
       deriveState.xInput(node, state)
       bindEvents.xInput(node, dispatch)
     }
-    if (node.hasAttribute?.("x-class")) {
-      deriveSubscribers.xClass(node, subscribers)
-    }
     if (node.hasAttribute?.("x-on")) {
       bindEvents.xOn(node, dispatch)
     }

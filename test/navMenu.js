@@ -19,7 +19,7 @@ describe("navigation menu enhancement", () => {
     </style>
       <${tagName}>
         <button x-on="click:toggleMenu">[=]</button>
-        <nav x-class="navClasses">
+        <nav x-node="nav">
             <ul>
                 <li>New In</li>
                 <li>Bestsellers</li>
@@ -33,18 +33,22 @@ describe("navigation menu enhancement", () => {
     define(tagName, () => {
       return {
         state: {
-          navClasses: {
-            hamburger: true,
-            open: false,
+          nav: {
+            class: {
+              hamburger: true,
+              open: false,
+            },
           },
         },
         update: {
           toggleMenu: (state) => {
             return {
               ...state,
-              navClasses: {
-                hamburger: true,
-                open: !state.navClasses.open,
+              nav: {
+                class: {
+                  hamburger: true,
+                  open: !state.nav.class.open,
+                },
               },
             }
           },
