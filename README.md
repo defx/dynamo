@@ -189,64 +189,6 @@ define("some-element", () => {
 })
 ```
 
-### x-ref
-
-Used to create a reference to a particular DOM element which will be available on the `refs` object provided as the third argument to a `middleware` callback function (see [Middleware]() for more details) and also as part of the first argument provided to `connectedCallback` (see [Lifecycle Events]()).
-
-```html
-<!-- .... -->
-<ul x-ref="productList">
-  <li x-list="products" data-id="afd56erg" data-price="14.99" data-rating="4.2">
-    <p>14.99</p>
-  </li>
-  <li x-list="products" data-id="f8g7r6d" data-price="5" data-rating="4.7">
-    <p>5</p>
-  </li>
-  <button x-on="click:loadMore">load more</button>
-</ul>
-```
-
-In the example above, we've added the `x-ref` to the list parent so that we have a reference to the element that we want to append more list items to.
-
-We've also included a "load more" button with an `x-on` binding which will invoke our `loadMore` function in the event of a click.
-
-The `loadMore` function in our `product-list` definition might look something like this:
-
-```js
-define("product-list", () => {
-  return {
-    /* ... */
-    middleware: {
-      loadMore: (action, next, { refs: { productList }, append }) => {
-        append(
-          html`
-            <li
-              x-list="products"
-              data-id="f7g649f9"
-              data-price="19.99"
-              data-rating="4.2"
-            >
-              <p>19.99</p>
-            </li>
-            <li
-              x-list="products"
-              data-id="k7s95jg7"
-              data-price="3.99"
-              data-rating="4.7"
-            >
-              <p>3.99</p>
-            </li>
-          `,
-          productList
-        )
-      },
-    },
-  }
-})
-```
-
-We've configured `middleware` to define our `loadMore` function as we're handling a side effect rather than simply updating state (see [Middleware]() for full details). In the example above we simply append some hard-coded html to the product list, however a more realistic scenario would include fetching the HTML from your server. Once the `append` function is invoked, the `product-list` DOM will be synchronised with state and your list will now include the additional items with the correct sorting applied.
-
 ## x-node
 
 Used to bind one or more nodes to a property in state. The value for each node will be represented by a dictionary of attributes, where kebab-cased attribute names are converted to camel-cased property names. In keeping with regular HTML Element Nodes, data-\* attributes are reflected under the `dataset` property. Changes to the object in state will be reflected back on to the DOM Node.
