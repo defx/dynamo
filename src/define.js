@@ -28,9 +28,11 @@ export const define = (name, factory) => {
         const listSubscribers = {}
 
         const onChangeCallback = (state) => {
-          subscribers
-            .concat(Object.values(listSubscribers))
+          // always update collections first
+          Object.values(listSubscribers)
+            .concat(subscribers)
             .forEach((fn) => fn(state))
+
           nextTickSubscribers.forEach((fn) => fn(state))
           nextTickSubscribers = []
         }

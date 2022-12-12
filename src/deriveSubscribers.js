@@ -58,3 +58,27 @@ export function xList(node, listSubscribers = {}) {
     listSync(node.parentNode, k, state[k])
   }
 }
+
+export function xNode(node, subscribers = [], listSubscribers = {}) {
+  const k = node.getAttribute(`x-node`)
+
+  if (k.endsWith(".*") && !(k in listSubscribers)) {
+    listSubscribers[k] = (state) => {
+      listSync(node.parentNode, k, state[k.slice(0, -2)])
+    }
+  }
+
+  subscribers.push((state) => {
+    let rk = k
+
+    if (k.endsWith(".*")) {
+      const collection = [
+        ...node.parentNode.querySelectorAll(`[x-node="${k}"]`),
+      ]
+      const index = collection.findIndex((n) => n === node)
+      rk = k.slice(0, -2) + `.${index}`
+    }
+
+    applyAttributes(getValueAtPath(rk, state), node)
+  })
+}

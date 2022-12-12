@@ -8,8 +8,8 @@ describe("deriveState", () => {
       <${tagName}>
         <ul>
           <li
-            x-list="products"
-            data-id="afd56erg"
+            x-node="products.*"
+            id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
@@ -17,8 +17,8 @@ describe("deriveState", () => {
             <a href="//bbc.co.uk"></a>
           </li>
           <li
-            x-list="products"
-            data-id="f8g7r6d"
+            x-node="products.*"
+            id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
           >
@@ -33,14 +33,18 @@ describe("deriveState", () => {
 
     assert.deepEqual(state.products, [
       {
+        dataset: {
+          price: 14.99,
+          rating: 4.2,
+        },
         id: "afd56erg",
-        price: 14.99,
-        rating: 4.2,
       },
       {
+        dataset: {
+          price: 5,
+          rating: 4.7,
+        },
         id: "f8g7r6d",
-        price: 5,
-        rating: 4.7,
       },
     ])
   })

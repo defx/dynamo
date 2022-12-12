@@ -3,7 +3,7 @@ import { define } from "../src/define.js"
 describe("list sorting", () => {
   it("sorts the list", async () => {
     mount(html`
-      <x-app>
+      <sort-list>
         <label for="sort">Sort by:</label>
         <select id="sort" name="sortBy" x-input>
           <option value="bestsellers">Bestsellers</option>
@@ -13,31 +13,26 @@ describe("list sorting", () => {
         </select>
         <ul>
           <li
-            x-list="products"
-            data-id="afd56erg"
+            x-node="products.*"
+            id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
             <p>first</p>
           </li>
-          <li
-            x-list="products"
-            data-id="f8g7r6d"
-            data-price="5"
-            data-rating="4.7"
-          >
+          <li x-node="products.*" id="f8g7r6d" data-price="5" data-rating="4.7">
             <p>second</p>
           </li>
         </ul>
-      </x-app>
+      </sort-list>
     `)
 
     const sort = {
-      priceLowToHigh: (a, b) => a.price - b.price,
-      priceHighToLow: (a, b) => b.price - a.price,
+      priceLowToHigh: (a, b) => a.dataset.price - b.dataset.price,
+      priceHighToLow: (a, b) => b.dataset.price - a.dataset.price,
     }
 
-    define("x-app", () => {
+    define("sort-list", () => {
       return {
         getState: (state) => ({
           products: state.products.sort(sort[state.sortBy]),
@@ -88,16 +83,16 @@ describe("list sorting", () => {
         </select>
         <ul>
           <li
-            x-list="products"
-            data-id="afd56erg"
+            x-node="products.*"
+            id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
             <p>first</p>
           </li>
           <li
-            x-list="products"
-            data-id="f8g7r6d"
+            x-node="products.*"
+            id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
           >
@@ -108,8 +103,8 @@ describe("list sorting", () => {
     `)
 
     const sort = {
-      priceLowToHigh: (a, b) => a.price - b.price,
-      priceHighToLow: (a, b) => b.price - a.price,
+      priceLowToHigh: (a, b) => a.dataset.price - b.dataset.price,
+      priceHighToLow: (a, b) => b.dataset.price - a.dataset.price,
     }
 
     define(name, () => {
@@ -145,16 +140,16 @@ describe("list merge", () => {
         </select>
         <ul x-ref="productList">
           <li
-            x-list="products"
-            data-id="afd56erg"
+            x-node="products.*"
+            id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
             <p>14.99</p>
           </li>
           <li
-            x-list="products"
-            data-id="f8g7r6d"
+            x-node="products.*"
+            id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
           >
@@ -165,9 +160,9 @@ describe("list merge", () => {
     `)
 
     const sort = {
-      priceLowToHigh: (a, b) => a.price - b.price,
-      priceHighToLow: (a, b) => b.price - a.price,
-      rating: (a, b) => b.rating - a.rating,
+      priceLowToHigh: (a, b) => a.dataset.price - b.dataset.price,
+      priceHighToLow: (a, b) => b.dataset.price - a.dataset.price,
+      rating: (a, b) => b.dataset.rating - a.dataset.rating,
     }
 
     define(tagName, () => {
@@ -183,16 +178,16 @@ describe("list merge", () => {
             append(
               html`
                 <li
-                  x-list="products"
-                  data-id="f7g649f9"
+                  x-node="products.*"
+                  id="f7g649f9"
                   data-price="19.99"
                   data-rating="4.2"
                 >
                   <p>19.99</p>
                 </li>
                 <li
-                  x-list="products"
-                  data-id="k7s95jg7"
+                  x-node="products.*"
+                  id="k7s95jg7"
                   data-price="3.99"
                   data-rating="4.7"
                 >
@@ -231,16 +226,16 @@ describe("list merge", () => {
         </select>
         <ul x-ref="productList">
           <li
-            x-list="products"
-            data-id="afd56erg"
+            x-node="products.*"
+            id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
             <p>14.99</p>
           </li>
           <li
-            x-list="products"
-            data-id="f8g7r6d"
+            x-node="products.*"
+            id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
           >
@@ -252,9 +247,9 @@ describe("list merge", () => {
     `)
 
     const sort = {
-      priceLowToHigh: (a, b) => a.price - b.price,
-      priceHighToLow: (a, b) => b.price - a.price,
-      rating: (a, b) => b.rating - a.rating,
+      priceLowToHigh: (a, b) => a.dataset.price - b.dataset.price,
+      priceHighToLow: (a, b) => b.dataset.price - a.dataset.price,
+      rating: (a, b) => b.dataset.rating - a.dataset.rating,
     }
 
     define(tagName, () => {
@@ -268,16 +263,16 @@ describe("list merge", () => {
             append(
               html`
                 <li
-                  x-list="products"
-                  data-id="f7g649f9"
+                  x-node="products.*"
+                  id="f7g649f9"
                   data-price="19.99"
                   data-rating="4.2"
                 >
                   <p>19.99</p>
                 </li>
                 <li
-                  x-list="products"
-                  data-id="k7s95jg7"
+                  x-node="products.*"
+                  id="k7s95jg7"
                   data-price="3.99"
                   data-rating="4.7"
                 >

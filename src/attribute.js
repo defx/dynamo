@@ -1,5 +1,17 @@
 import { isPrimitive, typeOf } from "./helpers.js"
 
+export const getAttributes = (node) => {
+  return node.getAttributeNames().reduce(
+    (o, k) => {
+      if (k.startsWith("x-") || k.startsWith("data-")) return o
+
+      o[k] = node.getAttribute(k)
+      return o
+    },
+    { dataset: node.dataset }
+  )
+}
+
 const pascalToKebab = (string) =>
   string.replace(/[\w]([A-Z])/g, function (m) {
     return m[0] + "-" + m[1].toLowerCase()
@@ -59,7 +71,13 @@ export const applyAttribute = (node, name, value) => {
         break
     }
   } else if (!isPrimitive(value)) {
-    return (node[kebabToPascal(name)] = value)
+    if (name === "dataset") {
+      // top-level dataset is read-only
+      Object.entries(value).forEach(([k, v]) => (node.dataset[k] = v))
+      return
+    } else {
+      return (node[kebabToPascal(name)] = value)
+    }
   }
 
   name = pascalToKebab(name)

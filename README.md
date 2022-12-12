@@ -324,6 +324,14 @@ define("page-container", () => {
 
 In the example above, we define some initial state for our `navClasses` causing the menu to be hidden offscreen, as well as our `toggleMenu` update function to toggle the `open` class in response to the click event.
 
+## x-node
+
+Used to bind one or more nodes to a property in state. The value for each node will be represented by a dictionary of attributes, where kebab-cased attribute names are converted to camel-cased property names. In keeping with regular HTML Element Nodes, data-\* attributes are reflected under the `dataset` property. Changes to the object in state will be reflected back on to the DOM Node.
+
+### Collections
+
+A set of adjacent siblings may be bound to an array in state using the `.*` "glob" postfix convention, making it possible to group items together, and also sort the items.
+
 ## define
 
 The define function is used to configure a new Custom Element.

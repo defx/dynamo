@@ -35,10 +35,10 @@ export const xOn = (node, dispatch) => {
   node.addEventListener(eventType, (event) => {
     event.stopPropagation()
 
-    const k = event.target.getAttribute("x-attr") || ""
+    const k = event.target.getAttribute("x-node") || ""
 
     const index = k.endsWith(".*")
-      ? findIndex(node.parentNode, event.target, `[x-attr="${k}"]`)
+      ? findIndex(node.parentNode, event.target, `[x-node="${k}"]`)
       : null
 
     dispatch({
