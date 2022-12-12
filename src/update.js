@@ -22,16 +22,18 @@ export function update(
   refs = {}
 ) {
   cwalk(rootNode, (node) => {
-    if (node.hasAttribute?.("x-input")) {
-      deriveState.xInput(node, state)
-      bindEvents.xInput(node, dispatch)
-    }
     if (node.hasAttribute?.("x-on")) {
       bindEvents.xOn(node, dispatch)
     }
     if (node.hasAttribute?.("x-node")) {
       deriveState.xNode(node, state)
-      deriveSubscribers.xNode(node, subscribers, listSubscribers, refs)
+      deriveSubscribers.xNode(
+        node,
+        subscribers,
+        listSubscribers,
+        refs,
+        dispatch
+      )
     }
   })
 

@@ -1,26 +1,3 @@
-export const xInput = (node, dispatch) => {
-  const name = node.getAttribute(`name`)
-
-  if (!name) {
-    console.warn(`Missing name attribute on x-input`, node)
-    return
-  }
-
-  node.addEventListener("input", () => {
-    let value =
-      node.getAttribute("type") === "checkbox" ? node.checked : node.value
-
-    if (value.trim?.().length && !isNaN(value)) value = +value
-
-    dispatch({
-      type: "MERGE",
-      payload: {
-        [name]: value,
-      },
-    })
-  })
-}
-
 function findIndex(rootNode, node, query) {
   const collection = [...rootNode.querySelectorAll(query)]
   return collection.findIndex((n) => n === node)

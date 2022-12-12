@@ -1,8 +1,16 @@
-import { getValueAtPath } from "./helpers.js"
+import { getValueAtPath, setValueAtPath } from "./helpers.js"
 import { listSync } from "./list.js"
 import * as xo from "./xo.js"
 
-export function xNode(node, subscribers = [], listSubscribers = {}, refs = {}) {
+const inputElements = ["INPUT", "TEXTAREA", "SELECT"]
+
+export function xNode(
+  node,
+  subscribers = [],
+  listSubscribers = {},
+  refs = {},
+  dispatch
+) {
   const k = node.getAttribute(`x-node`)
   const _k = k.replace(/\.\*$/, "")
 
@@ -34,4 +42,30 @@ export function xNode(node, subscribers = [], listSubscribers = {}, refs = {}) {
 
     xo.write(node, getValueAtPath(rk, state))
   })
+
+  if (inputElements.includes(node.nodeName)) {
+    node.addEventListener("input", () => {
+      let payload = {}
+      let rk = _k
+      let value =
+        node.getAttribute("type") === "checkbox" ? node.checked : node.value
+
+      if (value.trim?.().length && !isNaN(value)) value = +value
+
+      if (k.endsWith(".*")) {
+        const collection = [
+          ...node.parentNode.querySelectorAll(`[x-node="${k}"]`),
+        ]
+        const index = collection.findIndex((n) => n === node)
+        rk = _k + `.${index}`
+      }
+
+      setValueAtPath(rk, { value }, payload)
+
+      dispatch({
+        type: "MERGE",
+        payload,
+      })
+    })
+  }
 }

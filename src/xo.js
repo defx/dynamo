@@ -16,6 +16,8 @@ function aria(v) {
   return v
 }
 
+const inputElements = ["INPUT", "TEXTAREA", "SELECT"]
+
 export const read = (node) => {
   const attrs = node.getAttributeNames().reduce((o, k) => {
     if (k.startsWith("x-") || k.startsWith("data-")) return o
@@ -41,15 +43,26 @@ export const read = (node) => {
     o[k] = cast(v)
     return o
   }, {})
-  return {
+
+  const rv = {
     ...attrs,
     dataset,
   }
+
+  if (inputElements.includes(node.nodeName)) {
+    rv.value = node.value
+  }
+
+  return rv
 }
 
 export const write = (node, attrs) => {
   for (let [k, v] of Object.entries(attrs || {})) {
     k = pascalToKebab(k)
+
+    if (k === "value" && inputElements.includes(node.nodeName)) {
+      continue
+    }
 
     if (k === "class") {
       v = Object.entries(v)

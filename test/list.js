@@ -5,7 +5,7 @@ describe("list sorting", () => {
     mount(html`
       <sort-list>
         <label for="sort">Sort by:</label>
-        <select id="sort" name="sortBy" x-input>
+        <select id="sort" name="sortBy" x-node="sortBy">
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
@@ -35,7 +35,7 @@ describe("list sorting", () => {
     define("sort-list", () => {
       return {
         getState: (state) => ({
-          products: state.products.sort(sort[state.sortBy]),
+          products: state.products.sort(sort[state.sortBy.value]),
         }),
       }
     })
@@ -75,7 +75,7 @@ describe("list sorting", () => {
     mount(html`
       <${name}>
         <label for="sort">Sort by:</label>
-        <select name="sortBy" id="sort" x-input>
+        <select name="sortBy" id="sort" x-node="sortBy">
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh" selected>Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
@@ -110,7 +110,7 @@ describe("list sorting", () => {
     define(name, () => {
       return {
         getState: (state) => ({
-          products: state.products.sort(sort[state.sortBy]),
+          products: state.products.sort(sort[state.sortBy.value]),
         }),
       }
     })
@@ -132,7 +132,7 @@ describe("list merge", () => {
     mount(html`
       <${tagName}>
         <label for="pet-select">Sort by:</label>
-        <select name="sortBy" x-input>
+        <select name="sortBy" x-node="sortBy">
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh" selected>Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
@@ -170,7 +170,7 @@ describe("list merge", () => {
         getState: (state) => {
           return {
             ...state,
-            products: state.products.sort(sort[state.sortBy]),
+            products: state.products.sort(sort[state.sortBy.value]),
           }
         },
         connectedCallback({ refs: { products }, append }) {
@@ -218,7 +218,7 @@ describe("list merge", () => {
     mount(html`
       <${tagName}>
         <label for="sortInput">Sort by:</label>
-        <select name="sortBy" id="sortInput" x-input>
+        <select name="sortBy" id="sortInput" x-node="sortBy">
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh" selected>Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
@@ -256,7 +256,7 @@ describe("list merge", () => {
       return {
         getState: (state) => ({
           ...state,
-          products: state.products.sort(sort[state.sortBy]),
+          products: state.products.sort(sort[state.sortBy.value]),
         }),
         middleware: {
           loadMore: (_, { refs: { products }, append }) => {

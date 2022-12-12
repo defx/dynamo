@@ -54,7 +54,7 @@ describe("deriveState", () => {
     mount(html`
       <${tagName}>
         <label>Sort by:
-          <select name="sortBy" x-input>
+          <select name="sortBy" x-node="sortBy">
         </label>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>
@@ -66,7 +66,7 @@ describe("deriveState", () => {
 
     const state = update($(tagName))
 
-    assert.equal(state.sortBy, "bestsellers")
+    assert.equal(state.sortBy.value, "bestsellers")
   })
 
   it("derives state from a Select element with [selected]", () => {
@@ -74,7 +74,7 @@ describe("deriveState", () => {
     mount(html`
       <${tagName}>
         <label>Sort by:
-          <select name="sortBy" x-input>
+          <select name="sortBy" x-node="sortBy">
         </label>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>
@@ -86,6 +86,6 @@ describe("deriveState", () => {
 
     const state = update($(tagName))
 
-    assert.deepEqual(state.sortBy, "priceHighToLow")
+    assert.deepEqual(state.sortBy.value, "priceHighToLow")
   })
 })
