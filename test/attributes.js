@@ -8,11 +8,11 @@ describe("x-attr", () => {
       </x-attr-test>
     `)
     define("x-attr-test", () => ({
-      attributes: {
-        toggleButton: () => ({
+      state: {
+        toggleButton: {
           hidden: false,
           ariaExpanded: false,
-        }),
+        },
       },
     }))
 
@@ -28,19 +28,15 @@ describe("x-attr", () => {
     `)
     define("x-attr-test-2", () => ({
       state: {
-        expanded: false,
+        toggleButton: {
+          ariaExpanded: false,
+        },
       },
       update: {
-        toggle: (state) => ({
-          ...state,
-          expanded: !state.expanded,
-        }),
-      },
-      attributes: {
-        toggleButton: (state, attrs) => ({
-          ...attrs,
-          ariaExpanded: state.expanded,
-        }),
+        toggle: (state) => {
+          state.toggleButton.ariaExpanded = !state.toggleButton.ariaExpanded
+          return state
+        },
       },
     }))
 
@@ -58,15 +54,13 @@ describe("x-attr", () => {
       </x-attr-test-4>
     `)
     define("x-attr-test-4", () => ({
-      state: {
-        openMenuItem: -1,
-      },
-      attributes: {
-        toggleButtons: (state, attrs, i) => ({
-          ...attrs,
-          ariaExpanded: state.openMenuItem === i,
-        }),
-      },
+      state: (state) => ({
+        ...state,
+        toggleButtons: state.toggleButtons.map((v) => ({
+          ...v,
+          ariaExpanded: false,
+        })),
+      }),
     }))
 
     assert.equal($(`button`).getAttribute("aria-expanded"), "false")
@@ -87,11 +81,14 @@ describe("x-attr", () => {
           }
         },
       },
-      attributes: {
-        menuItems: (state, attrs, i) => ({
-          ...attrs,
-          ariaExpanded: state.openMenuItem === i,
-        }),
+      getState: (state) => {
+        return {
+          ...state,
+          menuItems: state.menuItems.map((v, i) => ({
+            ...v,
+            ariaExpanded: state.openMenuItem === i,
+          })),
+        }
       },
     }))
 

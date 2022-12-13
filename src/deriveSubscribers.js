@@ -1,6 +1,5 @@
 import { getValueAtPath } from "./helpers.js"
 import { listSync } from "./list.js"
-import { applyAttribute } from "./attribute.js"
 import * as xo from "./xo.js"
 
 function applyClasses(o, node) {
@@ -21,11 +20,6 @@ export function xClass(node, subscribers = []) {
   })
 }
 
-function applyAttributes(attrs, node) {
-  for (const [name, value] of Object.entries(attrs || {}))
-    applyAttribute(node, name, value)
-}
-
 export function xAttr(node, subscribers = []) {
   subscribers.push((state, config) => {
     let k = node.getAttribute("x-attr")
@@ -37,11 +31,10 @@ export function xAttr(node, subscribers = []) {
       ]
       index = collection.findIndex((n) => n === node)
       k = k.slice(0, -2)
+      k = `${k}.${index}`
     }
 
-    const fn = config.attributes?.[k]
-
-    if (fn) applyAttributes(fn(state, xo.read(node), index), node)
+    xo.write(node, getValueAtPath(k, state))
   })
 }
 

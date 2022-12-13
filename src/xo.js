@@ -1,4 +1,4 @@
-import { cast, isPrimitive } from "./helpers.js"
+import { isPrimitive } from "./helpers.js"
 
 const pascalToKebab = (string) =>
   string.replace(/[\w]([A-Z])/g, function (m) {
@@ -15,8 +15,6 @@ function aria(v) {
   if (v === "false") return false
   return v
 }
-
-const inputElements = ["INPUT", "TEXTAREA", "SELECT"]
 
 export const read = (node) => {
   return node.getAttributeNames().reduce((o, k) => {
@@ -45,11 +43,6 @@ export const write = (node, attrs) => {
   for (let [k, v] of Object.entries(attrs || {})) {
     k = pascalToKebab(k)
 
-    if (k === "value" && inputElements.includes(node.nodeName)) {
-      if (v !== node.value) node.value = v
-      continue
-    }
-
     if (k === "class") {
       v = Object.entries(v)
         .reduce((o, [k, v]) => {
@@ -68,14 +61,8 @@ export const write = (node, attrs) => {
     }
 
     if (isPrimitive(v) === false) {
-      if (k === "dataset") {
-        // top-level dataset is read-only
-        // @todo: check for removals
-        Object.entries(v).forEach(([k, v]) => (node.dataset[k] = v))
-        continue
-      } else {
-        node[kebabToPascal(k)] = v
-      }
+      // NB: trying to set dataset this way will error, but that's not something i currently want to support
+      node[kebabToPascal(k)] = v
     }
 
     let current = node.getAttribute(k)
