@@ -39,7 +39,7 @@ export function xAttr(node, subscribers = []) {
       k = k.slice(0, -2)
     }
 
-    const fn = config["x-attr"]?.[k]
+    const fn = config.attributes?.[k]
 
     if (fn) applyAttributes(fn(state, xo.read(node), index), node)
   })

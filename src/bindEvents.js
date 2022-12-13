@@ -26,6 +26,14 @@ function findIndex(rootNode, node, query) {
   return collection.findIndex((n) => n === node)
 }
 
+function getCollectionName(node) {
+  const list = node.getAttribute("x-list")
+  if (list) return ["x-list", list]
+  const attr = node.getAttribute("x-attr")
+  if (attr && attr.endsWith(".*")) return ["x-attr", attr]
+  return []
+}
+
 export const xOn = (node, dispatch) => {
   const [eventType, actionName] = node
     .getAttribute("x-on")
@@ -35,10 +43,10 @@ export const xOn = (node, dispatch) => {
   node.addEventListener(eventType, (event) => {
     event.stopPropagation()
 
-    const k = event.target.getAttribute("x-attr") || ""
+    const [k, v] = getCollectionName(node)
 
-    const index = k.endsWith(".*")
-      ? findIndex(node.parentNode, event.target, `[x-attr="${k}"]`)
+    const index = v?.endsWith(".*")
+      ? findIndex(node.parentNode, event.target, `[${k}="${v}"]`)
       : null
 
     dispatch({

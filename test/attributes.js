@@ -8,7 +8,7 @@ describe("x-attr", () => {
       </x-attr-test>
     `)
     define("x-attr-test", () => ({
-      "x-attr": {
+      attributes: {
         toggleButton: () => ({
           hidden: false,
           ariaExpanded: false,
@@ -36,7 +36,7 @@ describe("x-attr", () => {
           expanded: !state.expanded,
         }),
       },
-      "x-attr": {
+      attributes: {
         toggleButton: (state, attrs) => ({
           ...attrs,
           ariaExpanded: state.expanded,
@@ -61,7 +61,7 @@ describe("x-attr", () => {
       state: {
         openMenuItem: -1,
       },
-      "x-attr": {
+      attributes: {
         toggleButtons: (state, attrs, i) => ({
           ...attrs,
           ariaExpanded: state.openMenuItem === i,
@@ -87,7 +87,7 @@ describe("x-attr", () => {
           }
         },
       },
-      "x-attr": {
+      attributes: {
         menuItems: (state, attrs, i) => ({
           ...attrs,
           ariaExpanded: state.openMenuItem === i,
