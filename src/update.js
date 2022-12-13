@@ -31,7 +31,6 @@ export function update(
       bindEvents.xInput(node, dispatch)
     }
     if (node.hasAttribute?.("x-attr")) {
-      deriveState.xAttr(node, state)
       deriveSubscribers.xAttr(node, subscribers)
     }
     if (node.hasAttribute?.("x-class")) {

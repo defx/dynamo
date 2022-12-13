@@ -17,22 +17,3 @@ export function xInput(node, state = {}) {
   let v = cast(node.value)
   state[k] = v
 }
-
-function attributes(node) {
-  return node.getAttributeNames().reduce((o, k) => {
-    if (!k.startsWith("x-")) o[k] = node.getAttribute(k)
-    return o
-  }, {})
-}
-
-export function xAttr(node, state = {}) {
-  let k = node.getAttribute("x-attr")
-  const v = attributes(node)
-  if (k.endsWith(".*")) {
-    k = k.slice(0, -2)
-    state[k] = state[k] || []
-    state[k].push(v)
-  } else {
-    state[k] = v
-  }
-}
