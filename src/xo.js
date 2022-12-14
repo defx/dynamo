@@ -27,7 +27,7 @@ export const objectToClasses = (v = {}) => {
 
 export const objectFromClasses = (v = "") => {
   return v
-    .split(/\n+/g)
+    .split(/\s+/)
     .filter((v) => v)
     .reduce((o, k) => {
       o[k] = true

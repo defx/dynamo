@@ -34,7 +34,7 @@ function getCollectionName(node) {
   return []
 }
 
-export const xOn = (node, dispatch) => {
+export const xOn = (rootNode, node, dispatch) => {
   const [eventType, actionName] = node
     .getAttribute("x-on")
     .split(":")
@@ -46,7 +46,7 @@ export const xOn = (node, dispatch) => {
     const [k, v] = getCollectionName(node)
 
     const index = v?.endsWith(".*")
-      ? findIndex(node.parentNode, event.target, `[${k}="${v}"]`)
+      ? findIndex(rootNode, event.target, `[${k}="${v}"]`)
       : null
 
     dispatch({

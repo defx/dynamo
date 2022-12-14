@@ -1,19 +1,7 @@
-import { getValueAtPath } from "./helpers.js"
 import { listSync } from "./list.js"
 import * as xo from "./xo.js"
 
-function applyClasses(o, node) {
-  if (!o) return
-  Object.keys(o).forEach((name) => {
-    if (o[name]) {
-      node.classList.add(name)
-    } else {
-      node.classList.remove(name)
-    }
-  })
-}
-
-export function xClass(node, subscribers = []) {
+export function xClass(rootNode, node, subscribers = []) {
   subscribers.push((state, config) => {
     const k = node.getAttribute("x-class")
     const fn = config.classes?.[k]
@@ -21,9 +9,7 @@ export function xClass(node, subscribers = []) {
     if (fn) {
       let index
       if (k.endsWith(".*")) {
-        const collection = [
-          ...node.parentNode.querySelectorAll(`[x-class="${k}"]`),
-        ]
+        const collection = [...rootNode.querySelectorAll(`[x-class="${k}"]`)]
         index = collection.findIndex((n) => n === node)
       }
 
@@ -41,7 +27,7 @@ export function xClass(node, subscribers = []) {
   })
 }
 
-export function xAttr(node, subscribers = []) {
+export function xAttr(rootNode, node, subscribers = []) {
   subscribers.push((state, config) => {
     let k = node.getAttribute("x-attr")
     let index
@@ -49,9 +35,7 @@ export function xAttr(node, subscribers = []) {
     if (k.endsWith(".*")) {
       // @todo: cache these queries per xAttr invocation
 
-      const collection = [
-        ...node.parentNode.querySelectorAll(`[x-attr="${k}"]`),
-      ]
+      const collection = [...rootNode.querySelectorAll(`[x-attr="${k}"]`)]
       index = collection.findIndex((n) => n === node)
       k = k.slice(0, -2)
     }
@@ -62,7 +46,7 @@ export function xAttr(node, subscribers = []) {
   })
 }
 
-export function xList(node, listSubscribers = {}) {
+export function xList(rootNode, node, listSubscribers = {}) {
   const k = node.getAttribute(`x-list`)
 
   const { id } = node
