@@ -69,8 +69,6 @@ export function xList(rootNode, node, listSubscribers = {}) {
         ...node.dataset,
       }))
 
-      console.log(rootNode, listNodes, listData)
-
       listSync(listNodes, listData, fn(state, listData.slice(0)))
     }
   }
