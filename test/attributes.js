@@ -4,15 +4,16 @@ describe("x-attr", () => {
   it("initialises the attributes", () => {
     mount(html`
       <x-attr-test>
-        <button x-on="click:toggle" x-attr="toggleButton" hidden>[+]</button>
+        <button x-attr="toggleButton" hidden>[+]</button>
       </x-attr-test>
     `)
     define("x-attr-test", () => ({
-      state: {
-        toggleButton: {
+      attributes: {
+        toggleButton: (_, attrs) => ({
+          ...attrs,
           hidden: false,
           ariaExpanded: false,
-        },
+        }),
       },
     }))
 
@@ -28,15 +29,20 @@ describe("x-attr", () => {
     `)
     define("x-attr-test-2", () => ({
       state: {
-        toggleButton: {
-          ariaExpanded: false,
-        },
+        expanded: false,
+      },
+      attributes: {
+        toggleButton: ({ expanded }, attrs) => ({
+          ...attrs,
+          hidden: false,
+          ariaExpanded: expanded,
+        }),
       },
       update: {
-        toggle: (state) => {
-          state.toggleButton.ariaExpanded = !state.toggleButton.ariaExpanded
-          return state
-        },
+        toggle: (state) => ({
+          ...state,
+          expanded: !state.expanded,
+        }),
       },
     }))
 
@@ -54,13 +60,12 @@ describe("x-attr", () => {
       </x-attr-test-4>
     `)
     define("x-attr-test-4", () => ({
-      state: (state) => ({
-        ...state,
-        toggleButtons: state.toggleButtons.map((v) => ({
-          ...v,
+      attributes: {
+        toggleButtons: (_, attrs) => ({
+          ...attrs,
           ariaExpanded: false,
-        })),
-      }),
+        }),
+      },
     }))
 
     assert.equal($(`button`).getAttribute("aria-expanded"), "false")
@@ -72,23 +77,27 @@ describe("x-attr", () => {
         <button x-on="click:toggleMenuItem" x-attr="menuItems.*">[+]</button>
       </x-attr-test-5>
     `)
+
     define("x-attr-test-5", () => ({
+      state: {
+        openMenuItems: {},
+      },
       update: {
-        toggleMenuItem: (state, { index }) => {
+        toggleMenuItem: (state, { index: i }) => {
+          const { openMenuItems } = state
+          openMenuItems[i] = !(openMenuItems[i] || false)
+
           return {
             ...state,
-            openMenuItem: state.openMenuItem === index ? -1 : index,
+            openMenuItems,
           }
         },
       },
-      getState: (state) => {
-        return {
-          ...state,
-          menuItems: state.menuItems.map((v, i) => ({
-            ...v,
-            ariaExpanded: state.openMenuItem === i,
-          })),
-        }
+      attributes: {
+        menuItems: (state, attrs, i) => ({
+          ...attrs,
+          ariaExpanded: !!state.openMenuItems[i],
+        }),
       },
     }))
 

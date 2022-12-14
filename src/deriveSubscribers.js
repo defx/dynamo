@@ -26,15 +26,18 @@ export function xAttr(node, subscribers = []) {
     let index
 
     if (k.endsWith(".*")) {
+      // @todo: cache these queries per xAttr invocation
+
       const collection = [
         ...node.parentNode.querySelectorAll(`[x-attr="${k}"]`),
       ]
       index = collection.findIndex((n) => n === node)
       k = k.slice(0, -2)
-      k = `${k}.${index}`
     }
 
-    xo.write(node, getValueAtPath(k, state))
+    const fn = config.attributes?.[k]
+
+    if (fn) xo.write(node, fn(state, xo.read(node), index))
   })
 }
 

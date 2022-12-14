@@ -23,7 +23,7 @@ export function update(
 ) {
   cwalk(rootNode, (node) => {
     if (node.hasAttribute?.("x-list")) {
-      deriveState.xList(node, state)
+      // deriveState.xList(node, state)
       deriveSubscribers.xList(node, listSubscribers)
     }
     if (node.hasAttribute?.("x-input")) {
@@ -31,7 +31,6 @@ export function update(
       bindEvents.xInput(node, dispatch)
     }
     if (node.hasAttribute?.("x-attr")) {
-      deriveState.xAttr(node, state)
       deriveSubscribers.xAttr(node, subscribers)
     }
     if (node.hasAttribute?.("x-class")) {
