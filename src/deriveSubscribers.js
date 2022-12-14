@@ -44,17 +44,26 @@ export function xAttr(node, subscribers = []) {
 export function xList(node, listSubscribers = {}) {
   const k = node.getAttribute(`x-list`)
 
-  const { id } = node.dataset
+  const { id } = node
 
   if (!id) {
     console.warn(
-      `list node with no data-id attribute. any changes to state will not be reflected in the DOM`,
+      `list node with no id attribute. any changes to state will not be reflected in the DOM`,
       node
     )
     return
   }
 
-  listSubscribers[k] = (state) => {
-    listSync(node.parentNode, k, state[k])
+  listSubscribers[k] = (state, config) => {
+    const fn = config.lists?.[k]
+
+    if (fn) {
+      const listNodes = [...node.parentNode.querySelectorAll(`[x-list="${k}"]`)]
+      const listData = listNodes.map((node) => ({
+        id: node.id,
+        ...node.dataset,
+      }))
+      listSync(listNodes, listData, fn(state, listData.slice(0)))
+    }
   }
 }

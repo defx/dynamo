@@ -1,50 +1,6 @@
 import { update } from "../src/update.js"
 
 describe("deriveState", () => {
-  it("derives state from a list of elements", () => {
-    const tagName = createName()
-
-    mount(html`
-      <${tagName}>
-        <ul>
-          <li
-            x-list="products"
-            data-id="afd56erg"
-            data-price="14.99"
-            data-rating="4.2"
-          >
-            <img src="https://sdf76sdfhsdfj.cloudfront.com/ert987wer87u8.jpg" />
-            <a href="//bbc.co.uk"></a>
-          </li>
-          <li
-            x-list="products"
-            data-id="f8g7r6d"
-            data-price="5"
-            data-rating="4.7"
-          >
-            <img src="https://sdf76sdfhsdfj.cloudfront.com/ert987wer87u8.jpg" />
-            <a href="//bbc.co.uk"></a>
-          </li>
-        </ul>
-      </${tagName}>
-    `)
-
-    const state = update($(tagName))
-
-    assert.deepEqual(state.products, [
-      {
-        id: "afd56erg",
-        price: 14.99,
-        rating: 4.2,
-      },
-      {
-        id: "f8g7r6d",
-        price: 5,
-        rating: 4.7,
-      },
-    ])
-  })
-
   it("derives state from a Select element", () => {
     const tagName = createName()
     mount(html`

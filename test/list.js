@@ -2,8 +2,10 @@ import { define } from "../src/define.js"
 
 describe("list sorting", () => {
   it("sorts the list", async () => {
+    const name = createName()
+
     mount(html`
-      <x-app>
+      <${name}>
         <label for="sort">Sort by:</label>
         <select id="sort" name="sortBy" x-input>
           <option value="bestsellers">Bestsellers</option>
@@ -14,22 +16,17 @@ describe("list sorting", () => {
         <ul>
           <li
             x-list="products"
-            data-id="afd56erg"
+            id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
             <p>first</p>
           </li>
-          <li
-            x-list="products"
-            data-id="f8g7r6d"
-            data-price="5"
-            data-rating="4.7"
-          >
+          <li x-list="products" id="f8g7r6d" data-price="5" data-rating="4.7">
             <p>second</p>
           </li>
         </ul>
-      </x-app>
+      </${name}>
     `)
 
     const sort = {
@@ -37,11 +34,11 @@ describe("list sorting", () => {
       priceHighToLow: (a, b) => b.price - a.price,
     }
 
-    define("x-app", () => {
+    define(name, () => {
       return {
-        getState: (state) => ({
-          products: state.products.sort(sort[state.sortBy]),
-        }),
+        lists: {
+          products: (state, products) => products.sort(sort[state.sortBy]),
+        },
       }
     })
 
@@ -89,7 +86,7 @@ describe("list sorting", () => {
         <ul>
           <li
             x-list="products"
-            data-id="afd56erg"
+            id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
@@ -97,7 +94,7 @@ describe("list sorting", () => {
           </li>
           <li
             x-list="products"
-            data-id="f8g7r6d"
+            id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
           >
@@ -114,9 +111,11 @@ describe("list sorting", () => {
 
     define(name, () => {
       return {
-        getState: (state) => ({
-          products: state.products.sort(sort[state.sortBy]),
-        }),
+        lists: {
+          products: (state, products) => {
+            return products.sort(sort[state.sortBy])
+          },
+        },
       }
     })
 
@@ -146,7 +145,7 @@ describe("list merge", () => {
         <ul x-ref="productList">
           <li
             x-list="products"
-            data-id="afd56erg"
+            id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
@@ -154,7 +153,7 @@ describe("list merge", () => {
           </li>
           <li
             x-list="products"
-            data-id="f8g7r6d"
+            id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
           >
@@ -172,11 +171,8 @@ describe("list merge", () => {
 
     define(tagName, () => {
       return {
-        getState: (state) => {
-          return {
-            ...state,
-            products: state.products.sort(sort[state.sortBy]),
-          }
+        lists: {
+          products: (state, products) => products.sort(sort[state.sortBy]),
         },
         connectedCallback({ refs: { productList }, append }) {
           requestAnimationFrame(() => {
@@ -184,7 +180,7 @@ describe("list merge", () => {
               html`
                 <li
                   x-list="products"
-                  data-id="f7g649f9"
+                  id="f7g649f9"
                   data-price="19.99"
                   data-rating="4.2"
                 >
@@ -192,7 +188,7 @@ describe("list merge", () => {
                 </li>
                 <li
                   x-list="products"
-                  data-id="k7s95jg7"
+                  id="k7s95jg7"
                   data-price="3.99"
                   data-rating="4.7"
                 >
@@ -232,7 +228,7 @@ describe("list merge", () => {
         <ul x-ref="productList">
           <li
             x-list="products"
-            data-id="afd56erg"
+            id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
@@ -240,7 +236,7 @@ describe("list merge", () => {
           </li>
           <li
             x-list="products"
-            data-id="f8g7r6d"
+            id="f8g7r6d"
             data-price="5"
             data-rating="4.7"
           >
@@ -259,17 +255,16 @@ describe("list merge", () => {
 
     define(tagName, () => {
       return {
-        getState: (state) => ({
-          ...state,
-          products: state.products.sort(sort[state.sortBy]),
-        }),
+        lists: {
+          products: (state, products) => products.sort(sort[state.sortBy]),
+        },
         middleware: {
           loadMore: (_, { refs: { productList }, append }) => {
             append(
               html`
                 <li
                   x-list="products"
-                  data-id="f7g649f9"
+                  id="f7g649f9"
                   data-price="19.99"
                   data-rating="4.2"
                 >
@@ -277,7 +272,7 @@ describe("list merge", () => {
                 </li>
                 <li
                   x-list="products"
-                  data-id="k7s95jg7"
+                  id="k7s95jg7"
                   data-price="3.99"
                   data-rating="4.7"
                 >
