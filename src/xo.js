@@ -16,6 +16,25 @@ function aria(v) {
   return v
 }
 
+export const objectToClasses = (v = {}) => {
+  return Object.entries(v)
+    .reduce((c, [k, v]) => {
+      if (v) c.push(k)
+      return c
+    }, [])
+    .join(" ")
+}
+
+export const objectFromClasses = (v = "") => {
+  return v
+    .split(/\n+/g)
+    .filter((v) => v)
+    .reduce((o, k) => {
+      o[k] = true
+      return o
+    }, {})
+}
+
 export const read = (node) => {
   return node.getAttributeNames().reduce((o, k) => {
     if (k.startsWith("x-") || k.startsWith("data-")) return o
@@ -27,10 +46,7 @@ export const read = (node) => {
     }
 
     if (k === "class") {
-      v = v.split(/\n/).reduce((o, k) => {
-        o[k] = true
-        return o
-      }, {})
+      v = objectFromClasses(v)
     }
 
     o[pascalToKebab(k)] = v
@@ -44,12 +60,7 @@ export const write = (node, attrs) => {
     k = pascalToKebab(k)
 
     if (k === "class") {
-      v = Object.entries(v)
-        .reduce((o, [k, v]) => {
-          if (v) o.push(k)
-          return o
-        }, [])
-        .join(" ")
+      v = objectToClasses(v)
     }
 
     if (typeof v === "boolean") {

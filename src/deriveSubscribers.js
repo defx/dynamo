@@ -14,9 +14,30 @@ function applyClasses(o, node) {
 }
 
 export function xClass(node, subscribers = []) {
-  subscribers.push((state) => {
+  subscribers.push((state, config) => {
     const k = node.getAttribute("x-class")
-    applyClasses(state[k], node)
+    const fn = config.classes?.[k]
+
+    if (fn) {
+      let index
+      if (k.endsWith(".*")) {
+        const collection = [
+          ...node.parentNode.querySelectorAll(`[x-class="${k}"]`),
+        ]
+        index = collection.findIndex((n) => n === node)
+      }
+
+      node.setAttribute(
+        "class",
+        xo.objectToClasses(
+          fn(
+            state,
+            xo.objectFromClasses(node.getAttribute("class") || ""),
+            index
+          )
+        )
+      )
+    }
   })
 }
 
