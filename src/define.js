@@ -1,14 +1,13 @@
-import { deriveState } from "./deriveState.js"
-import { deriveSubscribers } from "./deriveSubscribers.js"
+import { update } from "./update.js"
 import { deriveRefs } from "./deriveRefs.js"
-import { bindInputs } from "./bindInputs.js"
-import { bindEvents } from "./bindEvents.js"
 import { configure } from "./store.js"
 
 function mergeHTML(parentNode, html) {
   const tpl = document.createElement("template")
   tpl.innerHTML = html.trim()
+  const childNodes = [...tpl.content.childNodes]
   parentNode.appendChild(tpl.content)
+  return childNodes
 }
 
 export const define = (name, factory) => {
@@ -25,31 +24,38 @@ export const define = (name, factory) => {
 
         let config = factory(this)
 
-        const initialState = deriveState(this)
-        const subscribers = deriveSubscribers(this, initialState)
+        const subscribers = []
+        const listSubscribers = {}
 
         const onChangeCallback = (state) => {
-          subscribers.forEach((fn) => fn(state))
+          Object.values(listSubscribers)
+            .concat(subscribers)
+            .forEach((fn) => fn(state, config))
           nextTickSubscribers.forEach((fn) => fn(state))
           nextTickSubscribers = []
         }
 
         const { dispatch, getState } = configure({
           ...config,
-          state: {
-            ...initialState,
-            ...((state) =>
-              typeof state === "function" ? state(initialState) : state)(
-              config.state || {}
-            ),
-          },
           api,
           onChangeCallback,
         })
 
+        const initialState = update(
+          this,
+          {},
+          subscribers,
+          listSubscribers,
+          dispatch
+        )
+
         api.append = (html, targetNode) => {
-          mergeHTML(targetNode, html)
-          const nextState = deriveState(this)
+          const childNodes = mergeHTML(targetNode, html)
+
+          const nextState = childNodes.reduce((state, node) => {
+            return update(this, state, subscribers, listSubscribers, dispatch)
+          }, getState())
+
           dispatch({
             type: "MERGE",
             payload: nextState,
@@ -64,10 +70,16 @@ export const define = (name, factory) => {
           ...api,
         }
 
-        bindInputs(this, dispatch)
-        bindEvents(this, dispatch)
-
-        onChangeCallback(getState())
+        dispatch({
+          type: "MERGE",
+          payload: {
+            ...initialState,
+            ...((state) =>
+              typeof state === "function" ? state(initialState) : state)(
+              config.state || {}
+            ),
+          },
+        })
 
         config.connectedCallback?.(store)
       }

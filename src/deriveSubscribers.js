@@ -1,107 +1,75 @@
-import { $$, getValueAtPath, findIndex } from "./helpers.js"
 import { listSync } from "./list.js"
-import { applyAttribute } from "./attribute.js"
+import * as xo from "./xo.js"
 
-function applyClasses(o, node) {
-  if (!o) return
-  Object.keys(o).forEach((name) => {
-    if (o[name]) {
-      node.classList.add(name)
-    } else {
-      node.classList.remove(name)
+export function xClass(rootNode, node, subscribers = []) {
+  subscribers.push((state, config) => {
+    const k = node.getAttribute("x-class")
+    const fn = config.classes?.[k]
+
+    if (fn) {
+      let index
+      if (k.endsWith(".*")) {
+        const collection = [...rootNode.querySelectorAll(`[x-class="${k}"]`)]
+        index = collection.findIndex((n) => n === node)
+      }
+
+      node.setAttribute(
+        "class",
+        xo.objectToClasses(
+          fn(
+            state,
+            xo.objectFromClasses(node.getAttribute("class") || ""),
+            index
+          )
+        )
+      )
     }
   })
 }
 
-function xClass(rootNode) {
-  return [
-    (state) => {
-      const nodes = $$(rootNode, `[x-class]`)
+export function xAttr(rootNode, node, subscribers = []) {
+  subscribers.push((state, config) => {
+    let k = node.getAttribute("x-attr")
+    let index
 
-      if (!nodes.length) return
+    if (k.endsWith(".*")) {
+      // @todo: cache these queries per xAttr invocation
 
-      for (const node of nodes) {
-        const k = node.getAttribute("x-class")
-        applyClasses(state[k], node)
-      }
-    },
-  ]
-}
-
-function applyAttributes(attrs, node) {
-  for (const [name, value] of Object.entries(attrs || {}))
-    applyAttribute(node, name, value)
-}
-
-function xAttr(rootNode) {
-  return [
-    (state) => {
-      const nodes = $$(rootNode, `[x-attr]`)
-
-      if (!nodes.length) return
-
-      for (const node of nodes) {
-        let k = node.getAttribute("x-attr")
-
-        if (k.endsWith(".*")) {
-          const collection = [...rootNode.querySelectorAll(`[x-attr="${k}"]`)]
-          const index = collection.findIndex((n) => n === node)
-          k = k.slice(0, -2) + `.${index}`
-        }
-
-        applyAttributes(getValueAtPath(k, state), node)
-      }
-    },
-  ]
-}
-
-function xList(rootNode) {
-  const nodes = $$(rootNode, `[x-list]`)
-
-  const byPath = {}
-
-  for (const node of nodes) {
-    const k = node.getAttribute(`x-list`)
-
-    const { id } = node.dataset
-
-    if (!id) {
-      console.warn(
-        `list node with no data-id attribute. any changes to state will not be reflected in the DOM`,
-        node
-      )
-      continue
+      const collection = [...rootNode.querySelectorAll(`[x-attr="${k}"]`)]
+      index = collection.findIndex((n) => n === node)
+      k = k.slice(0, -2)
     }
 
-    byPath[k] = (state) => {
-      listSync(rootNode, k, state[k])
-    }
+    const fn = config.attributes?.[k]
+
+    if (fn) xo.write(node, fn(state, xo.read(node), index))
+  })
+}
+
+export function xList(rootNode, node, listSubscribers = {}) {
+  const k = node.getAttribute(`x-list`)
+
+  const { id } = node
+
+  if (!id) {
+    console.warn(
+      `list node with no id attribute. any changes to state will not be reflected in the DOM`,
+      node
+    )
+    return
   }
 
-  return Object.values(byPath)
-}
+  listSubscribers[k] = (state, config) => {
+    const fn = config.lists?.[k]
 
-function xToggle(rootNode) {
-  const subscriptions = []
+    if (fn) {
+      const listNodes = [...rootNode.querySelectorAll(`[x-list="${k}"]`)]
+      const listData = listNodes.map((node) => ({
+        id: node.id,
+        ...node.dataset,
+      }))
 
-  $$(rootNode, `[x-toggle]`).forEach((node) => {
-    const id = node.getAttribute(`x-toggle`)
-    if (!id) return
-    const target = rootNode.querySelector(`#${id}`)
-    if (!target) return
-    subscriptions.push((state) => {
-      const expanded = state.__xToggles__?.[id] || false
-      node.setAttribute("aria-expanded", expanded)
-    })
-  })
-  return subscriptions
-}
-
-export function deriveSubscribers(rootNode) {
-  return [
-    xList(rootNode),
-    xToggle(rootNode),
-    xClass(rootNode),
-    xAttr(rootNode),
-  ].flat()
+      listSync(listNodes, listData, fn(state, listData.slice(0)))
+    }
+  }
 }

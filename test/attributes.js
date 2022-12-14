@@ -4,15 +4,16 @@ describe("x-attr", () => {
   it("initialises the attributes", () => {
     mount(html`
       <x-attr-test>
-        <button x-on="click:toggle" x-attr="toggleButton" hidden>[+]</button>
+        <button x-attr="toggleButton" hidden>[+]</button>
       </x-attr-test>
     `)
     define("x-attr-test", () => ({
-      state: {
-        toggleButton: {
+      attributes: {
+        toggleButton: (_, attrs) => ({
+          ...attrs,
           hidden: false,
           ariaExpanded: false,
-        },
+        }),
       },
     }))
 
@@ -28,16 +29,19 @@ describe("x-attr", () => {
     `)
     define("x-attr-test-2", () => ({
       state: {
-        toggleButton: {
+        expanded: false,
+      },
+      attributes: {
+        toggleButton: ({ expanded }, attrs) => ({
+          ...attrs,
           hidden: false,
-          ariaExpanded: false,
-        },
+          ariaExpanded: expanded,
+        }),
       },
       update: {
         toggle: (state) => ({
-          toggleButton: {
-            ariaExpanded: !state.toggleButton.ariaExpanded,
-          },
+          ...state,
+          expanded: !state.expanded,
         }),
       },
     }))
@@ -52,16 +56,15 @@ describe("x-attr", () => {
   it("initialises the attribute as part of a collection", () => {
     mount(html`
       <x-attr-test-4>
-        <button x-attr="toggleButton.*">[+]</button>
+        <button x-attr="toggleButtons.*">[+]</button>
       </x-attr-test-4>
     `)
     define("x-attr-test-4", () => ({
-      state: {
-        toggleButton: [
-          {
-            ariaExpanded: false,
-          },
-        ],
+      attributes: {
+        toggleButtons: (_, attrs) => ({
+          ...attrs,
+          ariaExpanded: false,
+        }),
       },
     }))
 
@@ -71,21 +74,30 @@ describe("x-attr", () => {
   it("updates the attribute as part of a collection", async () => {
     mount(html`
       <x-attr-test-5>
-        <button x-on="click:toggle" x-attr="toggleButtons.*">[+]</button>
+        <button x-on="click:toggleMenuItem" x-attr="menuItems.*">[+]</button>
       </x-attr-test-5>
     `)
+
     define("x-attr-test-5", () => ({
+      state: {
+        openMenuItems: {},
+      },
       update: {
-        toggle: (state, { index }) => {
+        toggleMenuItem: (state, { index: i }) => {
+          const { openMenuItems } = state
+          openMenuItems[i] = !(openMenuItems[i] || false)
+
           return {
-            toggleButtons: state.toggleButtons.map((v, i) => {
-              return {
-                ...v,
-                ariaExpanded: i === index ? !v.ariaExpanded : false,
-              }
-            }),
+            ...state,
+            openMenuItems,
           }
         },
+      },
+      attributes: {
+        menuItems: (state, attrs, i) => ({
+          ...attrs,
+          ariaExpanded: !!state.openMenuItems[i],
+        }),
       },
     }))
 
