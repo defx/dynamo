@@ -63,11 +63,14 @@ export function xList(rootNode, node, listSubscribers = {}) {
     const fn = config.lists?.[k]
 
     if (fn) {
-      const listNodes = [...node.parentNode.querySelectorAll(`[x-list="${k}"]`)]
+      const listNodes = [...rootNode.querySelectorAll(`[x-list="${k}"]`)]
       const listData = listNodes.map((node) => ({
         id: node.id,
         ...node.dataset,
       }))
+
+      console.log(rootNode, listNodes, listData)
+
       listSync(listNodes, listData, fn(state, listData.slice(0)))
     }
   }

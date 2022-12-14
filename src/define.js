@@ -53,7 +53,7 @@ export const define = (name, factory) => {
           const childNodes = mergeHTML(targetNode, html)
 
           const nextState = childNodes.reduce((state, node) => {
-            return update(node, state, subscribers, listSubscribers, dispatch)
+            return update(this, state, subscribers, listSubscribers, dispatch)
           }, getState())
 
           dispatch({
