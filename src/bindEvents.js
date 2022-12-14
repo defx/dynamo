@@ -49,10 +49,16 @@ export const xOn = (rootNode, node, dispatch) => {
       ? findIndex(rootNode, event.target, `[${k}="${v}"]`)
       : null
 
-    dispatch({
+    const action = {
       type: actionName,
       event,
       index,
-    })
+    }
+
+    if (eventType === "submit" && node.nodeName === "FORM") {
+      action.payload = Object.fromEntries(new FormData(node))
+    }
+
+    dispatch(action)
   })
 }
