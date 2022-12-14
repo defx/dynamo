@@ -38,18 +38,6 @@ export const setValueAtPath = (path, value, target) => {
   return (a[b] = value)
 }
 
-export const $$ = (e, q) => {
-  let matches = []
-  walk(e, (node) => {
-    if (node !== e && node.nodeName.includes("-"))
-      return node.nextSibling || node.parentNode.nextSibling
-    if (node.matches?.(q)) {
-      matches.push(node)
-    }
-  })
-  return matches
-}
-
 export const serializable = (o) => JSON.parse(JSON.stringify(o))
 
 export function cast(v) {

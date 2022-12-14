@@ -1,5 +1,4 @@
 import { update } from "./update.js"
-import { deriveRefs } from "./deriveRefs.js"
 import { configure } from "./store.js"
 
 function mergeHTML(parentNode, html) {
@@ -46,14 +45,22 @@ export const define = (name, factory) => {
           {},
           subscribers,
           listSubscribers,
-          dispatch
+          dispatch,
+          api.refs
         )
 
         api.append = (html, targetNode) => {
           const childNodes = mergeHTML(targetNode, html)
 
           const nextState = childNodes.reduce((state, node) => {
-            return update(this, state, subscribers, listSubscribers, dispatch)
+            return update(
+              node,
+              state,
+              subscribers,
+              listSubscribers,
+              dispatch,
+              api.refs
+            )
           }, getState())
 
           dispatch({
@@ -61,8 +68,6 @@ export const define = (name, factory) => {
             payload: nextState,
           })
         }
-
-        api.refs = deriveRefs(this)
 
         const store = {
           dispatch,

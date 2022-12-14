@@ -46,7 +46,7 @@ export function xAttr(rootNode, node, subscribers = []) {
   })
 }
 
-export function xList(rootNode, node, listSubscribers = {}) {
+export function xList(_, node, listSubscribers = {}) {
   const k = node.getAttribute(`x-list`)
 
   const { id } = node
@@ -63,7 +63,7 @@ export function xList(rootNode, node, listSubscribers = {}) {
     const fn = config.lists?.[k]
 
     if (fn) {
-      const listNodes = [...rootNode.querySelectorAll(`[x-list="${k}"]`)]
+      const listNodes = [...node.parentNode.querySelectorAll(`[x-list="${k}"]`)]
       const listData = listNodes.map((node) => ({
         id: node.id,
         ...node.dataset,
