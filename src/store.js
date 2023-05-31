@@ -9,8 +9,12 @@ export function configure({
 }) {
   let state
 
-  function transition(o) {
+  function setState(o) {
     state = getStateWrapper({ ...o })
+  }
+
+  function transition(o) {
+    setState(o)
 
     onChangeCallback(getState())
   }
@@ -22,14 +26,6 @@ export function configure({
   function dispatch(_action) {
     const { type, payload = {}, event, index } = _action
     const action = { type, payload: serializable(payload), event, index }
-
-    if (type === "MERGE") {
-      transition({
-        ...getState(),
-        ...action.payload,
-      })
-      return
-    }
 
     if (action.type in middleware) {
       middleware[action.type]?.(action, {
@@ -48,6 +44,7 @@ export function configure({
   return {
     dispatch, // dispatch an action to the reducers
     getState, // optionally provide a wrapper function to derive additional properties in state
+    setState,
     ...api,
   }
 }

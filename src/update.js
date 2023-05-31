@@ -19,8 +19,7 @@ export function update(
   state = {},
   subscribers = [],
   listSubscribers = {},
-  dispatch,
-  refs = {}
+  dispatch
 ) {
   cwalk(rootNode, (node) => {
     if (node.hasAttribute?.("x-list")) {
@@ -38,12 +37,6 @@ export function update(
     }
     if (node.hasAttribute?.("x-class")) {
       deriveSubscribers.xClass(rootNode, node, subscribers)
-    }
-    if (node.hasAttribute?.("x-ref")) {
-      const k = node.getAttribute("x-ref")
-      if (!refs[k]) {
-        refs[k] = node
-      }
     }
   })
 

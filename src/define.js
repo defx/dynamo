@@ -1,15 +1,7 @@
 import { update } from "./update.js"
 import { configure } from "./store.js"
 
-function mergeHTML(parentNode, html) {
-  const tpl = document.createElement("template")
-  tpl.innerHTML = html.trim()
-  const childNodes = [...tpl.content.childNodes]
-  parentNode.appendChild(tpl.content)
-  return childNodes
-}
-
-export const define = (name, factory) => {
+export const define = (name, config) => {
   customElements.define(
     name,
     class extends HTMLElement {
@@ -17,11 +9,8 @@ export const define = (name, factory) => {
         let nextTickSubscribers = []
 
         const api = {
-          refs: {},
           nextTick: (fn) => nextTickSubscribers.push(fn),
         }
-
-        let config = factory(this)
 
         const subscribers = []
         const listSubscribers = {}
@@ -34,7 +23,7 @@ export const define = (name, factory) => {
           nextTickSubscribers = []
         }
 
-        const { dispatch, getState } = configure({
+        const { dispatch, getState, setState } = configure({
           ...config,
           api,
           onChangeCallback,
@@ -45,29 +34,8 @@ export const define = (name, factory) => {
           {},
           subscribers,
           listSubscribers,
-          dispatch,
-          api.refs
+          dispatch
         )
-
-        api.append = (html, targetNode) => {
-          const childNodes = mergeHTML(targetNode, html)
-
-          const nextState = childNodes.reduce((state, node) => {
-            return update(
-              node,
-              state,
-              subscribers,
-              listSubscribers,
-              dispatch,
-              api.refs
-            )
-          }, getState())
-
-          dispatch({
-            type: "MERGE",
-            payload: nextState,
-          })
-        }
 
         const store = {
           dispatch,
@@ -75,15 +43,12 @@ export const define = (name, factory) => {
           ...api,
         }
 
-        dispatch({
-          type: "MERGE",
-          payload: {
-            ...initialState,
-            ...((state) =>
-              typeof state === "function" ? state(initialState) : state)(
-              config.state || {}
-            ),
-          },
+        setState({
+          ...initialState,
+          ...((state) =>
+            typeof state === "function" ? state(initialState) : state)(
+            config.state || {}
+          ),
         })
 
         config.connectedCallback?.(store)

@@ -1,6 +1,49 @@
 import { listSync } from "./list.js"
 import * as xo from "./xo.js"
 
+function apply(o, node) {
+  Object.entries(o).forEach(([k, v]) => {
+    switch (k) {
+      case "class": {
+        node.setAttribute("class", xo.objectToClasses(v))
+        break
+      }
+      case "style": {
+        break
+      }
+      case "textContent": {
+        node.textContent = v
+        break
+      }
+      default: {
+        xo.write(node, v)
+        break
+      }
+    }
+  })
+}
+
+export function xNode(rootNode, node, subscribers = []) {
+  const callback = (state, config) => {
+    const k = node.getAttribute("x-node")
+    const fn = config.node?.[k]
+
+    if (!fn) return
+
+    let index
+    if (k.endsWith(".*")) {
+      const collection = [...rootNode.querySelectorAll(`[x-node="${k}"]`)]
+      index = collection.findIndex((n) => n === node)
+      k = k.slice(0, -2)
+    }
+
+    const props = fn(state, index)
+
+    apply(props, node)
+  }
+  subscribers.push(callback)
+}
+
 export function xClass(rootNode, node, subscribers = []) {
   subscribers.push((state, config) => {
     const k = node.getAttribute("x-class")
