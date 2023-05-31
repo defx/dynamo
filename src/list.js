@@ -18,6 +18,7 @@ export function listSync(nodes, curr, next) {
 
   rest.forEach((d) => {
     let node = nodes.find((node) => node.id === d.id)
+
     if (node) {
       if (t.nextElementSibling !== node) {
         // is t.after already a no-op in this case?

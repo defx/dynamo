@@ -29,14 +29,17 @@ export function update(
       deriveState.xInput(node, state)
       bindEvents.xInput(node, dispatch)
     }
-    if (node.hasAttribute?.("x-attr")) {
-      deriveSubscribers.xAttr(rootNode, node, subscribers)
-    }
+    // if (node.hasAttribute?.("x-attr")) {
+    //   deriveSubscribers.xAttr(rootNode, node, subscribers)
+    // }
     if (node.hasAttribute?.("x-on")) {
       bindEvents.xOn(rootNode, node, dispatch)
     }
-    if (node.hasAttribute?.("x-class")) {
-      deriveSubscribers.xClass(rootNode, node, subscribers)
+    // if (node.hasAttribute?.("x-class")) {
+    //   deriveSubscribers.xClass(rootNode, node, subscribers)
+    // }
+    if (node.hasAttribute?.("x-node")) {
+      deriveSubscribers.xNode(rootNode, node, subscribers)
     }
   })
 

@@ -3,6 +3,8 @@ import * as xo from "./xo.js"
 
 function apply(o, node) {
   Object.entries(o).forEach(([k, v]) => {
+    // console.log("apply", { k, v })
+
     switch (k) {
       case "class": {
         node.setAttribute("class", xo.objectToClasses(v))
@@ -16,7 +18,7 @@ function apply(o, node) {
         break
       }
       default: {
-        xo.write(node, v)
+        xo.write(node, { [k]: v })
         break
       }
     }
@@ -25,10 +27,7 @@ function apply(o, node) {
 
 export function xNode(rootNode, node, subscribers = []) {
   const callback = (state, config) => {
-    const k = node.getAttribute("x-node")
-    const fn = config.node?.[k]
-
-    if (!fn) return
+    let k = node.getAttribute("x-node")
 
     let index
     if (k.endsWith(".*")) {
@@ -36,6 +35,12 @@ export function xNode(rootNode, node, subscribers = []) {
       index = collection.findIndex((n) => n === node)
       k = k.slice(0, -2)
     }
+
+    const fn = config.node?.[k]
+
+    // console.log("callback", { k, fn })
+
+    if (!fn) return
 
     const props = fn(state, index)
 

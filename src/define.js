@@ -31,7 +31,7 @@ export const define = (name, config) => {
 
         const initialState = update(
           this,
-          {},
+          {}, // ???
           subscribers,
           listSubscribers,
           dispatch

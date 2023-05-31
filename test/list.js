@@ -8,23 +8,22 @@ describe("list sorting", () => {
       <${name}>
         <label for="sort">Sort by:</label>
         <select id="sort" name="sortBy" x-input>
-          <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>
           <option value="priceHighToLow">Price (high - low)</option>
           <option value="rating">Rating</option>
         </select>
         <ul>
+          <li x-list="products" id="f8g7r6d" data-price="5" data-rating="4.7">
+            <p>£5</p>
+          </li>
           <li
             x-list="products"
             id="afd56erg"
             data-price="14.99"
             data-rating="4.2"
           >
-            <p>first</p>
-          </li>
-          <li x-list="products" id="f8g7r6d" data-price="5" data-rating="4.7">
-            <p>second</p>
-          </li>
+          <p>£14.99</p>
+        </li>
         </ul>
       </${name}>
     `)
@@ -34,15 +33,17 @@ describe("list sorting", () => {
       priceHighToLow: (a, b) => b.price - a.price,
     }
 
-    define(name, () => {
-      return {
-        lists: {
-          products: (state, products) => products.sort(sort[state.sortBy]),
+    define(name, {
+      lists: {
+        products: (state, products) => {
+          return products.sort(sort[state.sortBy])
         },
-      }
+      },
     })
 
-    $(`[id="sort"]`).value = "priceLowToHigh"
+    // return
+
+    $(`[id="sort"]`).value = "priceHighToLow"
     $(`[id="sort"]`).dispatchEvent(
       new Event("input", {
         bubbles: true,
@@ -57,9 +58,9 @@ describe("list sorting", () => {
 
     await nextFrame()
 
-    assert.deepEqual(prices(), [5, 14.99])
+    assert.deepEqual(prices(), [14.99, 5])
 
-    $(`[id="sort"]`).value = "priceHighToLow"
+    $(`[id="sort"]`).value = "priceLowToHigh"
     $(`[id="sort"]`).dispatchEvent(
       new Event("input", {
         bubbles: true,
@@ -68,7 +69,7 @@ describe("list sorting", () => {
 
     await nextFrame()
 
-    assert.deepEqual(prices(), [14.99, 5])
+    assert.deepEqual(prices(), [5, 14.99])
   })
 
   it("sorts the list with correct default", async () => {
@@ -109,14 +110,12 @@ describe("list sorting", () => {
       priceHighToLow: (a, b) => b.price - a.price,
     }
 
-    define(name, () => {
-      return {
-        lists: {
-          products: (state, products) => {
-            return products.sort(sort[state.sortBy])
-          },
+    define(name, {
+      lists: {
+        products: (state, products) => {
+          return products.sort(sort[state.sortBy])
         },
-      }
+      },
     })
 
     function prices() {

@@ -29,8 +29,8 @@ function findIndex(rootNode, node, query) {
 function getCollectionName(node) {
   const list = node.getAttribute("x-list")
   if (list) return ["x-list", list]
-  const attr = node.getAttribute("x-attr")
-  if (attr && attr.endsWith(".*")) return ["x-attr", attr]
+  const attr = node.getAttribute("x-node")
+  if (attr && attr.endsWith(".*")) return ["x-node", attr]
   return []
 }
 
