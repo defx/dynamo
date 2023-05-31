@@ -41,7 +41,8 @@ export function configure({
     }
 
     if (action.type in update) {
-      transition(update[action.type](getState(), action))
+      const x = update[action.type](getState(), action)
+      transition({ ...state, ...x })
     }
   }
 

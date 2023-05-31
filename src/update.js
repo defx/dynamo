@@ -24,6 +24,7 @@ export function update(
   cwalk(rootNode, (node) => {
     if (node.hasAttribute?.("x-list")) {
       deriveSubscribers.xList(rootNode, node, listSubscribers)
+      deriveState.xList(node, state)
     }
     if (node.hasAttribute?.("x-input")) {
       deriveState.xInput(node, state)

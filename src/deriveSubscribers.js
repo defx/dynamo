@@ -1,3 +1,4 @@
+import { castAll } from "./helpers.js"
 import { listSync } from "./list.js"
 import * as xo from "./xo.js"
 
@@ -108,16 +109,16 @@ export function xList(_, node, listSubscribers = {}) {
   }
 
   listSubscribers[k] = (state, config) => {
-    const fn = config.lists?.[k]
+    // const fn = config.lists?.[k]
 
-    if (fn) {
-      const listNodes = [...node.parentNode.querySelectorAll(`[x-list="${k}"]`)]
-      const listData = listNodes.map((node) => ({
-        id: node.id,
-        ...node.dataset,
-      }))
+    // if (fn) {
+    const listNodes = [...node.parentNode.querySelectorAll(`[x-list="${k}"]`)]
+    const listData = listNodes.map((node) => ({
+      id: node.id,
+      ...castAll(node.dataset),
+    }))
 
-      listSync(listNodes, listData, fn(state, listData.slice(0)))
-    }
+    listSync(listNodes, listData, state[k], config.template?.[k])
+    // }
   }
 }

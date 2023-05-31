@@ -1,4 +1,6 @@
-export function listSync(nodes, curr, next) {
+import { nodeFromString } from "./helpers.js"
+
+export function listSync(nodes, curr, next, template) {
   // check if anything has changed
   const currIds = curr.map(({ id }) => id)
   const nextIds = next.map(({ id }) => id)
@@ -16,8 +18,14 @@ export function listSync(nodes, curr, next) {
 
   let t = nodes.find((node) => node.id === first.id)
 
+  if (!t) {
+    t = nodeFromString(template(first))
+    nodes[0].before(t)
+  }
+
   rest.forEach((d) => {
-    let node = nodes.find((node) => node.id === d.id)
+    let node =
+      nodes.find((node) => node.id === d.id) || nodeFromString(template(d))
 
     if (node) {
       if (t.nextElementSibling !== node) {

@@ -34,10 +34,11 @@ describe("list sorting", () => {
     }
 
     define(name, {
-      lists: {
-        products: (state, products) => {
-          return products.sort(sort[state.sortBy])
-        },
+      getState: (state) => {
+        return {
+          ...state,
+          products: state.products.sort(sort[state.sortBy]),
+        }
       },
     })
 
@@ -111,10 +112,11 @@ describe("list sorting", () => {
     }
 
     define(name, {
-      lists: {
-        products: (state, products) => {
-          return products.sort(sort[state.sortBy])
-        },
+      getState: (state) => {
+        return {
+          ...state,
+          products: state.products.sort(sort[state.sortBy]),
+        }
       },
     })
 
@@ -168,37 +170,38 @@ describe("list merge", () => {
       rating: (a, b) => b.rating - a.rating,
     }
 
-    define(tagName, () => {
-      return {
-        lists: {
-          products: (state, products) => products.sort(sort[state.sortBy]),
+    define(tagName, {
+      update: {
+        loadMore: (state, { payload: { items } }) => {
+          return {
+            products: state.products.concat(items),
+          }
         },
-        connectedCallback({ refs: { productList }, append }) {
-          requestAnimationFrame(() => {
-            append(
-              html`
-                <li
-                  x-list="products"
-                  id="f7g649f9"
-                  data-price="19.99"
-                  data-rating="4.2"
-                >
-                  <p>19.99</p>
-                </li>
-                <li
-                  x-list="products"
-                  id="k7s95jg7"
-                  data-price="3.99"
-                  data-rating="4.7"
-                >
-                  <p>3.99</p>
-                </li>
-              `,
-              productList
-            )
+      },
+      getState: (state) => {
+        return {
+          ...state,
+          products: state.products.sort(sort[state.sortBy]),
+        }
+      },
+      template: {
+        products: ({ id, price, rating }) => {
+          return `<li x-list="products" id="${id}" data-price="${price}" data-rating="${rating}"><p>£${price}</p></li>`
+        },
+      },
+      connectedCallback({ dispatch }) {
+        requestAnimationFrame(() => {
+          dispatch({
+            type: "loadMore",
+            payload: {
+              items: [
+                { id: "f7g649f9", price: 19.99, rating: 4.2 },
+                { id: "k7s95jg7", price: 3.99, rating: 4.7 },
+              ],
+            },
           })
-        },
-      }
+        })
+      },
     })
 
     function prices() {
@@ -206,92 +209,6 @@ describe("list merge", () => {
         .map((el) => el.getAttribute("data-price"))
         .map((v) => +v)
     }
-
-    await nextFrame()
-
-    assert.deepEqual(prices(), [3.99, 5, 14.99, 19.99])
-  })
-
-  it("merges items into the list at the correct position (via middleware)", async () => {
-    const tagName = createName()
-
-    mount(html`
-      <${tagName}>
-        <label for="sortInput">Sort by:</label>
-        <select name="sortBy" id="sortInput" x-input>
-          <option value="bestsellers">Bestsellers</option>
-          <option value="priceLowToHigh" selected>Price (low - high)</option>
-          <option value="priceHighToLow">Price (high - low)</option>
-          <option value="rating">Rating</option>
-        </select>
-        <ul x-ref="productList">
-          <li
-            x-list="products"
-            id="afd56erg"
-            data-price="14.99"
-            data-rating="4.2"
-          >
-            <p>14.99</p>
-          </li>
-          <li
-            x-list="products"
-            id="f8g7r6d"
-            data-price="5"
-            data-rating="4.7"
-          >
-            <p>5</p>
-          </li>
-          <button x-on="click:loadMore">load more</button>
-        </ul>
-      </${tagName}>
-    `)
-
-    const sort = {
-      priceLowToHigh: (a, b) => a.price - b.price,
-      priceHighToLow: (a, b) => b.price - a.price,
-      rating: (a, b) => b.rating - a.rating,
-    }
-
-    define(tagName, () => {
-      return {
-        lists: {
-          products: (state, products) => products.sort(sort[state.sortBy]),
-        },
-        middleware: {
-          loadMore: (_, { refs: { productList }, append }) => {
-            append(
-              html`
-                <li
-                  x-list="products"
-                  id="f7g649f9"
-                  data-price="19.99"
-                  data-rating="4.2"
-                >
-                  <p>19.99</p>
-                </li>
-                <li
-                  x-list="products"
-                  id="k7s95jg7"
-                  data-price="3.99"
-                  data-rating="4.7"
-                >
-                  <p>3.99</p>
-                </li>
-              `,
-              productList
-            )
-          },
-        },
-      }
-    })
-
-    function prices() {
-      return $$(`[data-price]`)
-        .map((el) => el.getAttribute("data-price"))
-        .map((v) => +v)
-    }
-
-    $(`[x-on="click:loadMore"]`).click()
 
     await nextFrame()
 

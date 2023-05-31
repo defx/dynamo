@@ -41,8 +41,11 @@ export const setValueAtPath = (path, value, target) => {
 export const serializable = (o) => JSON.parse(JSON.stringify(o))
 
 export function cast(v) {
-  if (!isNaN(v)) return +v
-  return v
+  return isNaN(v) ? v : +v
+}
+
+export function castAll(o) {
+  return Object.fromEntries(Object.entries(o).map(([k, v]) => [k, cast(v)]))
 }
 
 export const isPrimitive = (v) => v === null || typeof v !== "object"
@@ -53,4 +56,18 @@ export const typeOf = (v) =>
 export const findIndex = (node, query) => {
   const collection = [...rootNode.querySelectorAll(query)]
   return collection.findIndex((n) => n === node)
+}
+
+export function nodeFromString(str) {
+  const doc = new DOMParser().parseFromString(str.trim(), "text/html", {
+    includeShadowRoots: true,
+  })
+
+  const errorNode = doc.querySelector("parsererror")
+
+  if (errorNode) {
+    // @todo ...
+  } else {
+    return doc.head.firstChild || doc.body.firstChild
+  }
 }
