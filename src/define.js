@@ -1,6 +1,6 @@
 import { initialise } from "./initialise.js"
-import { configure } from "./store.js"
-import { Median } from "./median.js"
+import { Store } from "./store.js"
+import { Medium } from "./medium.js"
 
 export const define = (name, config) => {
   customElements.define(
@@ -13,20 +13,20 @@ export const define = (name, config) => {
           nextTick: (fn) => nextTickSubscribers.push(fn),
         }
 
-        const median = Median({
+        const medium = Medium({
           postPublish: () => {
             nextTickSubscribers.forEach((fn) => fn(state))
             nextTickSubscribers = []
           },
         })
 
-        const { dispatch, getState, setState } = configure({
+        const { dispatch, getState, setState } = Store({
           ...config,
           api,
-          onChangeCallback: (state) => median.publish(state, config),
+          onChangeCallback: (state) => medium.publish(state, config),
         })
 
-        const initialState = initialise(this, median.subscribe, dispatch)
+        const initialState = initialise(this, medium.subscribe, dispatch)
 
         const store = {
           dispatch,

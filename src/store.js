@@ -1,6 +1,6 @@
 import { serializable } from "./helpers.js"
 
-export function configure({
+export function Store({
   update = {},
   middleware = [],
   getState: getStateWrapper = (v) => v,
