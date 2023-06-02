@@ -184,22 +184,18 @@ describe("list merge", () => {
           products: state.products.sort(sort[state.sortBy]),
         }
       },
-      template: {
-        products: ({ id, price, rating }) => {
-          return `<li x-list="products" id="${id}" data-price="${price}" data-rating="${rating}"><p>£${price}</p></li>`
-        },
-      },
       connectedCallback({ dispatch }) {
         requestAnimationFrame(() => {
-          dispatch({
-            type: "loadMore",
-            payload: {
-              items: [
-                { id: "f7g649f9", price: 19.99, rating: 4.2 },
-                { id: "k7s95jg7", price: 3.99, rating: 4.7 },
-              ],
-            },
-          })
+          // ...
+          // dispatch({
+          //   type: "loadMore",
+          //   payload: {
+          //     items: [
+          //       { id: "f7g649f9", price: 19.99, rating: 4.2 },
+          //       { id: "k7s95jg7", price: 3.99, rating: 4.7 },
+          //     ],
+          //   },
+          // })
         })
       },
     })
