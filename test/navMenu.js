@@ -19,7 +19,7 @@ describe("navigation menu enhancement", () => {
     </style>
       <${tagName}>
         <button x-on="click:toggleMenu">[=]</button>
-        <nav x-class="nav">
+        <nav x-node="nav">
             <ul>
                 <li>New In</li>
                 <li>Bestsellers</li>
@@ -30,29 +30,28 @@ describe("navigation menu enhancement", () => {
       </${tagName}>
     `)
 
-    define(tagName, () => {
-      return {
-        state: {
-          menuIsOpen: false,
-        },
-        classes: {
-          nav: (state, classes) => {
-            return {
-              ...classes,
+    define(tagName, {
+      state: {
+        menuIsOpen: false,
+      },
+      node: {
+        nav: ({ menuIsOpen }) => {
+          return {
+            class: {
               hamburger: true,
-              open: state.menuIsOpen,
-            }
-          },
+              open: menuIsOpen,
+            },
+          }
         },
-        update: {
-          toggleMenu: (state) => {
-            return {
-              ...state,
-              menuIsOpen: !state.menuIsOpen,
-            }
-          },
+      },
+      update: {
+        toggleMenu: (state) => {
+          return {
+            ...state,
+            menuIsOpen: !state.menuIsOpen,
+          }
         },
-      }
+      },
     })
 
     assert.ok($("nav").classList.contains("hamburger"))
