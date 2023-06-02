@@ -1,4 +1,4 @@
-import { update } from "./update.js"
+import { initialise } from "./initialise.js"
 import { configure } from "./store.js"
 
 export const define = (name, config) => {
@@ -29,9 +29,8 @@ export const define = (name, config) => {
           onChangeCallback,
         })
 
-        const initialState = update(
+        const initialState = initialise(
           this,
-          {}, // ???
           subscribers,
           listSubscribers,
           dispatch

@@ -1,12 +1,12 @@
 import { castAll } from "./helpers.js"
 import { listSync } from "./list.js"
-import * as xo from "./xo.js"
+import { objectToClasses, write } from "./xo.js"
 
 function apply(o, node) {
   Object.entries(o).forEach(([k, v]) => {
     switch (k) {
       case "class": {
-        node.setAttribute("class", xo.objectToClasses(v))
+        node.setAttribute("class", objectToClasses(v))
         break
       }
       case "style": {
@@ -17,7 +17,7 @@ function apply(o, node) {
         break
       }
       default: {
-        xo.write(node, { [k]: v })
+        write(node, { [k]: v })
         break
       }
     }

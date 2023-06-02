@@ -1,4 +1,4 @@
-import { update } from "../src/update.js"
+import { initialise } from "../src/initialise.js"
 
 describe("deriveState", () => {
   it("derives state from a Select element", () => {
@@ -16,7 +16,7 @@ describe("deriveState", () => {
       </${tagName}>
     `)
 
-    const state = update($(tagName))
+    const state = initialise($(tagName))
 
     assert.equal(state.sortBy, "bestsellers")
   })
@@ -36,7 +36,7 @@ describe("deriveState", () => {
       </${tagName}>
     `)
 
-    const state = update($(tagName))
+    const state = initialise($(tagName))
 
     assert.deepEqual(state.sortBy, "priceHighToLow")
   })
