@@ -14,17 +14,15 @@ const cwalk = (node, callback) => {
   })
 }
 
-export function initialise(
-  rootNode,
-  subscribers = [],
-  listSubscribers = {},
-  dispatch
-) {
+export function initialise(rootNode, subscribe, dispatch) {
   const state = {}
+  const listKeys = {}
 
   cwalk(rootNode, (node) => {
-    if (node.hasAttribute?.("x-list")) {
-      deriveSubscribers.xList(rootNode, node, listSubscribers)
+    const listKey = node.getAttribute?.("x-list")
+    if (listKey && !(listKey in listKeys)) {
+      // @todo list updates should be registered on the parent as items can be removed
+      deriveSubscribers.xList(listKey, node.parentNode, subscribe)
       deriveState.xList(node, state)
     }
     if (node.hasAttribute?.("x-input")) {
@@ -35,7 +33,7 @@ export function initialise(
       bindEvents.xOn(rootNode, node, dispatch)
     }
     if (node.hasAttribute?.("x-node")) {
-      deriveSubscribers.xNode(rootNode, node, subscribers)
+      deriveSubscribers.xNode(rootNode, node, subscribe)
     }
   })
 

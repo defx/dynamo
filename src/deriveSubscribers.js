@@ -24,7 +24,7 @@ function apply(o, node) {
   })
 }
 
-export function xNode(rootNode, node, subscribers = []) {
+export function xNode(rootNode, node, subscribe) {
   const callback = (state, config) => {
     let k = node.getAttribute("x-node")
 
@@ -37,37 +37,23 @@ export function xNode(rootNode, node, subscribers = []) {
 
     const fn = config.node?.[k]
 
-    // console.log("callback", { k, fn })
-
     if (!fn) return
 
     const props = fn(state, index)
 
     apply(props, node)
   }
-  subscribers.push(callback)
+  subscribe(callback)
 }
 
-export function xList(_, node, listSubscribers = {}) {
-  const k = node.getAttribute(`x-list`)
-
-  const { id } = node
-
-  if (!id) {
-    console.warn(
-      `list node with no id attribute. any changes to state will not be reflected in the DOM`,
-      node
-    )
-    return
-  }
-
-  listSubscribers[k] = (state) => {
-    const listNodes = [...node.parentNode.querySelectorAll(`[x-list="${k}"]`)]
+export function xList(k, parentNode, subscribe) {
+  subscribe((state) => {
+    const listNodes = [...parentNode.querySelectorAll(`[x-list="${k}"]`)]
     const listData = listNodes.map((node) => ({
       id: node.id,
       ...castAll(node.dataset),
     }))
 
     listSync(listNodes, listData, state[k])
-  }
+  })
 }
