@@ -1,13 +1,21 @@
-import { define } from "../src/index.js"
+import { $ } from "../src/index.js"
 
 describe("x-node", () => {
+  let rootNode
+
+  beforeEach(() => {
+    rootNode = document.createElement("root-node")
+    document.body.appendChild(rootNode)
+  })
+
+  afterEach(() => {
+    document.body.removeChild(rootNode)
+  })
+
   it("initialises the attributes", () => {
-    mount(html`
-      <x-attr-test>
-        <button x-node="toggleButton" hidden>[+]</button>
-      </x-attr-test>
-    `)
-    define("x-attr-test", {
+    rootNode.innerHTML = html`<button x-node="toggleButton" hidden>[+]</button>`
+
+    $(rootNode, {
       node: {
         toggleButton: () => ({
           hidden: false,
@@ -16,17 +24,23 @@ describe("x-node", () => {
       },
     })
 
-    assert.equal($(`button`).hidden, false)
-    assert.equal($(`button`).getAttribute("aria-expanded"), "false")
+    assert.equal(rootNode.querySelector(`button`).hidden, false)
+    assert.equal(
+      rootNode.querySelector(`button`).getAttribute("aria-expanded"),
+      "false"
+    )
   })
 
   it("updates the attributes", async () => {
-    mount(html`
-      <x-attr-test-2>
-        <button x-on="click:toggle" x-node="toggleButton" hidden>[+]</button>
-      </x-attr-test-2>
-    `)
-    define("x-attr-test-2", {
+    rootNode.innerHTML = html`<button
+      x-on="click:toggle"
+      x-node="toggleButton"
+      hidden
+    >
+      [+]
+    </button>`
+
+    $(rootNode, {
       state: {
         expanded: false,
       },
@@ -43,20 +57,19 @@ describe("x-node", () => {
       },
     })
 
-    $(`button`).click()
+    rootNode.querySelector(`button`).click()
 
     await nextFrame()
 
-    assert.equal($(`button`).getAttribute("aria-expanded"), "true")
+    assert.equal(
+      rootNode.querySelector(`button`).getAttribute("aria-expanded"),
+      "true"
+    )
   })
 
   it("initialises the attribute as part of a collection", () => {
-    mount(html`
-      <x-attr-test-4>
-        <button x-node="toggleButtons.*">[+]</button>
-      </x-attr-test-4>
-    `)
-    define("x-attr-test-4", {
+    rootNode.innerHTML = html`<button x-node="toggleButtons.*">[+]</button>`
+    $(rootNode, {
       node: {
         toggleButtons: () => ({
           ariaExpanded: false,
@@ -64,17 +77,18 @@ describe("x-node", () => {
       },
     })
 
-    assert.equal($(`button`).getAttribute("aria-expanded"), "false")
+    assert.equal(
+      rootNode.querySelector(`button`).getAttribute("aria-expanded"),
+      "false"
+    )
   })
 
   it("updates the attribute as part of a collection", async () => {
-    mount(html`
-      <x-attr-test-5>
-        <button x-on="click:toggleMenuItem" x-node="menuItems.*">[+]</button>
-      </x-attr-test-5>
-    `)
+    rootNode.innerHTML = html`
+      <button x-on="click:toggleMenuItem" x-node="menuItems.*">[+]</button>
+    `
 
-    define("x-attr-test-5", {
+    $(rootNode, {
       state: {
         openMenuItems: {},
       },
@@ -95,16 +109,22 @@ describe("x-node", () => {
       },
     })
 
-    $(`button`).click()
+    rootNode.querySelector(`button`).click()
 
     await nextFrame()
 
-    assert.equal($(`button`).getAttribute("aria-expanded"), "true")
+    assert.equal(
+      rootNode.querySelector(`button`).getAttribute("aria-expanded"),
+      "true"
+    )
 
-    $(`button`).click()
+    rootNode.querySelector(`button`).click()
 
     await nextFrame()
 
-    assert.equal($(`button`).getAttribute("aria-expanded"), "false")
+    assert.equal(
+      rootNode.querySelector(`button`).getAttribute("aria-expanded"),
+      "false"
+    )
   })
 })

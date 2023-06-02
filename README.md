@@ -2,11 +2,11 @@
 
 ## [![npm](https://shields.io/npm/v/@defx/dynamo)](https://www.npmjs.com/package/@defx/dynamo) [![gzip size](https://img.badgesize.io/https://unpkg.com/@defx/dynamo/dist/dynamo.min.js?compression=gzip&label=gzip)]()
 
-The small yet powerful JavaScript library for the progressive enhancement of HTML.
+The small yet powerful JavaScript library for progressive enhancement of HTML.
 
 ## Features
 
-- Component-driven workflow
+- Two API's available: Web Component and/or Query Selector
 - Functional state management
 - Reactive UI updates
 
@@ -26,7 +26,7 @@ import { define } from "https://unpkg.com/@defx/dynamo"
 
 ## Quick Start
 
-The first thing to understand is that, from a Dynamo point of view, it doesn't matter how or where you generate your HTML. Dynamo binds to your _existing_ HTML to enable asynchronous updates in the browser.
+The first thing to understand is that Dynamo doesn't care how or where you generate your HTML. Dynamo binds to your _existing_ HTML to enable asynchronous updates in the browser.
 
 Follow these 3 steps to get started:
 

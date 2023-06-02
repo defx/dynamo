@@ -37,8 +37,6 @@ export function xNode(rootNode, node, subscribe) {
 
     const fn = config.node?.[k]
 
-    console.log({ k, fn, config })
-
     if (!fn) return
 
     const props = fn(state, index)

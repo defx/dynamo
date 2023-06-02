@@ -1,6 +1,6 @@
 import { initialise } from "./initialise.js"
 import { Store } from "./store.js"
-import { Medium } from "./medium.js"
+import { Message } from "./message.js"
 
 export const $ = (target, config) => {
   const node =
@@ -12,7 +12,7 @@ export const $ = (target, config) => {
     nextTick: (fn) => nextTickSubscribers.push(fn),
   }
 
-  const medium = Medium({
+  const message = Message({
     postPublish: () => {
       nextTickSubscribers.forEach((fn) => fn(state))
       nextTickSubscribers = []
@@ -22,10 +22,10 @@ export const $ = (target, config) => {
   const { dispatch, getState, setState } = Store({
     ...config,
     api,
-    onChangeCallback: (state) => medium.publish(state, config),
+    onChangeCallback: (state) => message.publish(state, config),
   })
 
-  const initialState = initialise(node, medium.subscribe, dispatch)
+  const initialState = initialise(node, message.subscribe, dispatch)
 
   const store = {
     dispatch,

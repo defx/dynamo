@@ -1,4 +1,4 @@
-export const Medium = (callbacks) => {
+export const Message = (callbacks) => {
   const subscribers = []
   return {
     subscribe(fn) {
