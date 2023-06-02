@@ -1,4 +1,4 @@
-import { define, $ } from "../src/index.js"
+import { $ } from "../src/index.js"
 
 describe("list sorting", () => {
   let rootNode

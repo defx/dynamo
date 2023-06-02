@@ -2,7 +2,7 @@ import { initialise } from "./initialise.js"
 import { Store } from "./store.js"
 import { Message } from "./message.js"
 
-export const $ = (target, config) => {
+export const Dynamo = (target, config) => {
   const node =
     typeof target === "string" ? document.querySelector(target) : target
 
@@ -42,6 +42,8 @@ export const $ = (target, config) => {
 
   return store
 }
+
+export const $ = Dynamo
 
 export const define = (name, config) => {
   customElements.define(

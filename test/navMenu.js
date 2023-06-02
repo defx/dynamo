@@ -1,36 +1,42 @@
-import { define } from "../src/index.js"
+import { $ } from "../src/index.js"
 
 describe("navigation menu enhancement", () => {
+  let rootNode
+
+  beforeEach(() => {
+    rootNode = document.createElement("root-node")
+    document.body.appendChild(rootNode)
+  })
+
+  afterEach(() => {
+    document.body.removeChild(rootNode)
+  })
+
   it("binds click event and manages classes", async () => {
-    const tagName = createName()
-
-    mount(html`
-    <style>
-
+    rootNode.innerHTML = html`
+      <style>
         .hamburger {
-            transform: translate(-100%, 0);
-            transition: transform 0.5s ease-in-out;
+          transform: translate(-100%, 0);
+          transition: transform 0.5s ease-in-out;
         }
 
         .hamburger.open {
-            transform: translate(0, 0);
+          transform: translate(0, 0);
         }
+      </style>
 
-    </style>
-      <${tagName}>
-        <button x-on="click:toggleMenu">[=]</button>
-        <nav x-node="nav">
-            <ul>
-                <li>New In</li>
-                <li>Bestsellers</li>
-                <li>Skincare</li>
-                <li>Makeup</li>
-            </ul>
-        </nav>
-      </${tagName}>
-    `)
+      <button x-on="click:toggleMenu">[=]</button>
+      <nav x-node="nav">
+        <ul>
+          <li>New In</li>
+          <li>Bestsellers</li>
+          <li>Skincare</li>
+          <li>Makeup</li>
+        </ul>
+      </nav>
+    `
 
-    define(tagName, {
+    $(rootNode, {
       state: {
         menuIsOpen: false,
       },
@@ -54,13 +60,13 @@ describe("navigation menu enhancement", () => {
       },
     })
 
-    assert.ok($("nav").classList.contains("hamburger"))
-    assert.notOk($("nav").classList.contains("open"))
+    assert.ok(rootNode.querySelector("nav").classList.contains("hamburger"))
+    assert.notOk(rootNode.querySelector("nav").classList.contains("open"))
 
-    $(`[x-on="click:toggleMenu"]`).click()
+    rootNode.querySelector(`[x-on="click:toggleMenu"]`).click()
 
     await nextFrame()
 
-    assert.ok($("nav").classList.contains("open"))
+    assert.ok(rootNode.querySelector("nav").classList.contains("open"))
   })
 })
