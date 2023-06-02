@@ -1,4 +1,4 @@
-import { define } from "../src/define.js"
+import { define } from "../src/index.js"
 
 describe("navigation menu enhancement", () => {
   it("binds click event and manages classes", async () => {

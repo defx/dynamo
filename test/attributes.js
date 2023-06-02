@@ -1,4 +1,4 @@
-import { define } from "../src/define.js"
+import { define } from "../src/index.js"
 
 describe("x-node", () => {
   it("initialises the attributes", () => {
