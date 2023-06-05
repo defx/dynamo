@@ -9,7 +9,7 @@ describe("navigation menu enhancement", () => {
   })
 
   afterEach(() => {
-    document.body.removeChild(rootNode)
+    // document.body.removeChild(rootNode)
   })
 
   it("binds click event and manages classes", async () => {
@@ -17,7 +17,7 @@ describe("navigation menu enhancement", () => {
       <style>
         .hamburger {
           transform: translate(-100%, 0);
-          transition: transform 0.5s ease-in-out;
+          transition: transform 0.3s ease-in-out;
         }
 
         .hamburger.open {
