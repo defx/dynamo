@@ -123,7 +123,8 @@ The [x-node] attribute is used to identify a named function that can be used to 
 Used to bind an event to an action handler. Accepts two arguments separated by a colon `x-on="eventType:actionName"` where `eventType` is the type of event that you want to listen for and `actionName` is the name of the action handler you wish to invoke;
 
 ```html
-<button x-on="click:toggleMenu">load more</button>
+<button x-on="click:toggleMenu">[=]</button>
+<nav x-node="navMenu">...</nav>
 ```
 
 ```js
