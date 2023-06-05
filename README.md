@@ -157,12 +157,27 @@ Used to declare an element as an item within an ordered collection.
 The state for each item in the collection is derived from each elements dataset, so be sure to declare any values you need to work with as data attributes. For example, if you want to allow a user to sort a list, make sure that you declare any values you wish to sort on in each elements dataset:
 
 ```html
-<li x-list="products" data-id="f7g649f9" data-price="19.99" data-rating="4.2">
+<li x-each="products" id="f7g649f9" data-price="19.99" data-rating="4.2">
   <p>19.99</p>
 </li>
 ```
 
 > The only hard requirement for x-each item nodes is that they must include an `id` attribute so that the list can be reliably re-ordered.
+
+If you need the ability to dynamically add more items into your collection at any point, then you can configure a template using the same name as the collection and Dynamo will use it:
+
+```js
+Dynamo(rootNode, {
+  template: {
+    products: ({ id, price, rating }) => `
+    <li x-each="products" id="${id}" data-price="${price}" data-rating="${rating}">
+      <p>${price}</p>
+    </li>`,
+  },
+})
+```
+
+> If you're collection _doesn't_ need to have items added at any point then there's no need to provide a template, - re-ordering and removals can all be achieved without any templating.
 
 ## Action
 
