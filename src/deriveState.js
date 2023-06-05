@@ -6,14 +6,3 @@ export function xInput(node, state = {}) {
   let v = cast(node.value)
   state[k] = v
 }
-
-export function xList(node, state = {}) {
-  let k = node.getAttribute("x-list")
-  if (!k) return state
-
-  state[k] = state[k] || []
-  state[k].push({
-    id: node.id,
-    ...castAll(node.dataset),
-  })
-}
