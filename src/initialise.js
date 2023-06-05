@@ -18,7 +18,7 @@ export function initialise(rootNode, subscribe, dispatch) {
   const state = {}
 
   cwalk(rootNode, (node) => {
-    if (node.hasAttribute?.("x-input")) {
+    if (node.hasAttribute?.("x-control")) {
       deriveState.xInput(node, state)
       bindEvents.xInput(node, dispatch)
     }

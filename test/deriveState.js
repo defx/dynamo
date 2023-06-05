@@ -16,7 +16,7 @@ describe("deriveState", () => {
     rootNode.innerHTML = html`
    
         <label>Sort by:
-          <select name="sortBy" x-input>
+          <select name="sortBy" x-control>
         </label>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>
@@ -35,7 +35,7 @@ describe("deriveState", () => {
     rootNode.innerHTML = html`
       
         <label>Sort by:
-          <select name="sortBy" x-input>
+          <select name="sortBy" x-control>
         </label>
           <option value="bestsellers">Bestsellers</option>
           <option value="priceLowToHigh">Price (low - high)</option>

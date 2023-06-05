@@ -2,7 +2,7 @@ export const xInput = (node, dispatch) => {
   const name = node.getAttribute(`name`)
 
   if (!name) {
-    console.warn(`Missing name attribute on x-input`, node)
+    console.warn(`Missing name attribute on x-control`, node)
     return
   }
 
@@ -27,8 +27,6 @@ function findIndex(rootNode, node, query) {
 }
 
 function getCollectionName(node) {
-  const list = node.getAttribute("x-list")
-  if (list) return ["x-list", list]
   const attr = node.getAttribute("x-node")
   if (attr && attr.endsWith(".*")) return ["x-node", attr]
   return []
