@@ -120,7 +120,7 @@ The [x-node] attribute is used to identify a named function that can be used to 
 
 ### x-on
 
-Used to bind an event to an action handler. Accepts two arguments separated by a colon `x-on="eventType:actionName"` where `eventType` is the type of event that you want to listen for and `actionName` is the name of the action handler you wish to invoke;
+Used to bind an event to an action handler. Accepts two arguments separated by a colon `x-on="eventType:actionName"` where `eventType` is the type of event that you want to listen for and `actionName` is the name of the action handler you wish to invoke.
 
 ```html
 <button x-on="click:toggleMenu">[=]</button>
@@ -149,7 +149,7 @@ Dynamo(rootNode, {
 
 ### x-control
 
-Used to bind any user input control element (e.g., `<input>, <select>, <textarea>`) to a property in state. The x-control attribute is a boolean attribute that doesn't expect any value, the name of the property reflected in state will taken from the elements [name] attribute, so this must also be provided in all cases.
+Used to bind any user input control element (e.g., `<input>, <select>, <textarea>`) to a property in state. The x-control attribute is a boolean attribute that doesn't expect any value; the name of the property reflected in state will taken from the elements [name] attribute, so this must also be provided in all cases.
 
 > Applying the [name] + [x-control] pattern encourages parity between form data and request data for the purpose of progressive enhancement
 
