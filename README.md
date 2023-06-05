@@ -9,7 +9,7 @@ The small yet powerful JavaScript library for progressively enhancing HTML.
 
 ## If your only tool is a hammer then every problem looks like a nail
 
-If you're building a website that is server rendered and content-rich (e.g., blog, e-commerce shop, etc) then it's likely that 80-100% of your JavaScript requirements can be solved in a very simple, performant, and easily maintainable way without reactive templating. Dynamo is designed specifically to support this approach, whilst also giving you the flexibility to provide the bare minimum amount of templating required when its really needed.
+It's likely that 80-100% of your JavaScript interaction/reactivity requirements can be solved in a very simple, performant, and easily maintainable way without the use of a browser-side templating solution. Dynamo is designed specifically to support this approach, whilst also giving you the flexibility to provide the bare minimum amount of templating required as and when it's really needed.
 
 ### Two types of reactive updates
 
