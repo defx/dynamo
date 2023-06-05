@@ -1,8 +1,8 @@
 {
   "name": "@defx/dynamo",
   "type": "module",
-  "version": "0.2.2",
-  "description": "A lightweight JavaScript library for Progressive Enhancement",
+  "version": "0.3.0",
+  "description": "A JavaScript library for progressive enhancing HTML",
   "main": "dist/dynamo.min.js",
   "browser": "dist/dynamo.min.js",
   "unpkg": "dist/dynamo.min.js",
