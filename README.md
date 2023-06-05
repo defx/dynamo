@@ -65,7 +65,7 @@ Specifies the _initial_ state.
 
 #### action
 
-Action handlers are synchronous functions that receive the current state as their first argument, an Action object as their second argument, and return the _next_ state.
+Action handlers are synchronous functions that receive the _current state_ as their first argument, an Action object as their second argument, and return the _next state_.
 
 ```js
 Dynamo(rootNode, {
