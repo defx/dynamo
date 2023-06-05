@@ -85,19 +85,30 @@ Node functions accept the current state and return an object that is used to upd
 ```js
 Dynamo(rootNode, {
   action: {
-    toggleMenu: (state) => ({
+    toggle: (state) => ({
       ...state,
-      menuIsOpen: !state.menuIsOpen,
+      isOpen: !state.isOpen,
     }),
   },
   node: {
-    navMenu: (state) => ({
-      class: {
-        open: state.menuIsOpen,
-      },
+    accordionTrigger: (state) => ({
+      ariaExpanded: state.isOpen,
+      ariaControls: "accordionPanel",
+      hidden: false,
+    }),
+    accordionPanel: () => ({
+      hidden: !state.isOpen,
     }),
   },
 })
+```
+
+```html
+<h3>
+  <!-- content title -->
+  <button x-node="accordionTrigger" hidden></button>
+</h3>
+<div x-node="accordionPanel"><!-- content detail --></div>
 ```
 
 ## \[x-\*\] attributes
