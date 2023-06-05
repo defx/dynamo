@@ -190,7 +190,9 @@ Dynamo(rootNode, {
 
 > If you're collection _doesn't_ need to have items added at any point then there's no need to provide a template as re-ordering and removals can all be achieved without it.
 
-## Action
+## Types
+
+### Action
 
 Depending on how it was generated, the Action object may contain up to three properties:
 
@@ -207,9 +209,9 @@ type Action = {
 
 > The value of payload _must_ be serializable, which means no functions or classes, just simple objects and primitive values.
 
-## middleware
+### middleware API
 
-Middleware functions receieve an `Action` as their first argument, and a special [middleware api](#middleware-api) object as their second argument. Middleware functions are intended to do async work and handle side effects, so the Middleware API object provided as the second argument here provides the functions necessary to achieve that.
+Middleware functions receieve an `Action` as their first argument, and a special api object as their second argument. Middleware functions are intended to do async work and handle side effects, so the Middleware API object here provides the functions necessary to achieve that.
 
 ```typescript
 
