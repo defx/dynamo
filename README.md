@@ -15,7 +15,7 @@ If you're building a website that is server rendered and content-rich (e.g., blo
 Reactive DOM updates can broadly be divided into two categories:
 
 - updating attributes and properties of an existing DOM tree
-- updating the structure of the DOM tree itself
+- changing the structure of the DOM tree itself
 
 Making this distinction is useful to consider in terms of the associated costs, because structural updates require a browser templating solution, whereas updating attributes and properties of existing nodes does not, and the cost of templating in the browser can be quite expensive. Consider that, in order to update server-rendered content, your website or application must ship your templates to the browser so that your library understands how to re-render those parts. This makes perfect sense when your entire DOM tree needs to be structurally modifed at any point in time, however most websites and applications don't fall into that category. A common e-commerce website, for example, has very little requirement (if any) for structural DOM updates, and yet many new e-commerce websites are being built with tools that are designed specifically for that purpose.
 
