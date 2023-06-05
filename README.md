@@ -97,6 +97,7 @@ Dynamo(rootNode, {
       ariaControls: "accordionPanel",
     }),
     accordionPanel: (state) => ({
+      id: "accordionPanel",
       hidden: !state.isOpen,
     }),
   },
@@ -105,7 +106,9 @@ Dynamo(rootNode, {
 
 ```html
 <h3>
-  <button x-node="accordionTrigger"><!-- content title --></button>
+  <button x-node="accordionTrigger" x-on="click:toggle">
+    <!-- content title -->
+  </button>
 </h3>
 <div x-node="accordionPanel"><!-- content detail --></div>
 ```
