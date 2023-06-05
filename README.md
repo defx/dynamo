@@ -66,7 +66,38 @@ Specifies the _initial_ state.
 
 Action handlers are functions that receive the current state as their first argument, an Action object as their second argument, and must synchronously return the _next_ state.
 
+```js
+Dynamo(rootNode, {
+  action: {
+    toggleMenu: (state) => ({
+      ...state,
+      menuIsOpen: !state.menuIsOpen,
+    }),
+  },
+})
+```
+
 #### node
+
+Node functions accept the current state and return an object that is used to update the bound nodes attributes and/or properties
+
+```js
+Dynamo(rootNode, {
+  action: {
+    toggleMenu: (state) => ({
+      ...state,
+      menuIsOpen: !state.menuIsOpen,
+    }),
+  },
+  node: {
+    navMenu: (state) => ({
+      class: {
+        open: state.menuIsOpen,
+      },
+    }),
+  },
+})
+```
 
 ## \[x-\*\] attributes
 
