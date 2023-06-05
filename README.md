@@ -80,7 +80,7 @@ Dynamo(rootNode, {
 
 #### node
 
-Node functions accept the current state and return an object that is used to update the bound nodes attributes and/or properties
+Node functions accept the current state and return an object that is used to update the attributes and/or properties of each node that references it via the [x-node] attribute.
 
 ```js
 Dynamo(rootNode, {
