@@ -35,7 +35,7 @@ import { Dynamo } from "https://unpkg.com/@defx/dynamo"
 
 ## Usage
 
-Dynamo is instantiated with a DOM node (referred to as the _root node_), and also a configuration object. Everything that happens next is a combination of two things:
+Dynamo is instantiated with a DOM node (referred to as the _root node_) and a configuration object. Everything that happens next is a combination of two things:
 
 - the configuration object you provide during instantiation
 - the special x-attributes that exist on the DOM tree attached to your root node
