@@ -44,15 +44,3 @@ export const Dynamo = (target, config) => {
 }
 
 export const $ = Dynamo
-
-export const define = (name, config) => {
-  customElements.define(
-    name,
-    class extends HTMLElement {
-      connectedCallback() {
-        const store = $(this, config)
-        config.connectedCallback?.(store)
-      }
-    }
-  )
-}

@@ -1,4 +1,4 @@
-import { cast, castAll } from "./helpers.js"
+import { cast } from "./helpers.js"
 
 export function xInput(node, state = {}) {
   let k = node.getAttribute("name")
