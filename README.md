@@ -94,7 +94,6 @@ Dynamo(rootNode, {
     accordionTrigger: (state) => ({
       ariaExpanded: state.isOpen,
       ariaControls: "accordionPanel",
-      hidden: false,
     }),
     accordionPanel: (state) => ({
       hidden: !state.isOpen,
@@ -105,8 +104,7 @@ Dynamo(rootNode, {
 
 ```html
 <h3>
-  <!-- content title -->
-  <button x-node="accordionTrigger" hidden></button>
+  <button x-node="accordionTrigger"><!-- content title --></button>
 </h3>
 <div x-node="accordionPanel"><!-- content detail --></div>
 ```
