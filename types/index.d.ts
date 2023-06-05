@@ -39,9 +39,7 @@ declare namespace dynamo {
 
   type ActionInput = {
     type: string
-    payload: {
-      [key: string]: any
-    }
+    payload: SerialisableObject
   }
 
   type Action = {
