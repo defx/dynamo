@@ -101,7 +101,7 @@ Dynamo(rootNode, {
 
 ## \[x-\*\] attributes
 
-Attributes prefixed with an "x-" tell Dynamo about the parts of your HTML that you want to update and/or react to, and there are only 4 attributes to learn!
+Attributes prefixed with an "x-" tell Dynamo about the parts of your HTML that you want to update and/or react to, and there are only 4 such attributes.
 
 ### x-node
 
