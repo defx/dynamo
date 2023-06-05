@@ -10,12 +10,6 @@ const kebabToPascal = (string) =>
     return m[0] + m[2].toUpperCase()
   })
 
-function aria(v) {
-  if (v === "true") return true
-  if (v === "false") return false
-  return v
-}
-
 export const objectToClasses = (v = {}) => {
   return Object.entries(v)
     .reduce((c, [k, v]) => {
@@ -33,26 +27,6 @@ export const objectFromClasses = (v = "") => {
       o[k] = true
       return o
     }, {})
-}
-
-export const read = (node) => {
-  return node.getAttributeNames().reduce((o, k) => {
-    if (k.startsWith("x-") || k.startsWith("data-")) return o
-
-    let v = node.getAttribute(k)
-
-    if (k.startsWith("aria-")) {
-      v = aria(v)
-    }
-
-    if (k === "class") {
-      v = objectFromClasses(v)
-    }
-
-    o[pascalToKebab(k)] = v
-
-    return o
-  }, {})
 }
 
 export const write = (node, attrs) => {
