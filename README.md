@@ -189,7 +189,7 @@ Dynamo(rootNode, {
 })
 ```
 
-> If you're collection _doesn't_ need to have items added at any point then there's no need to provide a template, - re-ordering and removals can all be achieved without any templating.
+> If you're collection _doesn't_ need to have items added at any point then there's no need to provide a template as re-ordering and removals can all be achieved without it.
 
 ## Action
 
