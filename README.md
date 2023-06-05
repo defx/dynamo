@@ -33,6 +33,41 @@ import { Dynamo } from "https://unpkg.com/@defx/dynamo"
 > npm i @defx/dynamo
 ```
 
+## Usage
+
+When instantiating Dynamo you provide it with a DOM node (we can refer to this as the "root" node), and also a configuration object. Everything that happens next is a combination of two things:
+
+- the configuration object you provide during instantiation
+- the special x-attributes that exist on the DOM tree attached to your root node
+
+## Syntax
+
+```js
+Dynamo(rootNode, {
+  state: {
+    /* the initial state */
+  },
+  action: {
+    /* a dictionary of functions that synchronously update state */
+  },
+  node: {
+    /* a dictionary of functions that update individual node attributes and properties as a side-effect of every state transition */
+  },
+})
+```
+
+### Parameters
+
+#### state
+
+Specifies the _initial_ state.
+
+#### action
+
+Action handlers are functions that receive the current state as their first argument, an Action object as their second argument, and must synchronously return the _next_ state.
+
+#### node
+
 ## \[x-\*\] attributes
 
 Attributes prefixed with an "x-" tell Dynamo about the parts of your HTML that you want to react to, and there are only 4 attributes to learn!
@@ -52,23 +87,28 @@ Used to bind an event listener to an action handler. Accepts two arguments separ
 ```js
 Dynamo(rootNode, {
   action: {
-    toggleMenu: (state) => {
-      return {
-        ...state,
-        menuIsOpen: !state.menuIsOpen,
-      }
-    },
+    toggleMenu: (state) => ({
+      ...state,
+      menuIsOpen: !state.menuIsOpen,
+    }),
+  },
+  node: {
+    navMenu: (state) => ({
+      class: {
+        open: state.menuIsOpen,
+      },
+    }),
   },
 })
 ```
 
+> If you use [x-on] with a `<form>` `submit` event then Dynamo will automatically provide the forms [FormData](https://developer.mozilla.org/en-US/docs/Web/API/FormData) as the action payload
+
 ### x-control
 
-Used to bind any user input control element (e.g., `<input>, <select>, <textarea>`) to a property in state. The x-control attribute is a boolean attribute that doesn't expect any value, the name of the property reflected in state will be inferred from the elements [name] attribute.
+Used to bind any user input control element (e.g., `<input>, <select>, <textarea>`) to a property in state. The x-control attribute is a boolean attribute that doesn't expect any value, the name of the property reflected in state will taken from the elements [name] attribute, so this must also be provided in all cases.
 
 > Applying the [name] + [x-control] pattern encourages parity between form data and request data for the purpose of progressive enhancement
-
-> If you use [x-on] with a forms `submit` event then Dynamo will automatically provide the forms FormData as the action payload
 
 ```html
 <select name="sortBy" x-control>
@@ -93,31 +133,9 @@ The state for each item in the collection is derived from each elements dataset,
 
 > The only hard requirement for x-each item nodes is that they must include an `id` attribute so that the list can be reliably re-ordered.
 
-## Syntax
+## Action
 
-```js
-Dynamo(rootNode, {
-  state: {
-    /* the initial state */
-  },
-  action: {
-    /* a dictionary of functions that synchronously update state */
-  },
-  node: {
-    /* a dictionary of functions that update individual node attributes and properties as a side-effect of every state transition */
-  },
-})
-```
-
-### Parameters
-
-#### event
-
-Event handlers are functions that receive the current state as their first argument, an Action object as their second argument, and must synchronously return the _next_ state.
-
-## Actions
-
-An action object provides some context to the `update` and `middleware` functions. Depending on how it was generated, the action may contain up to three parameters:
+Depending on how it was generated, the Action object may contain up to three properties:
 
 ```typescript
 type Action = {
@@ -151,7 +169,7 @@ type MiddlewareAPI {
    */
   getState(): State
   /*
-  * Dispatch an update to any event handler with name matching action.type
+  * Dispatch an update to any action handler with name matching action.type
   */
   dispatch(action: ActionInput): void
   /*
