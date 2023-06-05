@@ -96,7 +96,7 @@ Dynamo(rootNode, {
       ariaControls: "accordionPanel",
       hidden: false,
     }),
-    accordionPanel: () => ({
+    accordionPanel: (state) => ({
       hidden: !state.isOpen,
     }),
   },
