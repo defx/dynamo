@@ -50,7 +50,7 @@ describe("x-node", () => {
           ariaExpanded: expanded,
         }),
       },
-      update: {
+      action: {
         toggle: (state) => ({
           expanded: !state.expanded,
         }),
@@ -92,7 +92,7 @@ describe("x-node", () => {
       state: {
         openMenuItems: {},
       },
-      update: {
+      action: {
         toggleMenuItem: (state, { index: i }) => {
           const { openMenuItems } = state
           openMenuItems[i] = !(openMenuItems[i] || false)

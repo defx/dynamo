@@ -50,7 +50,7 @@ describe("navigation menu enhancement", () => {
           }
         },
       },
-      update: {
+      action: {
         toggleMenu: (state) => {
           return {
             ...state,

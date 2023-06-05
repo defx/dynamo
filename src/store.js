@@ -1,7 +1,7 @@
 import { serializable } from "./helpers.js"
 
 export function Store({
-  update = {},
+  action: actionHandlers = {},
   middleware = [],
   getState: getStateWrapper = (v) => v,
   onChangeCallback,
@@ -40,8 +40,8 @@ export function Store({
       return
     }
 
-    if (action.type in update) {
-      const x = update[action.type](getState(), action)
+    if (action.type in actionHandlers) {
+      const x = actionHandlers[action.type](getState(), action)
       transition({ ...state, ...x })
     }
   }

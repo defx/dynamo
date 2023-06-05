@@ -8,7 +8,7 @@ The small yet powerful JavaScript library for progressively enhancing HTML.
 
 ## If your only tool is a hammer then every problem looks like a nail
 
-If you're building a website that is server rendered and content-rich (e.g., blog, e-commerce shop, etc) then it's likely that 80-100% of your JavaScript requirements can be solved in a very simple, performant, and easily maintainable way by using a small library such as Dynamo.
+If you're building a website that is server rendered and content-rich (e.g., blog, e-commerce shop, etc) then it's likely that 80-100% of your JavaScript requirements can be solved in a very simple, performant, and easily maintainable way without reactive templating. Dynamo is designed specifically to support this approach, whilst also giving you the flexibility to provide the bare minimum amount of templating required when its really needed.
 
 ### Two types of reactive updates
 
@@ -35,7 +35,7 @@ import { Dynamo } from "https://unpkg.com/@defx/dynamo"
 
 ## \[x-\*\] attributes
 
-Attributes prefixed with an "x-" tell Dynamo about the parts of your HTML that you want to react to, and there are only 3 attributes to learn!
+Attributes prefixed with an "x-" tell Dynamo about the parts of your HTML that you want to react to, and there are only 4 attributes to learn!
 
 ### x-node
 
@@ -78,6 +78,20 @@ Used to bind any user input control element (e.g., `<input>, <select>, <textarea
   <option value="rating">Rating</option>
 </select>
 ```
+
+### x-each
+
+Used to declare an element as an item within an ordered collection.
+
+The state for each item in the collection is derived from each elements dataset, so be sure to declare any values you need to work with as data attributes. For example, if you want to allow a user to sort a list, make sure that you declare any values you wish to sort on in each elements dataset:
+
+```html
+<li x-list="products" data-id="f7g649f9" data-price="19.99" data-rating="4.2">
+  <p>19.99</p>
+</li>
+```
+
+> The only hard requirement for x-each item nodes is that they must include an `id` attribute so that the list can be reliably re-ordered.
 
 ## Syntax
 

@@ -1,3 +1,5 @@
+// @todo: understand what happens when there's no node.id
+
 export function listSync(nodes, curr, next, template) {
   // check if anything has changed
   const currIds = curr.map(({ id }) => id)
