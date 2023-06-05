@@ -232,7 +232,8 @@ type MiddlewareAPI {
   */
   dispatch(action: ActionInput): void
   /*
-  * Register a callback to be invoked once after the next UI update. Useful for focusing an input element, for example.
+  * Register a callback to be invoked once after the next UI update.
+  Useful for focusing an input element, for example.
   */
   nextTick(callback: Function): void
 }
