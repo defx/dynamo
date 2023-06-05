@@ -1,4 +1,6 @@
 import { objectToClasses, write } from "./xo.js"
+import { listSync } from "./list.js"
+import { castAll } from "./helpers.js"
 
 function apply(o, node) {
   Object.entries(o).forEach(([k, v]) => {
@@ -42,4 +44,16 @@ export function xNode(rootNode, node, subscribe) {
     apply(props, node)
   }
   subscribe(callback)
+}
+
+export function xList(k, parentNode, subscribe) {
+  subscribe((state) => {
+    const listNodes = [...parentNode.querySelectorAll(`[x-each="${k}"]`)]
+    const listData = listNodes.map((node) => ({
+      id: node.id,
+      ...castAll(node.dataset),
+    }))
+
+    listSync(listNodes, listData, state[k])
+  })
 }
