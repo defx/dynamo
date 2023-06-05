@@ -51,7 +51,8 @@ Dynamo(rootNode, {
     /* a dictionary of functions that synchronously update state */
   },
   node: {
-    /* a dictionary of functions that update individual node attributes and properties as a side-effect of every state transition */
+    /* a dictionary of functions that update individual node attributes 
+    and properties as a side-effect of every state transition */
   },
 })
 ```
