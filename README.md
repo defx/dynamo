@@ -2,7 +2,8 @@
 
 🚧 Please kindly note that this project is a work in progress 🚧
 
-## [![npm](https://shields.io/npm/v/@defx/dynamo)](https://www.npmjs.com/package/@defx/dynamo) [![gzip size](https://img.badgesize.io/https://unpkg.com/@defx/dynamo/dist/dynamo.min.js?compression=gzip&label=gzip)]()
+[![npm](https://shields.io/npm/v/@defx/dynamo)](https://www.npmjs.com/package/@defx/dynamo)
+[![gzip size](https://img.badgesize.io/https://unpkg.com/@defx/dynamo/dist/dynamo.min.js?compression=gzip&label=gzip)]
 
 The small yet powerful JavaScript library for progressively enhancing HTML.
 
