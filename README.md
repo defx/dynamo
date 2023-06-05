@@ -43,19 +43,20 @@ The [x-node] attribute is used to identify a named function that can be used to 
 
 ### x-on
 
-Used to bind an event listener to an element, accepts two arguments separated by a colon `x-on="eventType:actionName"` where `eventType` is the type of even you want to listen for and `methodName` is the name of the update method you wish to invoke;
-
-Let's say, for example, we want to add a "load more" button to our product list...
+Used to bind an event listener to an action handler. Accepts two arguments separated by a colon `x-on="eventType:actionName"` where `eventType` is the type of event that you want to listen for and `actionName` is the name of the action handler you wish to invoke;
 
 ```html
-<button x-on="click:loadMore">[=]</button>
+<button x-on="click:toggleMenu">load more</button>
 ```
 
 ```js
 Dynamo(rootNode, {
   action: {
-    loadMore: (state) => {
-      /* fetch more products from the server... */
+    toggleMenu: (state) => {
+      return {
+        ...state,
+        menuIsOpen: !state.menuIsOpen,
+      }
     },
   },
 })
@@ -63,7 +64,7 @@ Dynamo(rootNode, {
 
 ### x-control
 
-Used to bind any user input control element (e.g., `<input>, <select>, <textarea>`) to a property in state. The x-control attribute is a boolean attribute that doesn't accept any value, the name of the property reflected in state will be inferred from the elements [name] attribute.
+Used to bind any user input control element (e.g., `<input>, <select>, <textarea>`) to a property in state. The x-control attribute is a boolean attribute that doesn't expect any value, the name of the property reflected in state will be inferred from the elements [name] attribute.
 
 > Applying the [name] + [x-control] pattern encourages parity between form data and request data for the purpose of progressive enhancement
 
@@ -89,7 +90,7 @@ Dynamo(rootNode, {
     /* a dictionary of functions that synchronously update state */
   },
   node: {
-    /* a dictionary of functions that update individual node attributes and properties as a side-effect of state transitions */
+    /* a dictionary of functions that update individual node attributes and properties as a side-effect of every state transition */
   },
 })
 ```
@@ -102,7 +103,7 @@ Event handlers are functions that receive the current state as their first argum
 
 ## Actions
 
-An action object provides some context to the `update` and `middleware` functions. Depending on how it was generated, the action will contain two of three possible parameters:
+An action object provides some context to the `update` and `middleware` functions. Depending on how it was generated, the action may contain up to three parameters:
 
 ```typescript
 type Action = {
@@ -140,13 +141,7 @@ type MiddlewareAPI {
   */
   dispatch(action: ActionInput): void
   /*
-  * A dictionary of any HTML elements declared with the x-ref attribute
-  */
-  refs: {
-    [key: string]: HTMLElement
-  }
-  /*
-  * Register a callback to be invoked once after the next UI update
+  * Register a callback to be invoked once after the next UI update. Useful for focusing an input element, for example.
   */
   nextTick(callback: Function): void
 }
