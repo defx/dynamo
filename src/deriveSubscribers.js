@@ -35,7 +35,7 @@ export function xNode(rootNode, node, subscribe) {
       k = k.slice(0, -2)
     }
 
-    const fn = config.node?.[k]
+    const fn = config.dom?.[k]
 
     if (!fn) return
 

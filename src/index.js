@@ -2,10 +2,7 @@ import { initialise } from "./initialise.js"
 import { Store } from "./store.js"
 import { Message } from "./message.js"
 
-export const Dynamo = (target, config) => {
-  const node =
-    typeof target === "string" ? document.querySelector(target) : target
-
+export const Dynamo = (node, config) => {
   let nextTickSubscribers = []
 
   const api = {

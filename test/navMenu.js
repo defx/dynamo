@@ -40,7 +40,7 @@ describe("navigation menu enhancement", () => {
       state: {
         menuIsOpen: false,
       },
-      node: {
+      dom: {
         nav: ({ menuIsOpen }) => {
           return {
             class: {

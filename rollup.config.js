@@ -10,6 +10,13 @@ export default [
   },
   {
     input: "src/index.js",
+    output: {
+      file: "examples/public/dynamo.js",
+      format: "es",
+    },
+  },
+  {
+    input: "src/index.js",
     plugins: [terser()],
     output: {
       file: "dist/dynamo.min.js",

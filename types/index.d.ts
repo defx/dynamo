@@ -33,7 +33,7 @@ declare namespace dynamo {
   type DynamoConfig = {
     state: SerialisableObject
     action: { [key: string]: StateUpdateFunction }
-    node: { [key: string]: NodeUpdateFunction }
+    dom: { [key: string]: NodeUpdateFunction }
     middleware?: { [key: string]: MiddlewareFunction }
   }
 

@@ -16,7 +16,7 @@ describe("x-node", () => {
     rootNode.innerHTML = html`<button x-node="toggleButton" hidden>[+]</button>`
 
     $(rootNode, {
-      node: {
+      dom: {
         toggleButton: () => ({
           hidden: false,
           ariaExpanded: false,
@@ -44,7 +44,7 @@ describe("x-node", () => {
       state: {
         expanded: false,
       },
-      node: {
+      dom: {
         toggleButton: ({ expanded }) => ({
           hidden: false,
           ariaExpanded: expanded,
@@ -70,7 +70,7 @@ describe("x-node", () => {
   it("initialises the attribute as part of a collection", () => {
     rootNode.innerHTML = html`<button x-node="toggleButtons.*">[+]</button>`
     $(rootNode, {
-      node: {
+      dom: {
         toggleButtons: () => ({
           ariaExpanded: false,
         }),
@@ -102,7 +102,7 @@ describe("x-node", () => {
           }
         },
       },
-      node: {
+      dom: {
         menuItems: (state, i) => ({
           ariaExpanded: !!state.openMenuItems[i],
         }),
