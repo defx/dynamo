@@ -27,7 +27,7 @@ declare namespace dynamo {
   type NodeConfig = NodeAttributes & NodeProperties
 
   type NodeUpdateFunction = {
-    (currentState: State): NodeConfig
+    (currentState: State, index: number): NodeConfig
   }
 
   type DynamoConfig = {

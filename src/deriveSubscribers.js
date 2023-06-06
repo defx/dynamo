@@ -29,11 +29,9 @@ export function xNode(rootNode, node, subscribe) {
     let k = node.getAttribute("x-node")
 
     let index
-    if (k.endsWith(".*")) {
-      const collection = [...rootNode.querySelectorAll(`[x-node="${k}"]`)]
-      index = collection.findIndex((n) => n === node)
-      k = k.slice(0, -2)
-    }
+
+    const collection = [...rootNode.querySelectorAll(`[x-node="${k}"]`)]
+    index = collection.findIndex((n) => n === node)
 
     const fn = config.node?.[k]
 

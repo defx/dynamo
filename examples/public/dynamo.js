@@ -165,11 +165,9 @@ function xNode(rootNode, node, subscribe) {
     let k = node.getAttribute("x-node");
 
     let index;
-    if (k.endsWith(".*")) {
-      const collection = [...rootNode.querySelectorAll(`[x-node="${k}"]`)];
-      index = collection.findIndex((n) => n === node);
-      k = k.slice(0, -2);
-    }
+
+    const collection = [...rootNode.querySelectorAll(`[x-node="${k}"]`)];
+    index = collection.findIndex((n) => n === node);
 
     const fn = config.node?.[k];
 
@@ -217,34 +215,21 @@ const xInput = (node, dispatch) => {
   });
 };
 
-function findIndex(rootNode, node, query) {
-  const collection = [...rootNode.querySelectorAll(query)];
-  return collection.findIndex((n) => n === node)
-}
-
-function getCollectionName(node) {
-  const attr = node.getAttribute("x-node");
-  if (attr && attr.endsWith(".*")) return ["x-node", attr]
-  return []
-}
-
 const xOn = (rootNode, node, dispatch) => {
-  const [eventType, actionName] = node
-    .getAttribute("x-on")
-    .split(":")
-    .map((v) => v.trim());
+  const attrValue = node.getAttribute("x-on");
+  const [eventType, k] = attrValue.split(":").map((v) => v.trim());
 
   node.addEventListener(eventType, (event) => {
     event.stopPropagation();
 
-    const [k, v] = getCollectionName(node);
+    let index;
+    let type = k;
 
-    const index = v?.endsWith(".*")
-      ? findIndex(rootNode, event.target, `[${k}="${v}"]`)
-      : null;
+    const collection = [...rootNode.querySelectorAll(`[x-on="${attrValue}"]`)];
+    index = collection.findIndex((n) => n === node);
 
     const action = {
-      type: actionName,
+      type,
       event,
       index,
     };

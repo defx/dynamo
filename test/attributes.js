@@ -68,7 +68,7 @@ describe("x-node", () => {
   })
 
   it("initialises the attribute as part of a collection", () => {
-    rootNode.innerHTML = html`<button x-node="toggleButtons.*">[+]</button>`
+    rootNode.innerHTML = html`<button x-node="toggleButtons">[+]</button>`
     $(rootNode, {
       node: {
         toggleButtons: () => ({
@@ -85,7 +85,7 @@ describe("x-node", () => {
 
   it("updates the attribute as part of a collection", async () => {
     rootNode.innerHTML = html`
-      <button x-on="click:toggleMenuItem" x-node="menuItems.*">[+]</button>
+      <button x-on="click:toggleMenuItem" x-node="menuItems">[+]</button>
     `
 
     $(rootNode, {
