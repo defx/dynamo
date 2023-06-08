@@ -19,16 +19,27 @@ I can apply the same principles elsewhere, for example the aria attributes such 
 
 ## Introducing Dynamo
 
-The first thing I will do is import the Dynamo function and then pass it a root node to control.
+The first thing I will do is create an Accordion function that will take a _root node_ and then pass it to Dynamo with the required configuration...
 
 ```js
 import { Dynamo } from "/dynamo.js"
 
-const rootNode = document.getElementById(`accordionGroup`)
+export const Accordion = (rootNode) =>
+  Dynamo(rootNode, {
+    // config here...
+  })
+```
 
-Dynamo(rootNode, {
-  // config goes here...
-})
+and then in my HTML file I will add a script to import that function and invoke it, passing the root node from the existing markup...
+
+```html
+<script type="module">
+  import { Accordion } from "./index.js"
+
+  const rootNode = document.getElementById("accordionGroup")
+
+  Accordion(rootNode)
+</script>
 ```
 
 I want my accordion to only ever have _one panel open at a time_. To implement that behaviour I'm going to need a state variable to store a number representing the positional index of the panel that is currently open. Dynamo configuration accepts a `state` property which can be assigned an object with any values required for the initial state. I'm going to add a single property named `openPanel` with a value of `0` to indicate that the first panel should be open.
@@ -36,13 +47,12 @@ I want my accordion to only ever have _one panel open at a time_. To implement t
 ```js
 import { Dynamo } from "/dynamo.js"
 
-const rootNode = document.getElementById(`accordionGroup`)
-
-Dynamo(rootNode, {
-  state: {
-    openPanel: 0,
-  },
-})
+export const Accordion = (rootNode) =>
+  Dynamo(rootNode, {
+    state: {
+      openPanel: 0,
+    },
+  })
 ```
 
 Another useful configuration property is `dom`; this property allows me to provide Dynamo with a dictionary of functions that derive some Element attributes and/or properties from the current state. Whenever there is a change in state, these functions will all be invoked and the objects they return will be used by Dynamo to update any Element nodes that reference them. I want my accordion panels to be hidden _unless_ they are the current `openPanel`, so I've created a entry here named `panel`, with a function that takes the current state and the node index, and then returns an object with a single `hidden` property.</p>
@@ -50,18 +60,17 @@ Another useful configuration property is `dom`; this property allows me to provi
 ```js
 import { Dynamo } from "/dynamo.js"
 
-const rootNode = document.getElementById(`accordionGroup`)
-
-Dynamo(rootNode, {
-  state: {
-    openPanel: 0,
-  },
-  node: {
-    panel: (state, i) => ({
-      hidden: state.openPanel !== i,
-    }),
-  },
-})
+export const Accordion = (rootNode) =>
+  Dynamo(rootNode, {
+    state: {
+      openPanel: 0,
+    },
+    node: {
+      panel: (state, i) => ({
+        hidden: state.openPanel !== i,
+      }),
+    },
+  })
 ```
 
 My example so far isn't going to do very much, to make everything work I will also need to tell Dynamo _which_ nodes are controlled by this configuration by applying the `x-node` attribute to the relevant DOM elements.
@@ -122,25 +131,24 @@ Now I'm going to replicate the same approach with the accordion trigger buttons 
 ```js
 import { Dynamo } from "/dynamo.js"
 
-const rootNode = document.getElementById(`accordionGroup`)
-
-Dynamo(rootNode, {
-  state: {
-    openPanel: 0,
-  },
-  node: {
-    trigger: (state, i) => ({
-      id: `trigger_${i}`,
-      ariaControls: `panel_${i}`,
-      ariaExpanded: state.openPanel === i,
-    }),
-    panel: (state, i) => ({
-      id: `panel_${i}`,
-      ariaLabelledby: `trigger_${i}`,
-      hidden: state.openPanel !== i,
-    }),
-  },
-})
+export const Accordion = (rootNode) =>
+  Dynamo(rootNode, {
+    state: {
+      openPanel: 0,
+    },
+    node: {
+      trigger: (state, i) => ({
+        id: `trigger_${i}`,
+        ariaControls: `panel_${i}`,
+        ariaExpanded: state.openPanel === i,
+      }),
+      panel: (state, i) => ({
+        id: `panel_${i}`,
+        ariaLabelledby: `trigger_${i}`,
+        hidden: state.openPanel !== i,
+      }),
+    },
+  })
 ```
 
 The last thing that I need to do is add the trigger functionality so I'm going to add the `x-on="click:togglePanel"` attribute to each of my trigger buttons. This tells Dynamo that when the button receives a `click` event then it should invoke the `togglePanel`_action handler_. Much like our `node` update function, Dynamo also accepts a dictionary of named `action` handler functions. These special functions receive the _current state_ as their first argument and return the _next state_.
@@ -148,29 +156,28 @@ The last thing that I need to do is add the trigger functionality so I'm going t
 ```js
 import { Dynamo } from "/dynamo.js"
 
-const rootNode = document.getElementById(`accordionGroup`)
-
-Dynamo(rootNode, {
-  state: {
-    openPanel: 0,
-  },
-  action: {
-    togglePanel: (state, { index }) => ({
-      ...state,
-      openPanel: state.openPanel === index ? -1 : index,
-    }),
-  },
-  node: {
-    trigger: (state, i) => ({
-      id: `trigger_${i}`,
-      ariaControls: `panel_${i}`,
-      ariaExpanded: state.openPanel === i,
-    }),
-    panel: (state, i) => ({
-      id: `panel_${i}`,
-      ariaLabelledby: `trigger_${i}`,
-      hidden: state.openPanel !== i,
-    }),
-  },
-})
+export const Accordion = (rootNode) =>
+  Dynamo(rootNode, {
+    state: {
+      openPanel: 0,
+    },
+    action: {
+      togglePanel: (state, { index }) => ({
+        ...state,
+        openPanel: state.openPanel === index ? -1 : index,
+      }),
+    },
+    node: {
+      trigger: (state, i) => ({
+        id: `trigger_${i}`,
+        ariaControls: `panel_${i}`,
+        ariaExpanded: state.openPanel === i,
+      }),
+      panel: (state, i) => ({
+        id: `panel_${i}`,
+        ariaLabelledby: `trigger_${i}`,
+        hidden: state.openPanel !== i,
+      }),
+    },
+  })
 ```
