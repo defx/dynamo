@@ -11,7 +11,7 @@ export default [
   {
     input: "src/index.js",
     output: {
-      file: "examples/public/dynamo.js",
+      file: "examples/dynamo.js",
       format: "es",
     },
   },

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Accordion Example - @defx/dynamo</title>
+    <title>Accordion Pattern - @defx/dynamo</title>
     <style>
         .accordion {
             margin: 0 auto;
@@ -246,35 +246,11 @@
     </div>
 
     <script type="module">
+        import { Accordion } from "./index.js"
 
-        import { Dynamo } from "/dynamo.js"
+        const rootNode = document.getElementById("accordionGroup")
 
-        const rootNode = document.getElementById(`accordionGroup`)
-
-        Dynamo(rootNode, {
-            state: {
-                openPanel: 0
-            },
-            action: {
-                togglePanel: (state, { index }) => ({
-                    ...state,
-                    openPanel: state.openPanel === index ? -1 : index
-                })
-            },
-            node: {
-                trigger: (state, i) => ({
-                    id: `trigger_${i}`,
-                    ariaControls: `panel_${i}`,
-                    ariaExpanded: state.openPanel === i
-                }),
-                panel: (state, i) => ({
-                    id: `panel_${i}`,
-                    ariaLabelledby: `trigger_${i}`,
-                    hidden: state.openPanel !== i
-                })
-            }
-        })
-
+        Accordion(rootNode)
     </script>
 
 </body>
