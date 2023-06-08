@@ -11,7 +11,7 @@ The first thing that I notice when opening the document in my browser is that th
 I can apply the same principles elsewhere, for example the aria attributes such as `aria-controls` are irrelevant until Dynamo is up an running so I can defer adding such attributes until I'm sure that the behaviour matches the description.
 
 <p align="center">
-    <img src="images/accordion-first-panel-open.png"
+    <img src="images/accordion.png"
         alt="The accordion with second and third panels closed by default">
     The accordion with second and third panels closed by default
 </p>
