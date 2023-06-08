@@ -10,11 +10,11 @@ The first thing that I notice when opening the document in my browser is that th
 
 I can apply the same principles elsewhere, for example the aria attributes such as `aria-controls` are irrelevant until Dynamo is up an running so I can defer adding such attributes until I'm sure that the behaviour matches the description.
 
-<figure style="width: 50%">
+<p style="text-align: center;">
     <img src="images/accordion-first-panel-open.png"
-        alt="The accordion with second and third panels closed by default">
-    <figcaption>The accordion with second and third panels closed by default</figcaption>
-</figure>
+        alt="The accordion with second and third panels closed by default" style="max-width: 320px;">
+    The accordion with second and third panels closed by default
+</p>
 
 ## Introducing Dynamo
 
