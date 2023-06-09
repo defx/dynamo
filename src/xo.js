@@ -33,6 +33,11 @@ export const write = (node, attrs) => {
   for (let [k, v] of Object.entries(attrs || {})) {
     k = pascalToKebab(k)
 
+    if (k === "textContent" && node.textContent !== textContent) {
+      node.textContent = textContent
+      continue
+    }
+
     if (k === "class") {
       v = objectToClasses(v)
     }
@@ -46,7 +51,6 @@ export const write = (node, attrs) => {
     }
 
     if (isPrimitive(v) === false) {
-      // NB: trying to set dataset this way will error, but that's not something i currently want to support
       node[kebabToPascal(k)] = v
     }
 

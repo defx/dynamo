@@ -1,28 +1,6 @@
-import { objectToClasses, write } from "./xo.js"
+import { write } from "./xo.js"
 import { listSync } from "./list.js"
 import { castAll } from "./helpers.js"
-
-function apply(o, node) {
-  Object.entries(o).forEach(([k, v]) => {
-    switch (k) {
-      case "class": {
-        node.setAttribute("class", objectToClasses(v))
-        break
-      }
-      case "style": {
-        break
-      }
-      case "textContent": {
-        node.textContent = v
-        break
-      }
-      default: {
-        write(node, { [k]: v })
-        break
-      }
-    }
-  })
-}
 
 export function xNode(rootNode, node, subscribe) {
   const callback = (state, config) => {
@@ -39,7 +17,7 @@ export function xNode(rootNode, node, subscribe) {
 
     const props = fn(state, index)
 
-    apply(props, node)
+    write(node, props)
   }
   subscribe(callback)
 }
