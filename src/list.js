@@ -18,7 +18,15 @@ export function listSync(nodes, curr, next, template) {
 
   let t = nodes.find((node) => node.id === first.id)
 
-  // @todo: check if template is required + present
+  if (
+    !template &&
+    next.find((c) => {
+      return curr.find((n) => c.id === n.id) === false
+    })
+  ) {
+    console.error(`Missing template when trying to add items to a list`)
+    return
+  }
 
   if (!t) {
     t = nodeFromString(template(first))
