@@ -2,21 +2,21 @@ import { terser } from "rollup-plugin-terser"
 
 export default [
   {
-    input: "src/index.js",
+    input: "src/define.js",
     output: {
       file: "dist/dynamo.js",
       format: "es",
     },
   },
   {
-    input: "src/index.js",
+    input: "src/define.js",
     output: {
       file: "examples/dynamo.js",
       format: "es",
     },
   },
   {
-    input: "src/index.js",
+    input: "src/define.js",
     plugins: [terser()],
     output: {
       file: "dist/dynamo.min.js",
@@ -24,7 +24,7 @@ export default [
     },
   },
   {
-    input: "src/index.js",
+    input: "src/define.js",
     output: {
       dir: "cjs",
       format: "cjs",

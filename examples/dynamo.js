@@ -92,7 +92,7 @@ const write = (node, attrs) => {
 
     if (v === current) continue
 
-    if (typeof v === "string" || typeof v === "number") {
+    if (v || typeof v === "number") {
       node.setAttribute(k, v);
     } else {
       node.removeAttribute(k);
@@ -121,7 +121,15 @@ function listSync(nodes, curr, next, template) {
 
   let t = nodes.find((node) => node.id === first.id);
 
-  // @todo: check if template is required + present
+  if (
+    !template &&
+    next.find((c) => {
+      return curr.find((n) => c.id === n.id) === false
+    })
+  ) {
+    console.error(`Missing template when trying to add items to a list`);
+    return
+  }
 
   if (!t) {
     t = nodeFromString(template(first));
@@ -142,8 +150,8 @@ function listSync(nodes, curr, next, template) {
   });
 }
 
-function xNode(rootNode, node, subscribe) {
-  const callback = (state, config) => {
+function xNode(rootNode, node) {
+  return (state, config) => {
     let k = node.getAttribute("x-node");
 
     let index;
@@ -158,12 +166,11 @@ function xNode(rootNode, node, subscribe) {
     const props = fn(state, index);
 
     write(node, props);
-  };
-  subscribe(callback);
+  }
 }
 
-function xList(k, parentNode, subscribe) {
-  subscribe((state) => {
+function xList(k, parentNode) {
+  return (state) => {
     const listNodes = [...parentNode.querySelectorAll(`[x-each="${k}"]`)];
     const listData = listNodes.map((node) => ({
       id: node.id,
@@ -171,7 +178,7 @@ function xList(k, parentNode, subscribe) {
     }));
 
     listSync(listNodes, listData, state[k]);
-  });
+  }
 }
 
 const xInput = (node, dispatch) => {
@@ -242,8 +249,7 @@ function initialise(rootNode, subscribe, dispatch) {
   cwalk(rootNode, (node) => {
     const listKey = node.getAttribute?.("x-each");
     if (listKey && !(listKey in listKeys)) {
-      // @todo list updates should be registered on the parent as items can be removed
-      xList(listKey, node.parentNode, subscribe);
+      subscribe(xList(listKey, node.parentNode));
       xList$1(node, state);
     }
     if (node.hasAttribute?.("x-control")) {
@@ -254,7 +260,7 @@ function initialise(rootNode, subscribe, dispatch) {
       xOn(rootNode, node, dispatch);
     }
     if (node.hasAttribute?.("x-node")) {
-      xNode(rootNode, node, subscribe);
+      subscribe(xNode(rootNode, node));
     }
   });
 
@@ -328,44 +334,84 @@ const Message = (callbacks) => {
   }
 };
 
-const Dynamo = (node, config) => {
-  let nextTickSubscribers = [];
+const define = (name, config) => {
+  if (customElements.get(name)) return
 
-  const api = {
-    nextTick: (fn) => nextTickSubscribers.push(fn),
-  };
+  customElements.define(
+    name,
+    class extends HTMLElement {
+      async connectedCallback() {
+        let nextTickSubscribers = [];
 
-  const message = Message({
-    postPublish: () => {
-      nextTickSubscribers.forEach((fn) => fn(state));
-      nextTickSubscribers = [];
-    },
-  });
+        const api = {
+          nextTick: (fn) => nextTickSubscribers.push(fn),
+        };
 
-  const { dispatch, getState, setState } = Store({
-    ...config,
-    api,
-    onChangeCallback: (state) => message.publish(state, config),
-  });
+        const message = Message({
+          postPublish: () => {
+            nextTickSubscribers.forEach((fn) => fn(state));
+            nextTickSubscribers = [];
+          },
+        });
 
-  const initialState = initialise(node, message.subscribe, dispatch);
+        const observed = new Set();
+        const host = this;
 
-  const store = {
-    dispatch,
-    getState,
-    ...api,
-  };
+        const wrap = (state) => {
+          return new Proxy(state, {
+            get(_, name) {
+              if (observed.has(name) === false) {
+                Object.defineProperty(host, name, {
+                  get() {
+                    return getState()[property]
+                  },
+                  set(value) {
+                    setState((state) => ({ ...state, [name]: value }));
+                  },
+                });
 
-  setState({
-    ...initialState,
-    ...((state) => (typeof state === "function" ? state(initialState) : state))(
-      config.state || {}
-    ),
-  });
+                observed.add(name);
+              }
+              return Reflect.get(...arguments)
+            },
+          })
+        };
 
-  return store
+        const { dispatch, getState, setState } = Store({
+          ...config,
+          api,
+          onChangeCallback: (state) => {
+            message.publish(wrap(state), config);
+          },
+        });
+
+        const initialState = initialise(this, message.subscribe, dispatch);
+
+        setState({
+          ...initialState,
+          ...((state) =>
+            typeof state === "function" ? state(initialState) : state)(
+            config.state || {}
+          ),
+        });
+
+        const sa = this.setAttribute;
+        this.setAttribute = (name, value) => {
+          if (observed.has(name)) {
+            setState((state) => ({ ...state, [name]: value }));
+          }
+          return sa.apply(this, [name, value])
+        };
+        const ra = this.removeAttribute;
+        this.removeAttribute = (name) => {
+          if (observed.has(name)) {
+            setState((state) => ({ ...state, [name]: null }));
+          }
+          return ra.apply(this, [name])
+        };
+      }
+    }
+  );
 };
 
-const $ = Dynamo;
-
-export { $, Dynamo };
+export { define };

@@ -21,8 +21,7 @@ export function initialise(rootNode, subscribe, dispatch) {
   cwalk(rootNode, (node) => {
     const listKey = node.getAttribute?.("x-each")
     if (listKey && !(listKey in listKeys)) {
-      // @todo list updates should be registered on the parent as items can be removed
-      deriveSubscribers.xList(listKey, node.parentNode, subscribe)
+      subscribe(deriveSubscribers.xList(listKey, node.parentNode))
       deriveState.xList(node, state)
     }
     if (node.hasAttribute?.("x-control")) {
@@ -33,7 +32,7 @@ export function initialise(rootNode, subscribe, dispatch) {
       bindEvents.xOn(rootNode, node, dispatch)
     }
     if (node.hasAttribute?.("x-node")) {
-      deriveSubscribers.xNode(rootNode, node, subscribe)
+      subscribe(deriveSubscribers.xNode(rootNode, node))
     }
   })
 

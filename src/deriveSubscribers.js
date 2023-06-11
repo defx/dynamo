@@ -2,8 +2,8 @@ import { write } from "./xo.js"
 import { listSync } from "./list.js"
 import { castAll } from "./helpers.js"
 
-export function xNode(rootNode, node, subscribe) {
-  const callback = (state, config) => {
+export function xNode(rootNode, node) {
+  return (state, config) => {
     let k = node.getAttribute("x-node")
 
     let index
@@ -19,11 +19,10 @@ export function xNode(rootNode, node, subscribe) {
 
     write(node, props)
   }
-  subscribe(callback)
 }
 
-export function xList(k, parentNode, subscribe) {
-  subscribe((state) => {
+export function xList(k, parentNode) {
+  return (state) => {
     const listNodes = [...parentNode.querySelectorAll(`[x-each="${k}"]`)]
     const listData = listNodes.map((node) => ({
       id: node.id,
@@ -31,5 +30,5 @@ export function xList(k, parentNode, subscribe) {
     }))
 
     listSync(listNodes, listData, state[k])
-  })
+  }
 }

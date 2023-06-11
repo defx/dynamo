@@ -110,23 +110,22 @@
 </head>
 
 <body>
-    <div id="combobox-container">
+    <combo-box>
         <label for="cb1-input">
             State
         </label>
         <div class="combobox combobox-list">
             <div class="group">
-                <input id="cb1-input" class="cb_edit" type="text" role="combobox" aria-autocomplete="both"
-                    aria-expanded="false" aria-controls="cb1-listbox">
-                <button type="button" id="cb1-button" aria-label="States" aria-expanded="false"
+                <input id="cb1-input" class="cb_edit" type="text" x-node="input">
+                <!-- <button type="button" id="cb1-button" aria-label="States" aria-expanded="false"
                     aria-controls="cb1-listbox" tabindex="-1">
                     <svg width="18" height="16" aria-hidden="true" focusable="false" style="forced-color-adjust: auto">
                         <polygon class="arrow" stroke-width="0" fill-opacity="0.75" fill="currentcolor"
                             points="3,6 15,6 9,14"></polygon>
-                    </svg>
+                    </svg> -->
                 </button>
             </div>
-            <ul id="cb1-listbox" role="listbox" aria-label="States">
+            <ul aria-label="States" x-node="listbox">
                 <li id="lb1-al" role="option">
                     Alabama
                 </li>
@@ -297,15 +296,9 @@
                 </li>
             </ul>
         </div>
-    </div>
+    </combo-box>
 
-    <script type="module">
-        import { Combobox } from "./index.js"
-
-        const rootNode = document.getElementById("combobox-container")
-
-        Combobox(rootNode)
-    </script>
+    <script type="module" src="index.js"></script>
 </body>
 
 </html>
