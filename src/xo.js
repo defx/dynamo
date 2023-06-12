@@ -52,6 +52,7 @@ export const write = (node, attrs) => {
 
     if (isPrimitive(v) === false) {
       node[kebabToPascal(k)] = v
+      continue
     }
 
     let current = node.getAttribute(k)

@@ -9,6 +9,7 @@ const cwalk = (node, callback) => {
   callback(node)
   walk(node.firstChild, (node) => {
     if (node.nodeName.includes("-")) {
+      callback(node)
       return node.nextSibling || node.parentNode.nextSibling
     }
     callback(node)

@@ -1,23 +1,18 @@
 import { define } from "/dynamo.js"
 
-const states =
-  "Alabama,Alaska,American Samoa,Arizona,Arkansas,California,Colorado,Conneticut,Delaware,District of Columbia"
-    .split(",")
-    .map((id) => ({ id }))
-
 define("combo-box", {
   state: {
     suggestions: [],
   },
-  getState: (state) => {
-    const input = state.input?.toLowerCase()
-
-    return {
-      ...state,
-      suggestions: input?.length
-        ? states.filter(({ id }) => id.toLowerCase().startsWith(input))
-        : [],
-    }
+  middleware: {
+    searchInput({ event: { target } }) {
+      target.dispatchEvent(
+        new CustomEvent("change", {
+          detail: target.value,
+          bubbles: true,
+        })
+      )
+    },
   },
   node: {
     input: () => ({

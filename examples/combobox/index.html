@@ -109,27 +109,69 @@
 </head>
 
 <body>
-    <combo-box>
-        <label for="cb1-input">
-            State
-        </label>
-        <div class="combobox combobox-list">
-            <div class="group">
-                <input id="cb1-input" class="cb_edit" type="text" name="input" x-control x-node="input">
-                <!-- <button type="button" id="cb1-button" aria-label="States" aria-expanded="false"
+    <x-app>
+        <combo-box x-node="searchBox" x-on="change:onInputChange">
+            <label for="cb1-input">
+                State
+            </label>
+            <div class="combobox combobox-list">
+                <div class="group">
+                    <input id="cb1-input" class="cb_edit" type="text" name="input" x-on="input:searchInput"
+                        x-node="input">
+                    <!-- <button type="button" id="cb1-button" aria-label="States" aria-expanded="false"
                     aria-controls="cb1-listbox" tabindex="-1">
                     <svg width="18" height="16" aria-hidden="true" focusable="false" style="forced-color-adjust: auto">
                         <polygon class="arrow" stroke-width="0" fill-opacity="0.75" fill="currentcolor"
                             points="3,6 15,6 9,14"></polygon>
                     </svg> -->
-                </button>
+                    </button>
+                </div>
+                <ul aria-label="States" x-node="listbox" x-list="suggestions">
+                </ul>
             </div>
-            <ul aria-label="States" x-node="listbox" x-list="suggestions">
-            </ul>
-        </div>
-    </combo-box>
+        </combo-box>
+    </x-app>
 
     <script type="module" src="index.js"></script>
+
+
+    <script type="module">
+
+        import { define } from "/dynamo.js"
+
+        const states =
+            "Alabama,Alaska,American Samoa,Arizona,Arkansas,California,Colorado,Conneticut,Delaware,District of Columbia"
+                .split(",")
+                .map((id) => ({ id }))
+
+        define("x-app", {
+            state: {
+                suggestions: []
+            },
+            action: {
+                updateSuggestions: (state, { payload: { suggestions } }) => ({
+                    ...state,
+                    suggestions
+                })
+            },
+            middleware: {
+                onInputChange: ({ event: { detail } }, { dispatch }) => {
+                    // just to simulate some level of async
+                    requestAnimationFrame(() => {
+                        const searchInput = detail.toLowerCase()
+                        const suggestions = searchInput.length ? states.filter(({ id }) => id.toLowerCase().startsWith(searchInput)) : []
+                        dispatch({ type: "updateSuggestions", payload: { suggestions } })
+                    })
+                }
+            },
+            node: {
+                searchBox: ({ suggestions }) => ({
+                    suggestions
+                })
+            }
+        })
+
+    </script>
 </body>
 
 </html>

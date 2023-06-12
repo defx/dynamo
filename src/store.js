@@ -49,7 +49,9 @@ export function Store({
   return {
     dispatch, // dispatch an action to the reducers
     getState, // optionally provide a wrapper function to derive additional properties in state
-    setState: transition,
+    setState: (fn) => {
+      transition(fn(getState()))
+    },
     ...api,
   }
 }

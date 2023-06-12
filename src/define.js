@@ -31,7 +31,7 @@ export const define = (name, config) => {
               if (observed.has(name) === false) {
                 Object.defineProperty(host, name, {
                   get() {
-                    return getState()[property]
+                    return getState()[name]
                   },
                   set(value) {
                     setState((state) => ({ ...state, [name]: value }))
@@ -60,13 +60,17 @@ export const define = (name, config) => {
           config
         )
 
-        setState({
+        const nextState = {
           ...initialState,
           ...((state) =>
             typeof state === "function" ? state(initialState) : state)(
             config.state || {}
           ),
-        })
+        }
+        setState((state) => ({
+          ...state,
+          ...nextState,
+        }))
 
         const sa = this.setAttribute
         this.setAttribute = (name, value) => {
