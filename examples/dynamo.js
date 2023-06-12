@@ -33,17 +33,6 @@ function xInput$1(node, state = {}) {
   state[k] = v;
 }
 
-function xList$1(node, state = {}) {
-  let k = node.getAttribute("x-each");
-  if (!k) return state
-
-  state[k] = state[k] || [];
-  state[k].push({
-    id: node.id,
-    ...castAll(node.dataset),
-  });
-}
-
 const pascalToKebab = (string) =>
   string.replace(/[\w]([A-Z])/g, function (m) {
     return m[0] + "-" + m[1].toLowerCase()
@@ -92,7 +81,7 @@ const write = (node, attrs) => {
 
     if (v === current) continue
 
-    if (v || typeof v === "number") {
+    if (typeof v === "string" || typeof v === "number") {
       node.setAttribute(k, v);
     } else {
       node.removeAttribute(k);
@@ -101,7 +90,18 @@ const write = (node, attrs) => {
   return node
 };
 
-// @todo: understand what happens when there's no node.id
+function listItems(listContainerNode) {
+  return [...listContainerNode.children].filter((node) =>
+    node.matches(`[x-list-item]`)
+  )
+}
+
+function listData(listItems) {
+  return listItems.map((node) => ({
+    id: node.id,
+    ...castAll(node.dataset),
+  }))
+}
 
 function listSync(nodes, curr, next, template) {
   // check if anything has changed
@@ -169,15 +169,10 @@ function xNode(rootNode, node) {
   }
 }
 
-function xList(k, parentNode) {
+function xList(name, node) {
   return (state) => {
-    const listNodes = [...parentNode.querySelectorAll(`[x-each="${k}"]`)];
-    const listData = listNodes.map((node) => ({
-      id: node.id,
-      ...castAll(node.dataset),
-    }));
-
-    listSync(listNodes, listData, state[k]);
+    const items = listItems(node);
+    listSync(items, listData(items), state[name]);
   }
 }
 
@@ -244,13 +239,12 @@ const cwalk = (node, callback) => {
 
 function initialise(rootNode, subscribe, dispatch) {
   const state = {};
-  const listKeys = {};
 
   cwalk(rootNode, (node) => {
-    const listKey = node.getAttribute?.("x-each");
-    if (listKey && !(listKey in listKeys)) {
-      subscribe(xList(listKey, node.parentNode));
-      xList$1(node, state);
+    if (node.hasAttribute?.("x-list")) {
+      const k = node.getAttribute("x-list");
+      subscribe(xList(k, node));
+      state[k] = listData(listItems(node));
     }
     if (node.hasAttribute?.("x-control")) {
       xInput$1(node, state);

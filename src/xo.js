@@ -58,7 +58,7 @@ export const write = (node, attrs) => {
 
     if (v === current) continue
 
-    if (v || typeof v === "number") {
+    if (typeof v === "string" || typeof v === "number") {
       node.setAttribute(k, v)
     } else {
       node.removeAttribute(k)
