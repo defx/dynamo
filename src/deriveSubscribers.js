@@ -1,6 +1,6 @@
 import { write } from "./xo.js"
-import { listSync } from "./list.js"
-import { castAll } from "./helpers.js"
+import { listSync, listItems, listData } from "./list.js"
+import {} from "./helpers.js"
 
 export function xNode(rootNode, node) {
   return (state, config) => {
@@ -21,14 +21,9 @@ export function xNode(rootNode, node) {
   }
 }
 
-export function xList(k, parentNode) {
+export function xList(name, node) {
   return (state) => {
-    const listNodes = [...parentNode.querySelectorAll(`[x-each="${k}"]`)]
-    const listData = listNodes.map((node) => ({
-      id: node.id,
-      ...castAll(node.dataset),
-    }))
-
-    listSync(listNodes, listData, state[k])
+    const items = listItems(node)
+    listSync(items, listData(items), state[name])
   }
 }

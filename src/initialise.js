@@ -2,6 +2,7 @@ import { walk } from "./helpers.js"
 import * as deriveState from "./deriveState.js"
 import * as deriveSubscribers from "./deriveSubscribers.js"
 import * as bindEvents from "./bindEvents.js"
+import { listItems, listData } from "./list.js"
 
 /* skip any custom elements  */
 const cwalk = (node, callback) => {
@@ -16,13 +17,12 @@ const cwalk = (node, callback) => {
 
 export function initialise(rootNode, subscribe, dispatch) {
   const state = {}
-  const listKeys = {}
 
   cwalk(rootNode, (node) => {
-    const listKey = node.getAttribute?.("x-each")
-    if (listKey && !(listKey in listKeys)) {
-      subscribe(deriveSubscribers.xList(listKey, node.parentNode))
-      deriveState.xList(node, state)
+    if (node.hasAttribute?.("x-list")) {
+      const k = node.getAttribute("x-list")
+      subscribe(deriveSubscribers.xList(k, node))
+      state[k] = listData(listItems(node))
     }
     if (node.hasAttribute?.("x-control")) {
       deriveState.xInput(node, state)

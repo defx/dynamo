@@ -20,16 +20,11 @@ describe("list sorting", () => {
         <option value="priceHighToLow">Price (high - low)</option>
         <option value="rating">Rating</option>
       </select>
-      <ul>
-        <li x-each="products" id="f8g7r6d" data-price="5" data-rating="4.7">
+      <ul x-list="products">
+        <li x-list-item id="f8g7r6d" data-price="5" data-rating="4.7">
           <p>£5</p>
         </li>
-        <li
-          x-each="products"
-          id="afd56erg"
-          data-price="14.99"
-          data-rating="4.2"
-        >
+        <li x-list-item id="afd56erg" data-price="14.99" data-rating="4.2">
           <p>£14.99</p>
         </li>
       </ul>
@@ -87,16 +82,11 @@ describe("list sorting", () => {
         <option value="priceHighToLow">Price (high - low)</option>
         <option value="rating">Rating</option>
       </select>
-      <ul>
-        <li
-          x-each="products"
-          id="afd56erg"
-          data-price="14.99"
-          data-rating="4.2"
-        >
+      <ul x-list="products">
+        <li x-list-item id="afd56erg" data-price="14.99" data-rating="4.2">
           <p>first</p>
         </li>
-        <li x-each="products" id="f8g7r6d" data-price="5" data-rating="4.7">
+        <li x-list-item id="f8g7r6d" data-price="5" data-rating="4.7">
           <p>second</p>
         </li>
       </ul>

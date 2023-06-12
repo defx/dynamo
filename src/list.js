@@ -1,4 +1,17 @@
-// @todo: understand what happens when there's no node.id
+import { castAll } from "./helpers.js"
+
+export function listItems(listContainerNode) {
+  return [...listContainerNode.children].filter((node) =>
+    node.matches(`[x-list-item]`)
+  )
+}
+
+export function listData(listItems) {
+  return listItems.map((node) => ({
+    id: node.id,
+    ...castAll(node.dataset),
+  }))
+}
 
 export function listSync(nodes, curr, next, template) {
   // check if anything has changed
