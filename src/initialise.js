@@ -15,13 +15,13 @@ const cwalk = (node, callback) => {
   })
 }
 
-export function initialise(rootNode, subscribe, dispatch) {
+export function initialise(rootNode, subscribe, dispatch, config) {
   const state = {}
 
   cwalk(rootNode, (node) => {
     if (node.hasAttribute?.("x-list")) {
       const k = node.getAttribute("x-list")
-      subscribe(deriveSubscribers.xList(k, node))
+      subscribe(deriveSubscribers.xList(k, node, config.template?.[k]))
       state[k] = listData(listItems(node))
     }
     if (node.hasAttribute?.("x-control")) {

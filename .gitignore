@@ -4,4 +4,4 @@ node_modules
 dist
 cjs
 scratch*
-examples/public/blog/*
+examples/dynamo.js

@@ -21,9 +21,9 @@ export function xNode(rootNode, node) {
   }
 }
 
-export function xList(name, node) {
+export function xList(name, node, template) {
   return (state) => {
     const items = listItems(node)
-    listSync(items, listData(items), state[name])
+    listSync(node, items, listData(items), state[name], template)
   }
 }

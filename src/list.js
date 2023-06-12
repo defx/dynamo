@@ -1,4 +1,4 @@
-import { castAll } from "./helpers.js"
+import { castAll, nodeFromString } from "./helpers.js"
 
 export function listItems(listContainerNode) {
   return [...listContainerNode.children].filter((node) =>
@@ -13,7 +13,7 @@ export function listData(listItems) {
   }))
 }
 
-export function listSync(nodes, curr, next, template) {
+export function listSync(parentNode, nodes, curr, next, template) {
   // check if anything has changed
   const currIds = curr.map(({ id }) => id)
   const nextIds = next.map(({ id }) => id)
@@ -23,13 +23,15 @@ export function listSync(nodes, curr, next, template) {
   // removals
   curr
     .filter((c) => {
-      return next.find((n) => c.id === n.id) === false
+      return next.find((n) => c.id === n.id) === undefined
     })
     .forEach(({ id }) => nodes.find((node) => node.id === id)?.remove())
 
   const [first, ...rest] = next
 
-  let t = nodes.find((node) => node.id === first.id)
+  if (!first) return
+
+  let t = first && nodes.find((node) => node.id === first.id)
 
   if (
     !template &&
@@ -43,7 +45,12 @@ export function listSync(nodes, curr, next, template) {
 
   if (!t) {
     t = nodeFromString(template(first))
-    nodes[0].before(t)
+
+    if (nodes[0]) {
+      nodes[0].before(t)
+    } else {
+      parentNode.append(t)
+    }
   }
 
   rest.forEach((d) => {

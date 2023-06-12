@@ -53,7 +53,12 @@ export const define = (name, config) => {
           },
         })
 
-        const initialState = initialise(this, message.subscribe, dispatch)
+        const initialState = initialise(
+          this,
+          message.subscribe,
+          dispatch,
+          config
+        )
 
         setState({
           ...initialState,

@@ -19,7 +19,10 @@ export const walk = (node, callback, deep = true) => {
 export const serializable = (o) => JSON.parse(JSON.stringify(o))
 
 export function cast(v) {
-  return isNaN(v) ? v : +v
+  if (typeof v === "string" && v.length) {
+    return isNaN(v) ? v : +v
+  }
+  return v
 }
 
 export function castAll(o) {
