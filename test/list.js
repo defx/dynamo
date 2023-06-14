@@ -15,16 +15,16 @@ describe("list sorting", () => {
   it("sorts the list", async () => {
     rootNode.innerHTML = html`
       <label for="sort">Sort by:</label>
-      <select id="sort" name="sortBy" x-control>
+      <select id="sort" name="sortBy">
         <option value="priceLowToHigh">Price (low - high)</option>
         <option value="priceHighToLow">Price (high - low)</option>
         <option value="rating">Rating</option>
       </select>
-      <ul x-list="products">
-        <li x-list-item id="f8g7r6d" data-price="5" data-rating="4.7">
+      <ul>
+        <li id="f8g7r6d" data-price="5" data-rating="4.7">
           <p>£5</p>
         </li>
-        <li x-list-item id="afd56erg" data-price="14.99" data-rating="4.2">
+        <li id="afd56erg" data-price="14.99" data-rating="4.2">
           <p>£14.99</p>
         </li>
       </ul>
@@ -41,6 +41,18 @@ describe("list sorting", () => {
           ...state,
           products: state.products.sort(sort[state.sortBy]),
         }
+      },
+      element: {
+        sortBy: {
+          query: "select",
+          input: "sortBy",
+        },
+        products: {
+          query: "ul",
+          list: {
+            query: "li",
+          },
+        },
       },
     })
 
@@ -76,17 +88,17 @@ describe("list sorting", () => {
   it("sorts the list with correct default", async () => {
     rootNode.innerHTML = html`
       <label for="sort">Sort by:</label>
-      <select name="sortBy" id="sort" x-control>
+      <select name="sortBy" id="sort">
         <option value="bestsellers">Bestsellers</option>
         <option value="priceLowToHigh" selected>Price (low - high)</option>
         <option value="priceHighToLow">Price (high - low)</option>
         <option value="rating">Rating</option>
       </select>
-      <ul x-list="products">
-        <li x-list-item id="afd56erg" data-price="14.99" data-rating="4.2">
+      <ul>
+        <li id="afd56erg" data-price="14.99" data-rating="4.2">
           <p>first</p>
         </li>
-        <li x-list-item id="f8g7r6d" data-price="5" data-rating="4.7">
+        <li id="f8g7r6d" data-price="5" data-rating="4.7">
           <p>second</p>
         </li>
       </ul>
@@ -103,6 +115,18 @@ describe("list sorting", () => {
           ...state,
           products: state.products.sort(sort[state.sortBy]),
         }
+      },
+      element: {
+        sortBy: {
+          query: "select",
+          input: "sortBy",
+        },
+        products: {
+          query: "ul",
+          list: {
+            query: "li",
+          },
+        },
       },
     })
 

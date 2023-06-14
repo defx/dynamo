@@ -25,8 +25,8 @@ describe("navigation menu enhancement", () => {
         }
       </style>
 
-      <button x-on="click:toggleMenu">[=]</button>
-      <nav x-node="nav">
+      <button>[=]</button>
+      <nav>
         <ul>
           <li>New In</li>
           <li>Bestsellers</li>
@@ -40,16 +40,6 @@ describe("navigation menu enhancement", () => {
       state: {
         menuIsOpen: false,
       },
-      node: {
-        nav: ({ menuIsOpen }) => {
-          return {
-            class: {
-              hamburger: true,
-              open: menuIsOpen,
-            },
-          }
-        },
-      },
       action: {
         toggleMenu: (state) => {
           return {
@@ -58,12 +48,31 @@ describe("navigation menu enhancement", () => {
           }
         },
       },
+      element: {
+        toggleButton: {
+          query: "button",
+          on: {
+            click: "toggleMenu",
+          },
+        },
+        nav: {
+          query: "nav",
+          attribute: ({ menuIsOpen }) => {
+            return {
+              class: {
+                hamburger: true,
+                open: menuIsOpen,
+              },
+            }
+          },
+        },
+      },
     })
 
     assert.ok(rootNode.querySelector("nav").classList.contains("hamburger"))
     assert.notOk(rootNode.querySelector("nav").classList.contains("open"))
 
-    rootNode.querySelector(`[x-on="click:toggleMenu"]`).click()
+    rootNode.querySelector(`button`).click()
 
     await nextFrame()
 

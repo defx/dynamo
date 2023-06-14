@@ -45,7 +45,7 @@ export const define = (name, config) => {
           })
         }
 
-        const { dispatch, getState, setState } = Store({
+        const store = Store({
           ...config,
           api,
           onChangeCallback: (state) => {
@@ -53,12 +53,9 @@ export const define = (name, config) => {
           },
         })
 
-        const initialState = initialise(
-          this,
-          message.subscribe,
-          dispatch,
-          config
-        )
+        const { getState, setState } = store
+
+        const initialState = initialise(this, message.subscribe, config, store)
 
         const nextState = {
           ...initialState,
@@ -86,6 +83,8 @@ export const define = (name, config) => {
           }
           return ra.apply(this, [name])
         }
+
+        config.connectedCallback?.(this, store)
       }
     }
   )

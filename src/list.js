@@ -1,8 +1,8 @@
 import { castAll, nodeFromString } from "./helpers.js"
 
-export function listItems(listContainerNode) {
+export function listItems(listContainerNode, listItemSelector) {
   return [...listContainerNode.children].filter((node) =>
-    node.matches(`[x-list-item]`)
+    node.matches(listItemSelector)
   )
 }
 

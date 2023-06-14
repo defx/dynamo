@@ -16,26 +16,26 @@ export const Dynamo = (node, config) => {
     },
   })
 
-  const { dispatch, getState, setState } = Store({
+  const store = Store({
     ...config,
     api,
     onChangeCallback: (state) => message.publish(state, config),
   })
 
-  const initialState = initialise(node, message.subscribe, dispatch)
+  const { setState } = store
 
-  const store = {
-    dispatch,
-    getState,
-    ...api,
-  }
+  const initialState = initialise(node, message.subscribe, config, store)
 
-  setState({
+  const nextState = {
     ...initialState,
     ...((state) => (typeof state === "function" ? state(initialState) : state))(
       config.state || {}
     ),
-  })
+  }
+  setState((state) => ({
+    ...state,
+    ...nextState,
+  }))
 
   return store
 }

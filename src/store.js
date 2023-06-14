@@ -1,8 +1,5 @@
-import { serializable } from "./helpers.js"
-
 export function Store({
   action: actionHandlers = {},
-  middleware = [],
   getState: getStateWrapper = (v) => v,
   onChangeCallback,
   api = {},
@@ -11,7 +8,6 @@ export function Store({
 
   function transition(o) {
     state = getStateWrapper({ ...o })
-
     onChangeCallback(getState())
   }
 
@@ -19,29 +15,9 @@ export function Store({
     return { ...state }
   }
 
-  function dispatch(_action) {
-    const { type, payload = {}, event, index } = _action
-    const action = { type, payload: serializable(payload), event, index }
-
-    if (type === "MERGE") {
-      transition({
-        ...getState(),
-        ...action.payload,
-      })
-      return
-    }
-
-    if (action.type in middleware) {
-      middleware[action.type]?.(action, {
-        getState,
-        dispatch,
-        ...api,
-      })
-      return
-    }
-
-    if (action.type in actionHandlers) {
-      const x = actionHandlers[action.type](getState(), action)
+  function dispatch(type, event) {
+    if (type in actionHandlers) {
+      const x = actionHandlers[type](getState(), event)
       transition({ ...state, ...x })
     }
   }

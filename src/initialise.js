@@ -1,40 +1,105 @@
-import { walk } from "./helpers.js"
-import * as deriveState from "./deriveState.js"
-import * as deriveSubscribers from "./deriveSubscribers.js"
-import * as bindEvents from "./bindEvents.js"
-import { listItems, listData } from "./list.js"
+import { listItems, listData, listSync } from "./list.js"
+import { write } from "./xo.js"
 
-/* skip any custom elements  */
-const cwalk = (node, callback) => {
-  callback(node)
-  walk(node.firstChild, (node) => {
-    if (node.nodeName.includes("-")) {
-      callback(node)
-      return node.nextSibling || node.parentNode.nextSibling
+export function initialise(rootNode, subscribe, config, store) {
+  let state = {}
+  const event = {}
+  const entries = Object.entries(config.element || {})
+
+  // find event listeners
+  entries.forEach(([_, c]) => {
+    const { query, on } = c
+    if (on) {
+      Object.entries(on).forEach(([type, callback]) => {
+        event[type] = event[type] || []
+        event[type].push({
+          selector: query,
+          callback,
+        })
+      })
     }
-    callback(node)
   })
-}
 
-export function initialise(rootNode, subscribe, dispatch, config) {
-  const state = {}
+  //derive initial state from lists...
+  entries
+    .filter(([_, { list }]) => list)
+    .forEach(([name, { query, list }]) => {
+      const targets = [...rootNode.querySelectorAll(query)]
+      targets.forEach((target) => {
+        const items = listItems(target, list.query)
+        const curr = listData(items)
+        state[name] = curr
+      })
+    })
 
-  cwalk(rootNode, (node) => {
-    if (node.hasAttribute?.("x-list")) {
-      const k = node.getAttribute("x-list")
-      subscribe(deriveSubscribers.xList(k, node, config.template?.[k]))
-      state[k] = listData(listItems(node))
-    }
-    if (node.hasAttribute?.("x-control")) {
-      deriveState.xInput(node, state)
-      bindEvents.xInput(node, dispatch)
-    }
-    if (node.hasAttribute?.("x-on")) {
-      bindEvents.xOn(rootNode, node, dispatch)
-    }
-    if (node.hasAttribute?.("x-node")) {
-      subscribe(deriveSubscribers.xNode(rootNode, node))
-    }
+  // derive initial state from input directives...
+  entries
+    .filter(([_, { input }]) => input)
+    .forEach(([_, { query, input }]) => {
+      const targets = [...rootNode.querySelectorAll(query)]
+      targets.forEach((target) => {
+        state = { ...state, [input]: target.value }
+
+        event.input = event.input || []
+        event.input.push({
+          selector: query,
+          callback: ({ target }) =>
+            store.setState((state) => ({ ...state, [input]: target.value })),
+        })
+      })
+    })
+
+  // delegate from the root node
+  Object.entries(event).forEach(([type, listeners]) => {
+    rootNode.addEventListener(type, (e) => {
+      listeners
+        .filter(({ selector }) => e.target.matches(selector))
+        .forEach(({ callback }) => {
+          if (typeof callback === "function") {
+            callback(e)
+          }
+          if (typeof callback === "string") {
+            store.dispatch(callback, e)
+          }
+        })
+    })
+  })
+
+  subscribe((state) => {
+    entries
+      .filter(([_, { read }]) => read)
+      .forEach(([_, { query, read }]) => {
+        const targets = [...rootNode.querySelectorAll(query)]
+        targets.forEach((target) => {
+          state = { ...state, ...read(target) }
+        })
+      })
+
+    // lists first
+    entries
+      .filter(([_, { list }]) => list)
+      .forEach(([name, { query, list }]) => {
+        const targets = [...rootNode.querySelectorAll(query)]
+        targets.forEach((target) => {
+          const items = listItems(target, list.query)
+          const curr = listData(items)
+          const next = state[name]
+          listSync(target, items, curr, next, list.template)
+        })
+      })
+
+    // then the rest...
+    entries.forEach(([name, c]) => {
+      const { query, attribute } = c
+
+      const targets = [...rootNode.querySelectorAll(query)]
+
+      targets.forEach((target) => {
+        if (attribute) {
+          write(target, attribute(state))
+        }
+      })
+    })
   })
 
   return state

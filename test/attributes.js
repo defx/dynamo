@@ -13,14 +13,17 @@ describe("x-node", () => {
   })
 
   it("initialises the attributes", () => {
-    rootNode.innerHTML = html`<button x-node="toggleButton" hidden>[+]</button>`
+    rootNode.innerHTML = html`<button hidden>[+]</button>`
 
     $(rootNode, {
-      node: {
-        toggleButton: () => ({
-          hidden: false,
-          ariaExpanded: false,
-        }),
+      element: {
+        toggleButton: {
+          query: "button",
+          attribute: () => ({
+            hidden: false,
+            ariaExpanded: false,
+          }),
+        },
       },
     })
 
@@ -32,81 +35,29 @@ describe("x-node", () => {
   })
 
   it("updates the attributes", async () => {
-    rootNode.innerHTML = html`<button
-      x-on="click:toggle"
-      x-node="toggleButton"
-      hidden
-    >
-      [+]
-    </button>`
+    rootNode.innerHTML = html`<button hidden>[+]</button>`
 
     $(rootNode, {
       state: {
         expanded: false,
-      },
-      node: {
-        toggleButton: ({ expanded }) => ({
-          hidden: false,
-          ariaExpanded: expanded,
-        }),
       },
       action: {
         toggle: (state) => ({
           expanded: !state.expanded,
         }),
       },
-    })
-
-    rootNode.querySelector(`button`).click()
-
-    await nextFrame()
-
-    assert.equal(
-      rootNode.querySelector(`button`).getAttribute("aria-expanded"),
-      "true"
-    )
-  })
-
-  it("initialises the attribute as part of a collection", () => {
-    rootNode.innerHTML = html`<button x-node="toggleButtons">[+]</button>`
-    $(rootNode, {
-      node: {
-        toggleButtons: () => ({
-          ariaExpanded: false,
-        }),
-      },
-    })
-
-    assert.equal(
-      rootNode.querySelector(`button`).getAttribute("aria-expanded"),
-      "false"
-    )
-  })
-
-  it("updates the attribute as part of a collection", async () => {
-    rootNode.innerHTML = html`
-      <button x-on="click:toggleMenuItem" x-node="menuItems">[+]</button>
-    `
-
-    $(rootNode, {
-      state: {
-        openMenuItems: {},
-      },
-      action: {
-        toggleMenuItem: (state, { index: i }) => {
-          const { openMenuItems } = state
-          openMenuItems[i] = !(openMenuItems[i] || false)
-
-          return {
-            openMenuItems,
-          }
+      element: {
+        toggleButton: {
+          query: `button`,
+          attribute: ({ expanded }) => ({
+            hidden: false,
+            ariaExpanded: expanded,
+          }),
+          on: {
+            click: "toggle",
+          },
         },
       },
-      node: {
-        menuItems: (state, i) => ({
-          ariaExpanded: !!state.openMenuItems[i],
-        }),
-      },
     })
 
     rootNode.querySelector(`button`).click()
@@ -117,14 +68,28 @@ describe("x-node", () => {
       rootNode.querySelector(`button`).getAttribute("aria-expanded"),
       "true"
     )
+  })
 
-    rootNode.querySelector(`button`).click()
+  it("initialises the attribute of multiple matches", () => {
+    rootNode.innerHTML = html`<button>[+]</button><button>[+]</button
+      ><button>[+]</button><button>[+]</button>`
+    $(rootNode, {
+      element: {
+        toggleButton: {
+          query: "button",
+          attribute: () => ({
+            ariaExpanded: false,
+          }),
+        },
+      },
+    })
 
-    await nextFrame()
+    const buttons = [...rootNode.querySelectorAll(`button`)]
 
-    assert.equal(
-      rootNode.querySelector(`button`).getAttribute("aria-expanded"),
-      "false"
+    assert.equal(buttons.length, 4)
+
+    buttons.forEach((button) =>
+      assert.equal(button.getAttribute("aria-expanded"), "false")
     )
   })
 })
