@@ -43,8 +43,9 @@ export function initialise(rootNode, subscribe, config, store) {
         event.input = event.input || []
         event.input.push({
           selector: query,
-          callback: ({ target }) =>
-            store.setState((state) => ({ ...state, [input]: target.value })),
+          callback: ({ target }) => {
+            store.setState((state) => ({ ...state, [input]: target.value }))
+          },
         })
       })
     })
@@ -72,15 +73,6 @@ export function initialise(rootNode, subscribe, config, store) {
   })
 
   subscribe((state) => {
-    entries
-      .filter(([_, { read }]) => read)
-      .forEach(([_, { query, read }]) => {
-        const targets = [...rootNode.querySelectorAll(query)]
-        targets.forEach((target) => {
-          state = { ...state, ...read(target) }
-        })
-      })
-
     // lists first
     entries
       .filter(([_, { list }]) => list)
@@ -96,13 +88,18 @@ export function initialise(rootNode, subscribe, config, store) {
 
     // then the rest...
     entries.forEach(([name, c]) => {
-      const { query, attribute } = c
+      const { query, attribute, input } = c
 
       const targets = [...rootNode.querySelectorAll(query)]
 
       targets.forEach((target, i) => {
         if (attribute) {
           write(target, attribute(state, i))
+        }
+        if (input) {
+          const value = state[input]
+
+          if (target.value !== value) target.value = value
         }
       })
     })

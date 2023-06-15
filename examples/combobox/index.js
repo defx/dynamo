@@ -22,6 +22,7 @@ export const ComboBox = ({
         on: {
           input: onSearchInput,
         },
+        input: "searchInput",
       },
       options: {
         query: `[role=listbox]`,
@@ -30,7 +31,6 @@ export const ComboBox = ({
         }),
         list: {
           query: "[role=option]",
-          value: (state) => state.options,
           template: optionTemplate,
         },
       },

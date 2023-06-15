@@ -19,5 +19,9 @@ define("combo-box", (rootNode) => {
 
       rootNode.options = options
     },
+    onOptionSelected: ({ target: { id } }) => {
+      rootNode.searchInput = id
+      rootNode.options = []
+    },
   })
 })

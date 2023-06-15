@@ -1,3 +1,15 @@
+function debounce(fn) {
+  let id
+  return (...args) => {
+    if (!id) {
+      id = requestAnimationFrame(() => {
+        fn(...args)
+        id = null
+      })
+    }
+  }
+}
+
 export function Store({
   action: actionHandlers = {},
   getState: getStateWrapper = (v) => v,
@@ -6,9 +18,11 @@ export function Store({
 }) {
   let state
 
+  const callback = debounce(() => onChangeCallback(getState()))
+
   function transition(o) {
     state = getStateWrapper({ ...o })
-    onChangeCallback(getState())
+    callback()
   }
 
   function getState() {
