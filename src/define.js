@@ -2,7 +2,7 @@ import { initialise } from "./initialise.js"
 import { Store } from "./store.js"
 import { Message } from "./message.js"
 
-export const define = (name, config) => {
+export const define = (name, configFn) => {
   if (customElements.get(name)) return
 
   customElements.define(
@@ -10,6 +10,7 @@ export const define = (name, config) => {
     class extends HTMLElement {
       async connectedCallback() {
         let nextTickSubscribers = []
+        const config = configFn(this)
 
         const api = {
           nextTick: (fn) => nextTickSubscribers.push(fn),

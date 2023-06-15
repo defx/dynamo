@@ -1,6 +1,6 @@
 import { define } from "/dynamo.js"
 
-define("x-accordion", {
+define("x-accordion", () => ({
   state: {
     openPanel: 0,
   },
@@ -31,4 +31,4 @@ define("x-accordion", {
       }),
     },
   },
-})
+}))
