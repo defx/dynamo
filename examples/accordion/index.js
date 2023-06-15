@@ -10,16 +10,25 @@ define("x-accordion", {
       openPanel: state.openPanel === index ? -1 : index,
     }),
   },
-  node: {
-    trigger: (state, i) => ({
-      id: `trigger_${i}`,
-      ariaControls: `panel_${i}`,
-      ariaExpanded: state.openPanel === i,
-    }),
-    panel: (state, i) => ({
-      id: `panel_${i}`,
-      ariaLabelledby: `trigger_${i}`,
-      hidden: state.openPanel !== i,
-    }),
+  element: {
+    triggerButtons: {
+      query: "button",
+      attribute: (state, i) => ({
+        id: `trigger_${i}`,
+        ariaControls: `panel_${i}`,
+        ariaExpanded: state.openPanel === i,
+      }),
+      on: {
+        click: "togglePanel",
+      },
+    },
+    panels: {
+      query: "[accordion-panel]",
+      attribute: (state, i) => ({
+        id: `panel_${i}`,
+        ariaLabelledby: `trigger_${i}`,
+        hidden: state.openPanel !== i,
+      }),
+    },
   },
 })

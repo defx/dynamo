@@ -54,12 +54,18 @@ export function initialise(rootNode, subscribe, config, store) {
     rootNode.addEventListener(type, (e) => {
       listeners
         .filter(({ selector }) => e.target.matches(selector))
-        .forEach(({ callback }) => {
+        .forEach(({ selector, callback }) => {
           if (typeof callback === "function") {
             callback(e)
           }
           if (typeof callback === "string") {
-            store.dispatch(callback, e)
+            const { target } = e
+
+            const targets = [...rootNode.querySelectorAll(selector)]
+
+            const index = targets.indexOf(target)
+
+            store.dispatch(callback, { event: e, index })
           }
         })
     })
@@ -94,9 +100,9 @@ export function initialise(rootNode, subscribe, config, store) {
 
       const targets = [...rootNode.querySelectorAll(query)]
 
-      targets.forEach((target) => {
+      targets.forEach((target, i) => {
         if (attribute) {
-          write(target, attribute(state))
+          write(target, attribute(state, i))
         }
       })
     })

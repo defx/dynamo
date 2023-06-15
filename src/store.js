@@ -15,9 +15,9 @@ export function Store({
     return { ...state }
   }
 
-  function dispatch(type, event) {
+  function dispatch(type, action) {
     if (type in actionHandlers) {
-      const x = actionHandlers[type](getState(), event)
+      const x = actionHandlers[type](getState(), action)
       transition({ ...state, ...x })
     }
   }
