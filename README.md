@@ -5,20 +5,7 @@
 [![npm](https://shields.io/npm/v/@defx/dynamo)](https://www.npmjs.com/package/@defx/dynamo)
 [![gzip size](https://img.badgesize.io/https://unpkg.com/@defx/dynamo/dist/dynamo.min.js?compression=gzip&label=gzip)](https://unpkg.com/@defx/dynamo/dist/dynamo.min.js)
 
-The small yet powerful JavaScript library for progressively enhancing HTML.
-
-## If your only tool is a hammer then every problem looks like a nail
-
-It's likely that 80-100% of your JavaScript interaction/reactivity requirements can be solved in a very simple, performant, and easily maintainable way without the use of a browser-side templating solution. Dynamo is designed specifically to support this approach, whilst also giving you the flexibility to provide the bare minimum amount of templating required as and when it's really needed.
-
-### Two types of reactive updates
-
-Reactive DOM updates can broadly be divided into two categories:
-
-- updating attributes and properties of an existing DOM tree
-- changing the structure of the DOM tree itself
-
-Making this distinction is useful to consider in terms of the associated costs, because structural updates require a browser templating solution, whereas updating attributes and properties of existing nodes does not, and the cost of templating in the browser can be quite expensive. Consider that, in order to update server-rendered content, your website or application must ship your templates to the browser so that your library understands how to re-render those parts. This makes perfect sense when your entire DOM tree needs to be structurally modifed at any point in time, however most websites and applications don't fall into that category. A common e-commerce website, for example, has very little requirement (if any) for structural DOM updates, and yet many such websites are being built with tools that are designed specifically for that purpose.
+Dynamo codifies UI behaviour with declarative configuration
 
 ## Install
 
