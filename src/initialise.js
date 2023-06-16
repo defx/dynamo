@@ -57,7 +57,7 @@ export function initialise(rootNode, subscribe, config, store, state = {}) {
         .filter(({ select }) => e.target.matches(select))
         .forEach(({ select, callback }) => {
           if (typeof callback === "function") {
-            callback(e)
+            callback(e, store)
           }
           if (typeof callback === "string") {
             const { target } = e

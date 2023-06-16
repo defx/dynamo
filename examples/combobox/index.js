@@ -9,19 +9,50 @@ export const ComboBox = ({
   const listBoxId = `listbox_${id}`
 
   return {
-    state: {},
+    state: {
+      searchText: "",
+      options: [],
+      selectedOption: -1,
+    },
+    action: {
+      selectNextOption: (state) => {
+        const { options, selectedOption } = state
+        return {
+          ...state,
+          selectedOption:
+            selectedOption < options.length - 1 ? selectedOption + 1 : 0,
+        }
+      },
+    },
     elements: [
       {
         select: "input[type=text]",
-        attribute: ({ options = [] }) => ({
+        attribute: ({ options = [], selectedOption }) => ({
           role: "combobox",
           ariaAutocomplete: "list",
           ariaExpanded: !!options.length,
           ariaControls: listBoxId,
+          ariaActivedescendant: options[selectedOption]?.id || "",
         }),
-        input: "searchInput",
+        input: "searchText",
         on: {
           input: onSearchInput,
+          keydown: (event, store) => {
+            if (event.ctrlKey || event.shiftKey) {
+              return
+            }
+
+            const { options } = store.getState()
+            if (!options?.length) return
+
+            switch (event.key) {
+              case "Down":
+              case "ArrowDown": {
+                store.dispatch("selectNextOption")
+                break
+              }
+            }
+          },
         },
       },
       {
@@ -39,6 +70,11 @@ export const ComboBox = ({
         select: "[role=option]",
         on: {
           click: onOptionSelected,
+        },
+        attribute: ({ selectedOption }, i) => {
+          return {
+            ariaSelected: selectedOption === i,
+          }
         },
       },
     ],

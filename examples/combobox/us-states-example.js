@@ -12,15 +12,15 @@ define("combo-box", (rootNode) => {
   return ComboBox({
     optionTemplate,
     onSearchInput: ({ target: { value } }) => {
-      const searchInput = value.toLowerCase()
-      const options = searchInput.length
-        ? states.filter(({ id }) => id.toLowerCase().startsWith(searchInput))
+      const inputValue = value.toLowerCase()
+      const options = inputValue.length
+        ? states.filter(({ id }) => id.toLowerCase().startsWith(inputValue))
         : []
 
       rootNode.options = options
     },
     onOptionSelected: ({ target: { id } }) => {
-      rootNode.searchInput = id
+      rootNode.searchText = id
       rootNode.options = []
     },
   })
