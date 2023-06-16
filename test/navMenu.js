@@ -48,14 +48,14 @@ describe("navigation menu enhancement", () => {
           }
         },
       },
-      element: {
-        toggleButton: {
+      elements: [
+        {
           select: "button",
           on: {
             click: "toggleMenu",
           },
         },
-        nav: {
+        {
           select: "nav",
           attribute: ({ menuIsOpen }) => {
             return {
@@ -66,7 +66,7 @@ describe("navigation menu enhancement", () => {
             }
           },
         },
-      },
+      ],
     })
 
     assert.ok(rootNode.querySelector("nav").classList.contains("hamburger"))

@@ -46,15 +46,17 @@ export const define = (name, configFn) => {
           })
         }
 
+        const onChangeCallback = (state) => {
+          message.publish(wrap(state), config)
+        }
+
         const store = Store({
           ...config,
           api,
-          onChangeCallback: (state) => {
-            message.publish(wrap(state), config)
-          },
+          onChangeCallback,
         })
 
-        const { getState, merge, set } = store
+        const { getState, merge } = store
 
         const initialState = initialise(
           this,
@@ -66,7 +68,8 @@ export const define = (name, configFn) => {
           )
         )
 
-        set(initialState)
+        store.set(initialState)
+        onChangeCallback(store.getState())
 
         const sa = this.setAttribute
         this.setAttribute = (name, value) => {

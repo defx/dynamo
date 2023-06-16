@@ -10,8 +10,8 @@ define("x-accordion", () => ({
       openPanel: state.openPanel === index ? -1 : index,
     }),
   },
-  element: {
-    triggerButtons: {
+  elements: [
+    {
       select: "button",
       attribute: (state, i) => ({
         id: `trigger_${i}`,
@@ -22,7 +22,7 @@ define("x-accordion", () => ({
         click: "togglePanel",
       },
     },
-    panels: {
+    {
       select: "[accordion-panel]",
       attribute: (state, i) => ({
         id: `panel_${i}`,
@@ -30,5 +30,5 @@ define("x-accordion", () => ({
         hidden: state.openPanel !== i,
       }),
     },
-  },
+  ],
 }))

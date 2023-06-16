@@ -16,15 +16,15 @@ describe("x-node", () => {
     rootNode.innerHTML = html`<button hidden>[+]</button>`
 
     $(rootNode, {
-      element: {
-        toggleButton: {
+      elements: [
+        {
           select: "button",
           attribute: () => ({
             hidden: false,
             ariaExpanded: false,
           }),
         },
-      },
+      ],
     })
 
     assert.equal(rootNode.querySelector(`button`).hidden, false)
@@ -46,8 +46,8 @@ describe("x-node", () => {
           expanded: !state.expanded,
         }),
       },
-      element: {
-        toggleButton: {
+      elements: [
+        {
           select: `button`,
           attribute: ({ expanded }) => ({
             hidden: false,
@@ -57,7 +57,7 @@ describe("x-node", () => {
             click: "toggle",
           },
         },
-      },
+      ],
     })
 
     rootNode.querySelector(`button`).click()
@@ -74,14 +74,14 @@ describe("x-node", () => {
     rootNode.innerHTML = html`<button>[+]</button><button>[+]</button
       ><button>[+]</button><button>[+]</button>`
     $(rootNode, {
-      element: {
-        toggleButton: {
+      elements: [
+        {
           select: "button",
           attribute: () => ({
             ariaExpanded: false,
           }),
         },
-      },
+      ],
     })
 
     const buttons = [...rootNode.querySelectorAll(`button`)]

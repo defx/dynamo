@@ -42,19 +42,19 @@ describe("list sorting", () => {
           products: state.products.sort(sort[state.sortBy]),
         }
       },
-      element: {
-        sortBy: {
+      elements: [
+        {
           select: "select",
           input: "sortBy",
         },
-        products: {
+        {
           select: "ul",
           list: {
             select: "li",
             from: "products",
           },
         },
-      },
+      ],
     })
 
     rootNode.querySelector(`[id="sort"]`).value = "priceHighToLow"
@@ -117,19 +117,19 @@ describe("list sorting", () => {
           products: state.products.sort(sort[state.sortBy]),
         }
       },
-      element: {
-        sortBy: {
+      elements: [
+        {
           select: "select",
           input: "sortBy",
         },
-        products: {
+        {
           select: "ul",
           list: {
             select: "li",
             from: "products",
           },
         },
-      },
+      ],
     })
 
     function prices() {

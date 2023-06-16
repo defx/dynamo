@@ -3,10 +3,11 @@ import { write } from "./xo.js"
 
 export function initialise(rootNode, subscribe, config, store, state = {}) {
   const event = {}
-  const entries = Object.entries(config.element || {})
+
+  const { elements = [] } = config
 
   // find event listeners
-  entries.forEach(([_, c]) => {
+  elements.forEach((c) => {
     const { select, on } = c
     if (on) {
       Object.entries(on).forEach(([type, callback]) => {
@@ -20,9 +21,9 @@ export function initialise(rootNode, subscribe, config, store, state = {}) {
   })
 
   //derive initial state from lists...
-  entries
-    .filter(([_, { list }]) => list)
-    .forEach(([_, { select, list }]) => {
+  elements
+    .filter(({ list }) => list)
+    .forEach(({ select, list }) => {
       const targets = [...rootNode.querySelectorAll(select)]
       targets.forEach((target) => {
         const items = listItems(target, list.select)
@@ -32,9 +33,9 @@ export function initialise(rootNode, subscribe, config, store, state = {}) {
     })
 
   // derive initial state from input directives...
-  entries
-    .filter(([_, { input }]) => input)
-    .forEach(([_, { select, input }]) => {
+  elements
+    .filter(({ input }) => input)
+    .forEach(({ select, input }) => {
       const targets = [...rootNode.querySelectorAll(select)]
       targets.forEach((target) => {
         state = { ...state, [input]: target.value }
@@ -73,9 +74,9 @@ export function initialise(rootNode, subscribe, config, store, state = {}) {
 
   const onChange = (state) => {
     // lists first
-    entries
-      .filter(([_, { list }]) => list)
-      .forEach(([_, { select, list }]) => {
+    elements
+      .filter(({ list }) => list)
+      .forEach(({ select, list }) => {
         const targets = [...rootNode.querySelectorAll(select)]
         targets.forEach((target) => {
           const items = listItems(target, list.select)
@@ -86,7 +87,7 @@ export function initialise(rootNode, subscribe, config, store, state = {}) {
       })
 
     // then the rest...
-    entries.forEach(([_, c]) => {
+    elements.forEach((c) => {
       const { select, attribute, input } = c
 
       const targets = [...rootNode.querySelectorAll(select)]

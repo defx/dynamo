@@ -10,8 +10,8 @@ export const ComboBox = ({
 
   return {
     state: {},
-    element: {
-      searchInput: {
+    elements: [
+      {
         select: "input[type=text]",
         attribute: ({ options = [] }) => ({
           role: "combobox",
@@ -24,7 +24,7 @@ export const ComboBox = ({
           input: onSearchInput,
         },
       },
-      options: {
+      {
         select: `[role=listbox]`,
         attribute: () => ({
           id: listBoxId,
@@ -35,12 +35,12 @@ export const ComboBox = ({
           from: "options",
         },
       },
-      option: {
+      {
         select: "[role=option]",
         on: {
           click: onOptionSelected,
         },
       },
-    },
+    ],
   }
 }
