@@ -23,6 +23,14 @@ export const ComboBox = ({
             selectedOption < options.length - 1 ? selectedOption + 1 : 0,
         }
       },
+      selectPreviousOption: (state) => {
+        const { options, selectedOption } = state
+        return {
+          ...state,
+          selectedOption:
+            selectedOption > 0 ? selectedOption - 1 : options.length - 1,
+        }
+      },
       clearSelectedOption: (state) => ({ ...state, selectedOption: -1 }),
     },
     elements: [
@@ -53,6 +61,11 @@ export const ComboBox = ({
               case "Down":
               case "ArrowDown": {
                 store.dispatch("selectNextOption")
+                break
+              }
+              case "Up":
+              case "ArrowUp": {
+                store.dispatch("selectPreviousOption")
                 break
               }
             }
