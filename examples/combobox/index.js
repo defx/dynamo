@@ -23,6 +23,7 @@ export const ComboBox = ({
             selectedOption < options.length - 1 ? selectedOption + 1 : 0,
         }
       },
+      clearSelectedOption: (state) => ({ ...state, selectedOption: -1 }),
     },
     elements: [
       {
@@ -36,7 +37,10 @@ export const ComboBox = ({
         }),
         input: "searchText",
         on: {
-          input: onSearchInput,
+          input: (e, store) => {
+            store.dispatch("clearSelectedOption")
+            onSearchInput(e)
+          },
           keydown: (event, store) => {
             if (event.ctrlKey || event.shiftKey) {
               return
