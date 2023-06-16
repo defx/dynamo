@@ -75,18 +75,18 @@ export function initialise(rootNode, subscribe, config, store, state = {}) {
     // lists first
     entries
       .filter(([_, { list }]) => list)
-      .forEach(([name, { select, list }]) => {
+      .forEach(([_, { select, list }]) => {
         const targets = [...rootNode.querySelectorAll(select)]
         targets.forEach((target) => {
           const items = listItems(target, list.select)
           const curr = listData(items)
-          const next = state[name]
+          const next = state[list.from]
           listSync(target, items, curr, next, list.template)
         })
       })
 
     // then the rest...
-    entries.forEach(([name, c]) => {
+    entries.forEach(([_, c]) => {
       const { select, attribute, input } = c
 
       const targets = [...rootNode.querySelectorAll(select)]
