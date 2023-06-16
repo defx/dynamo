@@ -12,7 +12,7 @@ export const ComboBox = ({
     state: {},
     element: {
       searchInput: {
-        query: "input[type=text]", // @todo: rename "query" to "select"
+        select: "input[type=text]", // @todo: rename "query" to "select"
         attribute: ({ options = [] }) => ({
           role: "combobox",
           ariaAutocomplete: "list",
@@ -28,17 +28,17 @@ export const ComboBox = ({
         // don't implicitly use properties as names in other contexts!
         // ...binding to a property should use the same syntax as with the input controls
         // and that should happen on the "list" object :)
-        query: `[role=listbox]`,
+        select: `[role=listbox]`,
         attribute: () => ({
           id: listBoxId,
         }),
         list: {
-          query: "[role=option]",
+          select: "[role=option]",
           template: optionTemplate,
         },
       },
       option: {
-        query: "[role=option]",
+        select: "[role=option]",
         on: {
           click: onOptionSelected,
         },

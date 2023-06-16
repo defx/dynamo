@@ -12,7 +12,7 @@ define("x-accordion", () => ({
   },
   element: {
     triggerButtons: {
-      query: "button",
+      select: "button",
       attribute: (state, i) => ({
         id: `trigger_${i}`,
         ariaControls: `panel_${i}`,
@@ -23,7 +23,7 @@ define("x-accordion", () => ({
       },
     },
     panels: {
-      query: "[accordion-panel]",
+      select: "[accordion-panel]",
       attribute: (state, i) => ({
         id: `panel_${i}`,
         ariaLabelledby: `trigger_${i}`,

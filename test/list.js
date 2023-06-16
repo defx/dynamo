@@ -44,13 +44,13 @@ describe("list sorting", () => {
       },
       element: {
         sortBy: {
-          query: "select",
+          select: "select",
           input: "sortBy",
         },
         products: {
-          query: "ul",
+          select: "ul",
           list: {
-            query: "li",
+            select: "li",
           },
         },
       },
@@ -118,13 +118,13 @@ describe("list sorting", () => {
       },
       element: {
         sortBy: {
-          query: "select",
+          select: "select",
           input: "sortBy",
         },
         products: {
-          query: "ul",
+          select: "ul",
           list: {
-            query: "li",
+            select: "li",
           },
         },
       },

@@ -18,7 +18,7 @@ describe("x-node", () => {
     $(rootNode, {
       element: {
         toggleButton: {
-          query: "button",
+          select: "button",
           attribute: () => ({
             hidden: false,
             ariaExpanded: false,
@@ -48,7 +48,7 @@ describe("x-node", () => {
       },
       element: {
         toggleButton: {
-          query: `button`,
+          select: `button`,
           attribute: ({ expanded }) => ({
             hidden: false,
             ariaExpanded: expanded,
@@ -76,7 +76,7 @@ describe("x-node", () => {
     $(rootNode, {
       element: {
         toggleButton: {
-          query: "button",
+          select: "button",
           attribute: () => ({
             ariaExpanded: false,
           }),

@@ -50,13 +50,13 @@ describe("navigation menu enhancement", () => {
       },
       element: {
         toggleButton: {
-          query: "button",
+          select: "button",
           on: {
             click: "toggleMenu",
           },
         },
         nav: {
-          query: "nav",
+          select: "nav",
           attribute: ({ menuIsOpen }) => {
             return {
               class: {
