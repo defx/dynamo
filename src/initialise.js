@@ -1,8 +1,7 @@
 import { listItems, listData, listSync } from "./list.js"
 import { write } from "./xo.js"
 
-export function initialise(rootNode, subscribe, config, store) {
-  let state = {}
+export function initialise(rootNode, subscribe, config, store, state = {}) {
   const event = {}
   const entries = Object.entries(config.element || {})
 
@@ -44,7 +43,7 @@ export function initialise(rootNode, subscribe, config, store) {
         event.input.push({
           selector: query,
           callback: ({ target }) => {
-            store.setState((state) => ({ ...state, [input]: target.value }))
+            store.merge({ [input]: target.value })
           },
         })
       })
@@ -72,7 +71,7 @@ export function initialise(rootNode, subscribe, config, store) {
     })
   })
 
-  subscribe((state) => {
+  const onChange = (state) => {
     // lists first
     entries
       .filter(([_, { list }]) => list)
@@ -103,7 +102,9 @@ export function initialise(rootNode, subscribe, config, store) {
         }
       })
     })
-  })
+  }
+
+  subscribe(onChange)
 
   return state
 }

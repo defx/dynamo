@@ -18,11 +18,10 @@ export function Store({
 }) {
   let state
 
-  const callback = debounce(() => onChangeCallback(getState()))
+  const transition = debounce(() => onChangeCallback(getState()))
 
-  function transition(o) {
+  function set(o) {
     state = getStateWrapper({ ...o })
-    callback()
   }
 
   function getState() {
@@ -32,16 +31,19 @@ export function Store({
   function dispatch(type, action) {
     if (type in actionHandlers) {
       const x = actionHandlers[type](getState(), action)
-      transition({ ...state, ...x })
+      set(x)
+      transition()
     }
   }
 
   return {
-    dispatch, // dispatch an action to the reducers
-    getState, // optionally provide a wrapper function to derive additional properties in state
-    setState: (fn) => {
-      transition(fn(getState()))
+    dispatch,
+    getState,
+    merge: (o) => {
+      set({ ...getState(), ...o })
+      transition()
     },
+    set,
     ...api,
   }
 }

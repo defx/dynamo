@@ -35,7 +35,7 @@ export const define = (name, configFn) => {
                     return getState()[name]
                   },
                   set(value) {
-                    setState((state) => ({ ...state, [name]: value }))
+                    merge({ [name]: value })
                   },
                 })
 
@@ -54,33 +54,31 @@ export const define = (name, configFn) => {
           },
         })
 
-        const { getState, setState } = store
+        const { getState, merge, set } = store
 
-        const initialState = initialise(this, message.subscribe, config, store)
-
-        const nextState = {
-          ...initialState,
-          ...((state) =>
-            typeof state === "function" ? state(initialState) : state)(
+        const initialState = initialise(
+          this,
+          message.subscribe,
+          config,
+          store,
+          ((state) => (typeof state === "function" ? state({}) : state))(
             config.state || {}
-          ),
-        }
-        setState((state) => ({
-          ...state,
-          ...nextState,
-        }))
+          )
+        )
+
+        set(initialState)
 
         const sa = this.setAttribute
         this.setAttribute = (name, value) => {
           if (observed.has(name)) {
-            setState((state) => ({ ...state, [name]: value }))
+            merge({ [name]: value })
           }
           return sa.apply(this, [name, value])
         }
         const ra = this.removeAttribute
         this.removeAttribute = (name) => {
           if (observed.has(name)) {
-            setState((state) => ({ ...state, [name]: null }))
+            merge({ [name]: null })
           }
           return ra.apply(this, [name])
         }

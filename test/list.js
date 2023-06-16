@@ -9,7 +9,7 @@ describe("list sorting", () => {
   })
 
   afterEach(() => {
-    document.body.removeChild(rootNode)
+    // document.body.removeChild(rootNode)
   })
 
   it("sorts the list", async () => {
@@ -96,10 +96,10 @@ describe("list sorting", () => {
       </select>
       <ul>
         <li id="afd56erg" data-price="14.99" data-rating="4.2">
-          <p>first</p>
+          <p>14.99</p>
         </li>
         <li id="f8g7r6d" data-price="5" data-rating="4.7">
-          <p>second</p>
+          <p>5</p>
         </li>
       </ul>
     `
