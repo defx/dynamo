@@ -51,6 +51,7 @@ describe("list sorting", () => {
           select: "ul",
           list: {
             select: "li",
+            from: "products",
           },
         },
       },
@@ -125,6 +126,7 @@ describe("list sorting", () => {
           select: "ul",
           list: {
             select: "li",
+            from: "products",
           },
         },
       },

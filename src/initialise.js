@@ -22,12 +22,12 @@ export function initialise(rootNode, subscribe, config, store, state = {}) {
   //derive initial state from lists...
   entries
     .filter(([_, { list }]) => list)
-    .forEach(([name, { select, list }]) => {
+    .forEach(([_, { select, list }]) => {
       const targets = [...rootNode.querySelectorAll(select)]
       targets.forEach((target) => {
         const items = listItems(target, list.select)
         const curr = listData(items)
-        state[name] = curr
+        state[list.from] = curr
       })
     })
 
