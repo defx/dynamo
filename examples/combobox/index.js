@@ -15,6 +15,15 @@ export const ComboBox = ({
       selectedOption: -1,
     },
     action: {
+      setValue: (state) => {
+        const { selectedOption, options } = state
+
+        return {
+          ...state,
+          selectedOption: -1,
+          searchText: options[selectedOption]?.value,
+        }
+      },
       selectNextOption: (state) => {
         const { options, selectedOption } = state
         return {
@@ -58,6 +67,10 @@ export const ComboBox = ({
             if (!options?.length) return
 
             switch (event.key) {
+              case "Enter": {
+                store.dispatch("setValue")
+                break
+              }
               case "Down":
               case "ArrowDown": {
                 store.dispatch("selectNextOption")

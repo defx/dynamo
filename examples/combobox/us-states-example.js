@@ -4,9 +4,10 @@ import { ComboBox } from "./index.js"
 const states =
   "Alabama,Alaska,American Samoa,Arizona,Arkansas,California,Colorado,Conneticut,Delaware,District of Columbia"
     .split(",")
-    .map((id) => ({ id }))
+    .map((value) => ({ id: `option_${value}`, value }))
 
-const optionTemplate = ({ id }) => `<li id="${id}" role="option">${id}</li>`
+const optionTemplate = ({ id, value }) =>
+  `<li id="${id}" role="option">${value}</li>`
 
 define("combo-box", (rootNode) => {
   return ComboBox({
@@ -14,12 +15,15 @@ define("combo-box", (rootNode) => {
     onSearchInput: ({ target: { value } }) => {
       const inputValue = value.toLowerCase()
       const options = inputValue.length
-        ? states.filter(({ id }) => id.toLowerCase().startsWith(inputValue))
+        ? states.filter(({ value }) =>
+            value.toLowerCase().startsWith(inputValue)
+          )
         : []
 
       rootNode.options = options
     },
     onOptionSelected: ({ target: { id } }) => {
+      // !!
       rootNode.searchText = id
       rootNode.options = []
     },
