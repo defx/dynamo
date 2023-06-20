@@ -44,8 +44,8 @@ export const ComboBox = ({ optionTemplate, options = [] }) => {
       clearSelectedOption: (state) => ({ ...state, selectedOption: -1 }),
       onSearchInput: (state) => {
         const { options } = state
-
         const searchText = state.searchText.toLowerCase()
+
         return {
           ...state,
           selectedOption: -1,
@@ -69,7 +69,10 @@ export const ComboBox = ({ optionTemplate, options = [] }) => {
         }),
         input: "searchText",
         on: {
-          keydown: (event, store) => {
+          input: (_, store) => {
+            store.dispatch("onSearchInput")
+          },
+          keyup: (event, store) => {
             if (event.ctrlKey || event.shiftKey) {
               return
             }
@@ -77,7 +80,9 @@ export const ComboBox = ({ optionTemplate, options = [] }) => {
             const { options } = store.getState()
             if (!options?.length) return
 
-            switch (event.key) {
+            const { key } = event
+
+            switch (key) {
               case "Enter": {
                 store.dispatch("setValue")
                 break
@@ -90,10 +95,6 @@ export const ComboBox = ({ optionTemplate, options = [] }) => {
               case "Up":
               case "ArrowUp": {
                 store.dispatch("selectPreviousOption")
-                break
-              }
-              default: {
-                store.dispatch("onSearchInput")
                 break
               }
             }
