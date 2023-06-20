@@ -6,6 +6,25 @@ export function initialise(rootNode, subscribe, config, store, state = {}) {
 
   const { elements = [] } = config
 
+  // derive initial state from input directives...
+  elements
+    .filter(({ input }) => input)
+    .forEach(({ select, input }) => {
+      const targets = [...rootNode.querySelectorAll(select)]
+      targets.forEach((target) => {
+        state = { ...state, [input]: target.value }
+
+        event.input = event.input || []
+        event.input.push({
+          select,
+          callback: (event) => {
+            const { target } = event
+            store.merge({ [input]: target.value })
+          },
+        })
+      })
+    })
+
   // find event listeners
   elements.forEach((c) => {
     const { select, on } = c
@@ -29,24 +48,6 @@ export function initialise(rootNode, subscribe, config, store, state = {}) {
         const items = listItems(target, list.select)
         const curr = listData(items)
         state[list.from] = curr
-      })
-    })
-
-  // derive initial state from input directives...
-  elements
-    .filter(({ input }) => input)
-    .forEach(({ select, input }) => {
-      const targets = [...rootNode.querySelectorAll(select)]
-      targets.forEach((target) => {
-        state = { ...state, [input]: target.value }
-
-        event.input = event.input || []
-        event.input.push({
-          select,
-          callback: ({ target }) => {
-            store.merge({ [input]: target.value })
-          },
-        })
       })
     })
 
