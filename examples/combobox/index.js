@@ -1,63 +1,74 @@
 let counter = 0
 
-export const ComboBox = ({
-  optionTemplate,
-  onSearchInput,
-  onOptionSelected,
-}) => {
+export const ComboBox = ({ optionTemplate, options = [] }) => {
   const id = counter++
   const listBoxId = `listbox_${id}`
 
   return {
     state: {
       searchText: "",
-      options: [],
+      options,
       selectedOption: -1,
     },
     action: {
       setValue: (state) => {
-        const { selectedOption, options } = state
+        const { selectedOption, filteredOptions } = state
 
         return {
           ...state,
           selectedOption: -1,
-          searchText: options[selectedOption]?.value,
+          searchText: filteredOptions[selectedOption]?.value,
+          filteredOptions: [],
         }
       },
       selectNextOption: (state) => {
-        const { options, selectedOption } = state
+        const { filteredOptions, selectedOption } = state
         return {
           ...state,
           selectedOption:
-            selectedOption < options.length - 1 ? selectedOption + 1 : 0,
+            selectedOption < filteredOptions.length - 1
+              ? selectedOption + 1
+              : 0,
         }
       },
       selectPreviousOption: (state) => {
-        const { options, selectedOption } = state
+        const { filteredOptions, selectedOption } = state
         return {
           ...state,
           selectedOption:
-            selectedOption > 0 ? selectedOption - 1 : options.length - 1,
+            selectedOption > 0
+              ? selectedOption - 1
+              : filteredOptions.length - 1,
         }
       },
       clearSelectedOption: (state) => ({ ...state, selectedOption: -1 }),
+      onSearchInput: (state) => {
+        const { options } = state
+
+        const searchText = state.searchText.toLowerCase()
+        return {
+          ...state,
+          selectedOption: -1,
+          filteredOptions: searchText.length
+            ? options.filter(({ value }) =>
+                value.toLowerCase().startsWith(searchText)
+              )
+            : [],
+        }
+      },
     },
     elements: [
       {
         select: "input[type=text]",
-        attribute: ({ options = [], selectedOption }) => ({
+        attribute: ({ filteredOptions = [], selectedOption }) => ({
           role: "combobox",
           ariaAutocomplete: "list",
-          ariaExpanded: !!options.length,
+          ariaExpanded: !!filteredOptions.length,
           ariaControls: listBoxId,
-          ariaActivedescendant: options[selectedOption]?.id || "",
+          ariaActivedescendant: filteredOptions[selectedOption]?.id || "",
         }),
         input: "searchText",
         on: {
-          input: (e, store) => {
-            store.dispatch("clearSelectedOption")
-            onSearchInput(e)
-          },
           keydown: (event, store) => {
             if (event.ctrlKey || event.shiftKey) {
               return
@@ -81,6 +92,10 @@ export const ComboBox = ({
                 store.dispatch("selectPreviousOption")
                 break
               }
+              default: {
+                store.dispatch("onSearchInput")
+                break
+              }
             }
           },
         },
@@ -93,14 +108,11 @@ export const ComboBox = ({
         list: {
           select: "[role=option]",
           template: optionTemplate,
-          from: "options",
+          from: "filteredOptions",
         },
       },
       {
         select: "[role=option]",
-        on: {
-          click: onOptionSelected,
-        },
         attribute: ({ selectedOption }, i) => {
           return {
             ariaSelected: selectedOption === i,
